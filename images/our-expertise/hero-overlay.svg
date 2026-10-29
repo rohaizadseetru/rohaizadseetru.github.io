@@ -1,0 +1,15 @@
+<svg preserveAspectRatio="none" width="2920.6" height="1647.8" viewBox="0 0 2920.6 1647.8" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Hero Overlay Vector">
+<path d="M55.0195 1283.24C45.3895 795.733 1299.31 406.875 1299.31 406.875C1401.22 377.242 1526.81 337.332 1617.08 312.812C1749.93 276.687 1838.99 255.923 1948.57 231.473C2220.82 170.708 2444.02 137.639 2596.26 118.922C2744.05 100.725 2842.47 93.7937 2898.89 98.408C2909.48 99.2569 2915.59 99.6463 2920.6 100.046V0H0V1647.8H538.24C58.3197 1579.73 55.0298 1283.23 55.0298 1283.23L55.0195 1283.24Z" fill="url(#paint0_linear_0_6)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_6" x1="0" y1="823.898" x2="2920.6" y2="823.898" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="0.05" stop-color="#80ADBE" stop-opacity="0.77"/>
+<stop offset="0.11" stop-color="#C5DAE1" stop-opacity="0.51"/>
+<stop offset="0.17" stop-color="#EFF5F7" stop-opacity="0.35"/>
+<stop offset="0.21" stop-color="white" stop-opacity="0.29"/>
+<stop offset="0.56" stop-color="#43879F"/>
+</linearGradient>
+</defs>
+</svg>

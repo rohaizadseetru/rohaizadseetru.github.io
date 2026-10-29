@@ -1,0 +1,14 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="1696.2" height="793.778" viewBox="0 0 1696.2 793.778" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!-- Figma's export wrapped this ellipse in a foreign-object node carrying a
+     backdrop-filter blur shim set to 0px. Chrome refuses to rasterise any SVG
+     image containing one, so the layer was drawing as nothing at all and it
+     tainted every canvas it was composited into. The shim is a no-op at 0px, so
+     it and its now-unreferenced clip path are removed. -->
+<ellipse id="Blur Effect" cx="848.101" cy="396.889" rx="848.101" ry="396.889" fill="url(#paint0_linear_1490_4530)" fill-opacity="0.05"/>
+<defs>
+<linearGradient id="paint0_linear_1490_4530" x1="848.101" y1="0" x2="848.101" y2="793.778" gradientUnits="userSpaceOnUse">
+<stop stop-color="white" stop-opacity="0"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+</defs>
+</svg>

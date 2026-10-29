@@ -1,0 +1,2102 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>MRT Corp · Property · TXA 2026</title>
+<style>
+/* ===== Shared kiosk design system ===== */
+
+:root{
+  --navy:#07254F; --navy2:#0D4386; --deep:#041A3A;
+  --blue:#2771CC; --red:#E42132; --teal:#269C95; --yellow:#F6B700;
+  --ice:#EFF5FB; --ice2:#E4EEF8; --white:#fff;
+  --glass:rgba(255,255,255,.07); --glass2:rgba(255,255,255,.12); --line:rgba(255,255,255,.14);
+  --font:"Segoe UI Variable Display","Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:var(--font);color:#fff;
+  -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;overscroll-behavior:none}
+body.nocursor, body.nocursor *{cursor:none!important}
+button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer;touch-action:manipulation}
+img{-webkit-user-drag:none;user-drag:none}
+
+/* ---------- fixed 1920x1080 stage, scaled to any screen ---------- */
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center;overflow:hidden;
+  background:radial-gradient(1200px 800px at 80% -10%,#0D4386 0%,transparent 60%),radial-gradient(900px 700px at -10% 110%,#0b3470 0%,transparent 55%),var(--navy)}
+.screen{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s .45s}
+.screen.active{opacity:1;visibility:visible;transition:opacity .45s ease}
+
+/* animated line background (shared) */
+#bgLines{position:absolute;inset:0;opacity:.3;pointer-events:none}
+#bgLines path{fill:none;stroke-width:6;stroke-linecap:round;stroke-dasharray:14 26;animation:flow 6s linear infinite}
+#bgLines path:nth-child(2){animation-duration:8s}#bgLines path:nth-child(3){animation-duration:7s}#bgLines path:nth-child(4){animation-duration:9s}
+@keyframes flow{to{stroke-dashoffset:-400}}
+.grid{position:absolute;inset:0;pointer-events:none;opacity:.35;
+  background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:60px 60px}
+
+/* top bar */
+.topbar{position:absolute;left:0;right:0;top:0;height:110px;display:flex;align-items:center;justify-content:space-between;padding:0 64px;z-index:5}
+.brand{display:flex;align-items:center;gap:22px}
+.brand img{height:130px}
+.wordmark{font-weight:800;font-size:34px;letter-spacing:.06em}
+.wordmark b{color:var(--red)}
+.brand .tag{font-size:20px;letter-spacing:.18em;opacity:.75;border-left:2px solid var(--line);padding-left:22px;text-transform:uppercase}
+.navbtns{display:flex;gap:18px}
+.iconbtn{height:76px;min-width:76px;padding:0 26px;border-radius:40px;background:var(--glass2);border:1.5px solid var(--line);display:flex;align-items:center;gap:12px;font-size:24px;font-weight:600;transition:transform .15s,background .2s}
+.iconbtn:active{transform:scale(.94);background:rgba(255,255,255,.22)}
+.iconbtn svg{width:32px;height:32px}
+
+.footer{position:absolute;left:0;right:0;bottom:0;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 64px;font-size:19px;opacity:.7;letter-spacing:.04em;z-index:4}
+.linebar{position:absolute;left:0;right:0;bottom:64px;height:6px;display:flex;z-index:4}
+.linebar i{flex:1}
+
+svg.ic{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- ATTRACT ---------- */
+#attract{background:#000}
+#attract video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#attractFallback{position:absolute;inset:0;display:none;background:radial-gradient(1400px 900px at 70% 30%,#0D4386,var(--deep))}
+#attract.novideo #attractFallback{display:block}
+#attract.novideo video{display:none}
+#attractFallback svg path{fill:none;stroke-width:14;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:3000;stroke-dashoffset:3000;animation:draw 5s ease forwards, glow 4s ease-in-out 5s infinite alternate}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes glow{from{opacity:.85}to{opacity:.45}}
+.fbHead{position:absolute;left:120px;top:250px;max-width:1100px}
+.fbHead .k{font-size:28px;letter-spacing:.3em;text-transform:uppercase;color:var(--yellow);font-weight:700;margin-bottom:24px}
+.fbHead h1{font-size:132px;line-height:.98;font-weight:800;letter-spacing:-.02em}
+.fbHead h1 span{color:var(--red)}
+.fbHead p{font-size:40px;margin-top:28px;opacity:.85}
+.shade{position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,26,58,.85) 0%,rgba(4,26,58,0) 38%),linear-gradient(180deg,rgba(4,26,58,.6) 0%,rgba(4,26,58,0) 18%);pointer-events:none}
+
+@keyframes pop{0%{transform:translateY(30px);opacity:0}100%{transform:none;opacity:1}}
+.fab{position:absolute;right:90px;bottom:80px;display:flex;align-items:center;gap:26px;height:150px;padding:0 64px 0 44px;border-radius:80px;
+  background:linear-gradient(135deg,#ff3446,var(--red));box-shadow:0 20px 60px rgba(228,33,50,.55);font-size:46px;font-weight:800;letter-spacing:.02em;animation:bob 3s ease-in-out infinite}
+.fab svg{width:72px;height:72px;stroke-width:1.6}
+.fab::before,.fab::after{content:"";position:absolute;inset:0;border-radius:80px;border:4px solid rgba(228,33,50,.8);animation:ring 2.4s ease-out infinite}
+.fab::after{animation-delay:1.2s}
+@keyframes ring{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.35,1.6);opacity:0}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.fab small{display:block;font-size:22px;font-weight:500;opacity:.9;letter-spacing:.06em;margin-top:2px}
+
+/* ---------- HUB ---------- */
+.hero-title{position:absolute;left:0;right:0;top:170px;text-align:center}
+.eyebrow{font-size:24px;letter-spacing:.3em;text-transform:uppercase;color:var(--yellow);font-weight:700}
+.hero-title h2{font-size:84px;font-weight:800;letter-spacing:-.01em;margin-top:16px}
+.hero-title p{font-size:32px;opacity:.8;margin-top:0}
+.journeys{position:absolute;left:0;right:0;top:420px;display:flex;justify-content:center;gap:60px}
+.journey{width:760px;height:500px;border-radius:40px;padding:56px;text-align:left;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;
+  background:linear-gradient(160deg,rgba(255,255,255,.13),rgba(255,255,255,.04));border:1.5px solid var(--line);
+  box-shadow:0 30px 80px rgba(0,0,0,.35);transition:transform .2s;animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+.journey:nth-child(2){animation-delay:.12s}
+.journey:active{transform:scale(.97)}
+@keyframes rise{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
+.journey .jic{width:120px;height:120px;border-radius:32px;display:grid;place-items:center;background:var(--c)}
+.journey .jic svg{width:70px;height:70px;stroke-width:1.6}
+.journey h3{font-size:56px;font-weight:800;margin-top:34px;line-height:1.05}
+.journey p{font-size:28px;opacity:.8;margin-top:16px}
+.journey .go{margin-top:auto;height:96px;padding:0 44px;border-radius:50px;background:var(--c);display:flex;align-items:center;gap:14px;font-size:32px;font-weight:800}
+.journey .go svg{width:36px;height:36px;stroke-width:2.4}
+.journey .bigring{position:absolute;right:-120px;top:-120px;width:420px;height:420px;border-radius:50%;border:40px solid var(--c);opacity:.14}
+
+/* ---------- QUIZ ---------- */
+.rail{position:absolute;left:260px;right:260px;top:150px;height:120px}
+.rail .track{position:absolute;left:40px;right:40px;top:38px;height:10px;border-radius:6px;background:rgba(255,255,255,.14)}
+.rail .fill{position:absolute;left:40px;top:38px;height:10px;border-radius:6px;background:linear-gradient(90deg,var(--blue),var(--red),var(--yellow),var(--teal));transition:width .7s cubic-bezier(.4,0,.2,1)}
+.rail .stn{position:absolute;top:0;width:86px;margin-left:-43px;text-align:center}
+.rail .dot{width:86px;height:86px;border-radius:50%;border:6px solid rgba(255,255,255,.25);background:var(--navy);display:grid;place-items:center;font-size:32px;font-weight:800;transition:all .4s}
+.rail .lbl{font-size:22px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-top:12px;opacity:.55;white-space:nowrap;margin-left:-60px;margin-right:-60px}
+.rail .stn.done .dot{border-color:var(--sc)}
+/* .rail .stn.done .dot{background:var(--sc);border-color:var(--sc)} */
+.rail .stn.cur .dot{border-color:var(--sc);box-shadow:0 0 0 12px color-mix(in srgb,var(--sc) 30%,transparent);transform:scale(1.1)}
+.rail .stn.cur .lbl,.rail .stn.done .lbl{opacity:1}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+@keyframes pulse{50%{transform:scale(1.25)}}
+
+.btn{height:110px;border-radius:60px;font-size:34px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:16px;transition:transform .15s;letter-spacing:.03em}
+.btn:active{transform:scale(.96)}
+.btn svg{width:40px;height:40px;stroke-width:2.4}
+.btn.primary{background:var(--red);box-shadow:0 18px 44px rgba(228,33,50,.4)}
+.btn.ghost{background:transparent;border:2.5px solid rgba(255,255,255,.55)}
+
+#map{position:absolute;left:80px;top:330px;width:1760px;height:600px}
+#map > svg{position:absolute;inset:0;overflow:visible}
+#map svg .ln{fill:none;stroke-width:22;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:4000;stroke-dashoffset:4000}
+#explore.active #map svg .ln{animation:draw 2.2s ease forwards}
+#map svg .train{opacity:0}
+#explore.active #map svg .train{animation:show .3s 2.2s forwards}
+@keyframes show{to{opacity:1}}
+
+/* detail panel */
+#scrim{position:absolute;inset:0;background:rgba(2,14,34,.6);opacity:0;visibility:hidden;transition:opacity .35s,visibility 0s .35s;z-index:20}
+#scrim.on{opacity:1;visibility:visible;transition:opacity .35s}
+#panel{position:absolute;right:0;top:0;bottom:0;width:1240px;background:linear-gradient(180deg,#0a2e5e,#061d42);z-index:21;transform:translateX(105%);transition:transform .55s cubic-bezier(.2,.8,.2,1);box-shadow:-40px 0 100px rgba(0,0,0,.5);overflow:hidden}
+#panel.on{transform:none}
+
+@keyframes floaty{50%{transform:translateY(-14px) rotate(-3deg)}}
+
+.chip{display:inline-flex;align-items:center;gap:10px;padding:8px 20px;border-radius:30px;background:rgba(255,255,255,.18);font-size:18px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.chip i{width:26px;height:10px;border-radius:5px;background:var(--pc);outline:2px solid #fff}
+
+.pclose{position:absolute;right:36px;top:36px;z-index:3;width:90px;height:90px;border-radius:50%;background:rgba(4,26,58,.6);border:2px solid rgba(255,255,255,.4);display:grid;place-items:center}
+.pclose svg{width:40px;height:40px;stroke-width:2.4}
+
+.lead{margin-top:30px;font-size:22px;opacity:.75}
+.lead b{opacity:1;color:#fff}
+
+/* wipe transition */
+#wipe{position:absolute;inset:0;z-index:50;pointer-events:none;display:flex;flex-direction:column}
+#wipe i{flex:1;transform:translateX(-102%)}
+#wipe.run i{animation:wipe .95s cubic-bezier(.7,0,.3,1) forwards}
+#wipe.run i:nth-child(2){animation-delay:.05s}#wipe.run i:nth-child(3){animation-delay:.1s}#wipe.run i:nth-child(4){animation-delay:.15s}
+@keyframes wipe{0%{transform:translateX(-102%)}45%,55%{transform:translateX(0)}100%{transform:translateX(102%)}}
+
+/* idle overlay */
+#idle{position:absolute;inset:0;z-index:60;background:rgba(2,14,34,.8);display:grid;place-items:center;opacity:0;visibility:hidden;transition:opacity .3s}
+#idle.on{opacity:1;visibility:visible}
+#idle .box{text-align:center}
+#idle .num{font-size:180px;font-weight:800;color:var(--yellow);line-height:1}
+#idle h3{font-size:56px;font-weight:800;margin-top:10px}
+#idle p{font-size:30px;opacity:.8;margin-top:14px}
+
+/* admin */
+#hot{position:absolute;left:0;top:0;width:90px;height:90px;z-index:70}
+#admin{position:absolute;inset:80px;z-index:80;background:#fff;color:#0b1f3f;border-radius:24px;padding:40px 50px;display:none;font-size:22px;overflow:auto}
+#admin.on{display:block}
+#admin h3{font-size:34px;margin-bottom:16px}
+#admin table{border-collapse:collapse;margin:10px 0 24px}
+#admin td,#admin th{border:1px solid #cdd8e6;padding:8px 14px;text-align:left}
+#admin .warn{color:#b3141f;font-weight:700}
+#admin .ok{color:#1c7d52;font-weight:700}
+#admin button{background:#07254F;color:#fff;padding:14px 26px;border-radius:10px;font-size:22px;margin-right:12px}
+
+/* ===== Procurement-specific components ===== */
+.journeys.four{gap:36px;top:370px}
+.journeys.four .journey{width:410px;height:550px;padding:40px 38px}
+.journeys.four .journey h3{font-size:42px;margin-top:28px}
+.journeys.four .journey p{font-size:23px;line-height:1.35}
+.journeys.four .journey .jic{width:104px;height:104px;border-radius:28px}
+.journeys.four .journey .jic svg{width:60px;height:60px}
+.journeys.four .journey .go{height:64px;padding:0 36px;font-size:28px}
+.journeys.four .journey:nth-child(3){animation-delay:.24s}.journeys.four .journey:nth-child(4){animation-delay:.36s}
+
+/* journey viewer */
+#jRail{position:absolute;left:220px;right:220px;top:140px;height:120px}
+#jRail .stn{cursor:pointer}
+
+#jArea{position:absolute;left:120px;right:120px;top:300px;height:560px}
+.sl{position:absolute;inset:0;animation:fadeup .5s ease both}
+.sl.back{animation-name:fadedown}
+@keyframes fadedown{from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:none}}
+
+.sl h2{font-size:50px;font-weight:800;line-height:1.08;margin-top:8px;letter-spacing:-.01em}
+.sl .lead{font-size:26px;opacity:.88;line-height:1.4;margin-top:14px;max-width:1500px}
+
+.note{font-size:21px;opacity:.65;margin-top:18px;font-style:italic}
+
+.lc{flex:1;border-radius:30px;padding:26px 28px 22px;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border:1.5px solid var(--line);position:relative;overflow:hidden;animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+.lc:nth-child(2){animation-delay:.1s}.lc:nth-child(3){animation-delay:.2s}.lc:nth-child(4){animation-delay:.3s}
+.lc::before{content:"";position:absolute;left:0;right:0;top:0;height:12px;background:var(--lcc)}
+
+.lc .sub{font-size:24px;opacity:.8;margin-top:8px}
+
+.lc .bar{height:14px;border-radius:8px;background:rgba(255,255,255,.14);margin-top:20px;position:relative;overflow:visible}
+.lc .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:8px;background:var(--lcc);width:0;transition:width 1.4s cubic-bezier(.2,.8,.2,1) .5s}
+.lc .bar u{position:absolute;top:-8px;bottom:-8px;width:4px;background:#fff;border-radius:2px}
+
+/* process + grade picker */
+.flow{display:flex;align-items:center;gap:0;margin-top:26px}
+.flow .f{padding:18px 34px;border-radius:18px;font-size:28px;font-weight:800;background:var(--glass2);border:1.5px solid var(--line)}
+.flow .f.on{background:var(--jc);border-color:var(--jc)}
+
+.step{display:flex;gap:20px;align-items:flex-start;font-size:22px;line-height:1.35;animation:fadeup .45s ease both}
+.step:nth-child(2){animation-delay:.1s}.step:nth-child(3){animation-delay:.2s}
+.step b.n{flex:0 0 48px;height:48px;border-radius:50%;background:var(--gc);display:grid;place-items:center;font-size:22px}
+.step strong{display:block;font-size:25px}
+
+.tab{height:80px;padding:0 34px;border-radius:40px;font-size:26px;font-weight:800;background:var(--glass2);border:1.5px solid var(--line)}
+.tab.sel{background:var(--jc);border-color:var(--jc)}
+.tab b{display:inline-grid;place-items:center;min-width:40px;height:40px;border-radius:20px;background:rgba(255,255,255,.25);margin-left:10px;font-size:20px}
+
+.logo{height:150px;border-radius:24px;background:#fff;display:grid;place-items:center;padding:22px 30px;animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.logo img{max-width:100%;max-height:100%;object-fit:contain}
+
+/* journey nav */
+.jnav{position:absolute;left:120px;right:120px;bottom:100px;display:flex;justify-content:space-between;align-items:center}
+.jnav .btn{width:380px;height:100px;font-size:30px}
+.jnav .btn[disabled]{opacity:.25;pointer-events:none}
+.jnav .dots{font-size:22px;letter-spacing:.2em;opacity:.7;font-weight:700;text-align:center;}
+.swipehint{font-size:20px;opacity:.55;letter-spacing:.1em;margin-top:6px;text-align:center}
+
+#player{position:absolute;inset:0;z-index:40;background:#000;display:none}
+#player.on{display:block}
+#player video{width:100%;height:100%;object-fit:contain;background:#000}
+#player .pclose{position:absolute;right:40px;top:40px;z-index:2}
+#player .soon{position:absolute;inset:0;display:none;place-items:center;text-align:center;background:var(--navy)}
+#player.missing .soon{display:grid}
+#player .soon h3{font-size:64px;font-weight:800}
+#player .soon p{font-size:30px;opacity:.8;margin-top:14px}
+
+#attract {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+}
+/* Background gradient & SVG graphic layer (Always visible) */
+#attractFallback {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: radial-gradient(1400px 900px at 70% 30%, #0D4386, var(--deep));
+}
+#attractFallback svg path {
+  fill: none;
+  stroke-width: 14;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 3000;
+  stroke-dashoffset: 3000;
+  animation: draw 5s ease forwards, glow 4s ease-in-out 5s infinite alternate;
+}
+
+.attract-disclaimer {
+  position: absolute;
+  left: 64px;
+  right: 64px;
+  bottom: 24px;
+  font-size: 13px;
+  line-height: 1.4;
+  opacity: 0.55;
+  text-align: center;
+  z-index: 4;
+  pointer-events: none;
+}
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes glow { from { opacity: .85; } to { opacity: .45; } }
+
+.fbHead { position: absolute; left: 120px; top: 250px; max-width: 1100px; z-index: 2; }
+.fbHead .k { font-size: 28px; letter-spacing: .3em; text-transform: uppercase; color: var(--yellow); font-weight: 700; margin-bottom: 24px; }
+.fbHead h1 { font-size: 132px; line-height: .98; font-weight: 800; letter-spacing: -.02em; }
+.fbHead h1 span { color: var(--red); }
+.fbHead p { font-size: 40px; margin-top: 28px; opacity: .85; }
+
+/* Video container scaled and positioned inside the target section */
+
+.video-frame {
+  position: absolute;
+  top: 160px;
+  right: 80px;
+  width: 880px;
+  height: 560px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  z-index: 2;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.video-frame video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#attract.novideo .video-frame video {
+  display: none;
+}
+
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(4, 26, 58, .85) 0%, rgba(4, 26, 58, 0) 38%),
+              linear-gradient(180deg, rgba(4, 26, 58, .6) 0%, rgba(4, 26, 58, 0) 18%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes pop { 0% { transform: translateY(30px); opacity: 0; } 100% { transform: none; opacity: 1; } }
+
+.fab {
+  position: absolute; right: 90px; bottom: 100px; display: flex; align-items: center; gap: 26px; height: 100px; padding: 0 44px 0 44px; border-radius: 80px;
+ 
+  background: linear-gradient(135deg, #e42132ba); box-shadow: 0 20px 60px rgba(228, 33, 50, .55); font-size: 36px; font-weight: 800; letter-spacing: .02em; animation: bob 3s ease-in-out infinite; z-index: 3;
+}
+.fab svg {
+  width: 72px;
+  height: 72px;
+  stroke-width: 1.6;
+  fill: none;
+  stroke: currentColor;
+  overflow: visible;
+  transform-origin: 70% 80%;
+  /* Slowed down to 3.5s for a smooth, relaxed rhythm */
+  animation: clickTap 2.5s ease-in-out infinite; 
+}
+
+/* Slow & deliberate click motion */
+@keyframes clickTap {
+  0%, 35%, 100% {
+    transform: scale(1) rotate(0deg) translate(0, 0);
+  }
+  48% {
+    /* Gentle press down */
+    transform: scale(0.85) rotate(-10deg) translate(-2px, 4px);
+  }
+  60% {
+    /* Smooth bounce release */
+    transform: scale(1.03) rotate(2deg) translate(0, -1px);
+  }
+  70% {
+    transform: scale(1) rotate(0deg) translate(0, 0);
+  }
+}
+
+/* Touch dot pulse on contact */
+
+/* Wave ripple expanding outwards like water */
+
+@keyframes ring{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.35,1.6);opacity:0}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.fab small{display:block;font-size:22px;font-weight:500;opacity:.9;letter-spacing:.06em;margin-top:2px}
+
+/* ===================== Property kiosk additions ===================== */
+.fbHead h1{font-size:120px}
+.fbHead p{font-size:38px;max-width:780px;line-height:1.3}
+
+.video-frame .vph{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--navy);background:linear-gradient(160deg,#fff,#e8eff8)}
+.video-frame .vph svg{width:120px;height:120px;stroke-width:1.4;color:var(--navy2)}
+.video-frame .vph b{display:block;font-size:30px;margin-top:14px}
+#attract:not(.novideo) .video-frame .vph{display:none}
+
+/* language switch */
+.lang{height:76px;padding:6px;border-radius:40px;background:var(--glass2);border:1.5px solid var(--line);display:flex;gap:4px;align-items:stretch;transition:transform .15s}
+.lang b{min-width:84px;padding:0 18px;border-radius:34px;display:grid;place-items:center;font-size:24px;font-weight:800;letter-spacing:.06em;opacity:.65;transition:background .2s,color .2s}
+.lang b.on{background:var(--yellow);color:var(--navy);opacity:1}
+.lang:active{transform:scale(.96)}
+
+/* hub */
+.journeys.four .journey p{margin-bottom:24px}
+.journeys.four .journey h3{min-height:100px}
+
+/* page heading used on inner screens */
+.phead{position:absolute;left:120px;right:120px;top:140px}
+.phead h2{font-size:64px;font-weight:800;line-height:1.05;margin-top:10px;letter-spacing:-.01em}
+.phead p{font-size:28px;opacity:.82;margin-top:14px;line-height:1.35;max-width:1400px}
+
+/* developments list */
+.devs{position:absolute;left:120px;right:120px;top:360px;display:flex;gap:56px}
+.devcard{flex:1;height:560px;border-radius:36px;overflow:hidden;text-align:left;display:flex;flex-direction:column;
+  background:linear-gradient(160deg,rgba(255,255,255,.13),rgba(255,255,255,.04));border:1.5px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.35);
+  animation:rise .7s cubic-bezier(.2,.8,.2,1) both;transition:transform .2s}
+.devcard:nth-child(2){animation-delay:.12s}
+.devcard:active{transform:scale(.98)}
+.devcard .im{height:300px;background:#fff;display:grid;place-items:center;overflow:hidden;position:relative}
+.devcard .im img{max-width:100%;max-height:100%;object-fit:contain}
+
+.devcard .tx{padding:28px 40px 32px;display:flex;flex-direction:column;flex:1}
+.devcard .chip{align-self:flex-start;background:var(--dc);color:#fff}
+.devcard .chip i{background:#fff;outline:none}
+.devcard h3{font-size:46px;font-weight:800;margin-top:14px;margin-bottom:20px;line-height:1.08}
+.devcard .go{margin-top:auto;align-self:flex-start;height:80px;padding:0 36px;border-radius:44px;background:var(--dc);display:flex;align-items:center;gap:12px;font-size:28px;font-weight:800}
+.devcard .go svg{width:32px;height:32px;stroke-width:2.4}
+.devcard .gogo {
+  margin-top: auto;
+  align-self: flex-start;
+  height: 50px;
+  padding: 0 36px;
+  border-radius: 44px;
+  background:transparent;border:2.5px solid rgba(255,255,255,.55);
+  /* background: var(--dc); */
+  color: #fff;                     /* Ensures text is white against the theme color */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+/* Icon sizing for .gogo */
+.devcard .gogo svg {
+  width: 32px;
+  height: 32px;
+  stroke-width: 2.4;
+  stroke: currentColor;
+}
+
+.stats .stat .l {white-space: pre-line;line-height: 1.45;}
+
+/* development detail */
+.dd-img{position:absolute;left:120px;top:150px;width:660px;height:670px;border-radius:32px;background:#fff;overflow:hidden;display:grid;place-items:center;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.dd-img img{max-width:100%;max-height:100%;object-fit:cover}
+.dd-img.zoomable {
+  cursor: zoom-in;
+}
+
+/* Zoom hint badge */
+.dd-img .zhint {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 30px;
+  background: rgba(4, 26, 58, .8);
+  border: 1px solid rgba(255, 255, 255, .2);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 700;
+  pointer-events: none; /* Allows clicks to register on the container */
+  z-index: 3;
+}
+
+.dd-img .zhint svg {
+  width: 20px;
+  height: 20px;
+  stroke: #fff;
+}
+
+/* Hide zoom hint if image failed to load */
+.dd-img.noimg .zhint {
+  display: none;
+}
+
+.dd-txt{position:absolute;left:840px;right:120px;top:150px}
+.dd-txt .eyebrow{color:var(--dc)}
+.dd-txt h2{font-size:68px;font-weight:800;line-height:1.02;margin-top:12px}
+.dd-txt .sub{font-size:30px;opacity:.85;margin-top:12px}
+
+/* Carousel Styles */
+/* 1. Force block display so .dd-img's grid layout doesn't break track sizing */
+.dd-carousel {
+  display: block !important;
+  position: absolute;
+  left: 120px;
+  top: 150px;
+  width: 660px;
+  height: 680px;
+  border-radius: 32px;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0,0,0,.35);
+}
+
+/* 2. Lock track to exactly 100% (660px) so translateX(-100%) moves 1 slide */
+.dd-carousel-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+.dd-carousel-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.dd-carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 3. Button and SVG pointer fixes */
+.dd-carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(4, 26, 58, 0.7);
+  border: 1px solid rgba(255,255,255,0.3);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 10;                     /* Ensures buttons stay above slides */
+  transition: background 0.2s, transform 0.2s;
+}
+
+.dd-carousel-btn:active {
+  transform: translateY(-50%) scale(0.92);
+  background: var(--red);
+}
+
+/* Prevents SVG paths from swallowing touch/click events */
+.dd-carousel-btn svg {
+  width: 30px;
+  height: 30px;
+  stroke-width: 2.4;
+  stroke: #fff;
+  fill: none;
+  pointer-events: none;
+}
+
+.dd-carousel-prev { left: 16px; }
+.dd-carousel-next { right: 16px; }
+
+/* If your next button uses ic('back'), keep rotate(180deg). 
+   If it uses ic('arrow'), remove the rotation so it points right. */
+.dd-carousel-next svg {
+  transform: rotate(180deg);
+}
+
+.dd-carousel-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  z-index: 10;
+}
+
+.dd-carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.dd-carousel-dot.active {
+  background: #fff;
+  width: 28px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.stats{display:grid;grid-template-columns:1fr 2fr 2fr;gap:18px;margin-top:34px}
+.stat{border-radius:24px;padding:22px 26px;background:linear-gradient(160deg,rgba(255,255,255,.13),rgba(255,255,255,.04));border:1.5px solid var(--line);border-left:8px solid var(--dc)}
+.stat .v{font-size:44px;font-weight:800;line-height:1.05}
+.stat .l{font-size:20px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-top:8px;font-weight:700;line-height:1.3}
+.stat.wide{grid-column:1/4}
+.tline{margin-top:28px;display:flex;flex-direction:column;gap:12px}
+.tl{display:flex;align-items:center;gap:22px;border-radius:20px;padding:14px 22px;background:var(--glass);border:1.5px solid var(--line)}
+.tl .when{flex:0 0 190px;font-size:26px;font-weight:800;color:var(--yellow)}
+.tl .what{font-size:24px;font-weight:600;line-height:1.3}
+.dd-note{font-size:20px;opacity:.6;margin-top:16px;font-style:italic}
+.dd-act{position:absolute;left:840px;right:120px;bottom:110px;display:flex;gap:28px}
+.dd-act .btn{flex:1;height:70px;font-size:20px}
+.dd-disclaimer {position: absolute;left: 120px;top: 855px; /* Positions it right below the 680px tall image */width: 660px;font-size: 13.5px;line-height: 1.35;color: rgba(255, 255, 255, 0.65); /* A little bit visible, no white background */}
+.dd-disclaimer b {color: var(--red);font-size: 14.5px;display: block;margin-bottom: 4px;}
+
+
+/* Joint venture branding */
+.dd-joint {margin-top: 22px;display: flex;align-items: center;gap: 20px;}
+.dd-joint .joint-lbl {font-size: 18px;font-weight: 700;text-transform: uppercase;letter-spacing: .08em;opacity: .75;white-space: nowrap;}
+.dd-joint .joint-logos {display: flex;align-items: center;}
+
+/* White badge container ensures both dark and light logos display cleanly */
+.dd-joint .joint-logo-box {height: 52px;min-width: 50px;max-width: 100px;border-radius: 14px;display: grid;place-items: center;box-shadow: 0 4px 14px rgba(0, 0, 0, .2);align-content: end;padding: 10px;}
+.dd-joint .joint-logo-box img {max-width: 100%;max-height: 100%;object-fit: contain;}
+
+/* philosophy journey slides */
+#jArea{position:absolute;left:120px;right:120px;top:290px;height:540px}
+.ph{display:flex;gap:56px;height:100%}
+.ph .t{flex:1;min-width:0}
+
+.ph .t h2{font-size:58px;white-space: pre-line;}
+.ph .t .lead{font-size:32px;font-weight:700;opacity:1;margin-top:18px;line-height:1.3;max-width:none}
+.ph .t .body{font-size:25px;opacity:.85;line-height:1.5;margin-top:18px}
+.ph .quote{margin-top:26px;border-radius:24px;padding:22px 28px;background:color-mix(in srgb,var(--jc) 18%,transparent);border-left:10px solid var(--jc);font-size:26px;font-weight:700;line-height:1.4}
+.ph .pic{flex:0 0 520px;height:100%;border-radius:32px;overflow:hidden;position:relative;background:linear-gradient(160deg,color-mix(in srgb,var(--jc) 60%,#041A3A),#041A3A);display:grid;place-items:center}
+.ph .pic img{width:100%;height:100%;object-fit:cover}
+.ph .pic .bigic{width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,.14);display:grid;place-items:center;animation:floaty 5s ease-in-out infinite}
+.ph .pic .bigic svg{width:150px;height:150px;stroke-width:1.2}
+.ph .pic .num{position:absolute;left:36px;bottom:26px;font-size:120px;font-weight:800;opacity:.25;line-height:1}
+
+/* available sites map */
+#smap{position:absolute;left:80px;right:80px;top:330px;height:540px}
+#smap svg{position:absolute;inset:0;overflow:visible}
+#smap .ln{fill:none;stroke-width:20;stroke-linecap:round;stroke-linejoin:round}
+
+.slegend{position:absolute;left:120px;right:120px;bottom:88px;display:flex;gap:40px;align-items:center;justify-content:center;font-size:21px;font-weight:700}
+.slegend span{display:flex;align-items:center;gap:12px}
+.slegend .d{width:30px;height:30px;border-radius:50%;background:#fff;border:6px solid var(--yellow)}
+.slegend .d.aw{background:var(--teal);border-color:#fff;box-shadow:0 0 0 4px var(--teal)}
+.slegend .d.rfp{border-style:dashed}
+.spots{position:absolute;right:120px;top:140px;display:flex;gap:12px;flex-direction:column;align-items:stretch;width:320px}
+#sites .phead{right:500px}
+.spots .btn{height:64px;padding:0 26px;font-size:24px;justify-content:flex-start}
+.spots .k{font-size:19px;letter-spacing:.18em;text-transform:uppercase;opacity:.7;font-weight:800;align-self:center}
+
+/* spotlight */
+.sp-img{position:absolute;left:120px;top:300px;width:1120px;height:600px;border-radius:30px;overflow:hidden;background:#0a2e5e;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.sp-img img{width:100%;height:100%;object-fit:contain;background:#0a2e5e}
+.sp-img .cap{position:absolute;left:0;right:0;bottom:0;padding:18px 26px;background:linear-gradient(0deg,rgba(4,26,58,.92),rgba(4,26,58,0));font-size:22px;font-weight:700}
+.sp-side{position:absolute;left:1290px;right:120px;top:300px}
+.sp-side h5{font-size:20px;letter-spacing:.22em;text-transform:uppercase;color:var(--yellow);font-weight:800}
+.assets{list-style:none;margin-top:18px;display:flex;flex-direction:column;gap:12px}
+.assets li{display:flex;gap:18px;align-items:center;font-size:25px;font-weight:600;line-height:1.3}
+.assets li b{flex:0 0 50px;height:50px;border-radius:50%;background:var(--yellow);color:var(--navy);display:grid;place-items:center;font-size:24px}
+.sp-bnd{display:flex;gap:14px;align-items:center;margin-top:24px;font-size:22px;opacity:.85;line-height:1.3}
+.sp-bnd i{flex:0 0 44px;height:26px;border:4px dashed #ff4d5a;background:rgba(246,183,0,.35);border-radius:4px}
+.sp-tabs{display:flex;gap:14px;margin-top:30px}
+.sp-tabs .tab{height:72px;font-size:23px}
+.sp-tabs .tab.sel{background:var(--yellow);border-color:var(--yellow);color:var(--navy)}
+
+#player{z-index:40}
+
+.jnav .btn{white-space:nowrap;width:auto;min-width:380px;padding:0 40px}
+.slegend span{white-space:nowrap}
+.ph .t .body{font-size:24px;line-height:1.45}
+
+/* ===== three development cards. Every card: image header, then buttons in one standard order:
+   "Watch video" (red, always first) and "View details" (outline). Taman Naga Emas: Watch video only. ===== */
+.devs{display:flex;gap:40px;top:330px}
+.devcard{height:650px;flex-direction:column;cursor:default}
+.devcard:active{transform:none}
+.devcard:nth-child(3){animation-delay:.24s}.devcard:nth-child(4){animation-delay:.36s}
+.devcard .im{flex:0 0 280px;height:280px;background:#fff;position:relative}
+.devcard .tx{padding:26px 32px 28px;min-width:0}
+.devcard h3{font-size:34px;margin-top:18px;margin-bottom:12px;line-height:1.08}
+.devcard h3 span{display:block;font-size:20px;font-weight:600;opacity:.85;margin-top:12px}
+.devcard .acts{margin-top:auto;display:grid;gap:14px}
+/* .devcard .acts{margin-top:auto;display:grid;grid-template-columns:1fr 1fr;gap:14px} */
+.devcard .acts button{height:50px;border-radius:40px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:23px;font-weight:800;white-space:nowrap;transition:transform .15s}
+.devcard .acts button:active{transform:scale(.95)}
+.devcard .acts .wv{background:var(--red);box-shadow:0 12px 30px rgba(228,33,50,.35)}
+.devcard .acts .vd{background:transparent;border:2.5px solid rgba(255,255,255,.55)}
+.devcard .acts svg{width:26px;height:26px;stroke-width:2.4}
+/* image placeholder until the file is supplied */
+.soonimg{display:none;position:absolute;inset:0;place-items:center;align-content:center;gap:12px;text-align:center;color:#7d93b3;background:linear-gradient(160deg,#fff,#e8eff8)}
+.soonimg svg{width:64px;height:64px;stroke-width:1.5;margin:0 auto}
+.soonimg b{font-size:20px;font-weight:700;color:#5f7698}
+.noimg>.soonimg{display:grid}
+.noimg>img{display:none}
+.dd-img{position:absolute}
+.dd-tbc{margin-top:30px;border-radius:20px;padding:20px 26px;background:var(--glass);border:1.5px dashed var(--line);font-size:24px;opacity:.85}
+.dd-act .btn.primary{order:0;white-space: pre-line;}
+
+/* explore opportunities */
+.exgrid{position:absolute;left:120px;right:120px;top:350px;display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.excard{position:relative;height:178px;border-radius:24px;overflow:hidden;text-align:left;background:linear-gradient(150deg,color-mix(in srgb,var(--lc) 35%,#0a2e5e),#0a2e5e);border:1.5px solid var(--line);
+  border-top:6px solid var(--lc);padding:22px 24px;display:flex;flex-direction:column;justify-content:flex-end;animation:rise .6s cubic-bezier(.2,.8,.2,1) both;transition:transform .15s}
+.excard:active{transform:scale(.97)}
+.excard .th{position:absolute;inset:0}
+.excard .th img{width:100%;height:100%;object-fit:cover;opacity:.55}
+.excard .th .v{position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,26,58,.95) 15%,rgba(4,26,58,.25) 80%)}
+.excard .lnch{position:relative;display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.9}
+.excard .lnch i{width:22px;height:8px;border-radius:4px;background:var(--lc)}
+.excard b{position:relative;font-size:28px;font-weight:800;line-height:1.1;margin-top:6px;padding-right:56px}
+.excard .go{position:absolute;right:20px;bottom:20px;width:48px;height:48px;border-radius:50%;background:var(--red);display:grid;place-items:center}
+.excard .go svg{width:26px;height:26px;stroke-width:2.6}
+
+/* spotlight Site plan / Transit / Amenities buttons (Aerial view removed) */
+.sp-img .soonimg b{font-size:26px}
+.sp-side{bottom:180px}
+.sp-body{min-height:420px}
+.sp-tbc{margin-top:18px;border-radius:18px;padding:20px 24px;background:var(--glass);border:1.5px dashed var(--line);font-size:24px;opacity:.85}
+.assets li b svg{width:26px;height:26px;stroke-width:2.2}
+.sp-tabs{position:absolute;left:0;right:0;bottom:0;margin-top:0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.sp-tabs .tab{height:76px;font-size:20px;padding:0 8px;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:40px;background:var(--glass2);border:1.5px solid var(--line);font-weight:800}
+.sp-tabs .tab svg{width:26px;height:26px;stroke-width:2.2}
+.sp-tabs .tab.sel svg{color:var(--navy)}
+.sp-img{width:1060px}
+#spot .sp-side{left:1230px}
+.sp-tabs .tab{white-space:nowrap}
+
+/* ===== available sites map, same design as the Commercial network map (no station branding) ===== */
+#sites .net-head{position:absolute;left:120px;top:118px;width:900px;z-index:3}
+#sites .net-head h2{font-size:44px;font-weight:800;line-height:1.05;margin-top:8px;white-space:nowrap}
+#sites .net-legend{position:absolute;right:80px;top:132px;display:flex;gap:26px;align-items:center;font-size:20px;font-weight:700;z-index:3}
+#sites .net-legend span{display:flex;align-items:center;gap:10px;white-space:nowrap}
+#sites .net-legend i{display:inline-block;width:24px;height:24px;border-radius:50%;background:var(--c);border:4px solid #fff}
+#sites .net-legend i.fut{background:#fff;border:6px solid #9fb3cc}
+#sites .net-legend i.ug{width:44px;height:10px;border:0;border-radius:0;background:repeating-linear-gradient(90deg,#fff 0 6px,transparent 6px 10px)}
+#sites .net-hint{position:absolute;right:80px;top:184px;font-size:19px;letter-spacing:.16em;text-transform:uppercase;opacity:.75;display:flex;gap:10px;align-items:center;z-index:3}
+#sites .net-hint svg{width:30px;height:30px}
+#smap{position:absolute;inset:0;left:0;right:auto;top:0;width:1920px;height:1080px;z-index:2}
+#smap .ln{fill:none;stroke-width:12;stroke-linecap:butt;stroke-linejoin:round}
+#smap .xlink{stroke:#fff;stroke-width:8;stroke-linecap:round;opacity:.9}
+#smap .stn text{fill:#fff;font-size:16px;font-weight:500;opacity:.92;letter-spacing:.01em}
+#smap .stn{pointer-events:none}
+#smap .stn circle.d{fill:#fff;stroke-width:6}
+#smap .stn.xc circle.d{stroke:#fff;fill:#07254F}
+#smap .site.tap{cursor:pointer;pointer-events:auto}
+#smap .site .hit{fill:transparent}
+#smap .site text{font-size:17px;font-weight:800;opacity:1}
+#smap .site circle.m{stroke-width:5;transition:transform .15s;transform-box:fill-box;transform-origin:center}
+#smap .site.tap:active circle.m{transform:scale(1.25)}
+#smap .pulse{fill:none;stroke-width:4;opacity:0;transform-box:fill-box;transform-origin:center;animation:ping2 2.6s ease-out infinite}
+@keyframes ping2{0%{transform:scale(1);opacity:.85}70%,100%{transform:scale(2.6);opacity:0}}
+#smap .train{pointer-events:none}
+#smap .lnlbl{font-size:34px;font-weight:800;letter-spacing:.01em}
+#smap .lnstat{fill:#fff;font-size:19px;opacity:.75}
+
+
+/* connect with us */
+.ct-left{position:absolute;left:120px;top:170px;width:1040px}
+.ct-left h2{font-size:68px;font-weight:800;line-height:1.05;margin-top:12px}
+.ct-left > p{font-size:28px;opacity:.85;margin-top:18px;line-height:1.4}
+.ctlist{margin-top:40px;display:flex;flex-direction:column;gap:22px}
+.ctrow{display:flex;gap:26px;align-items:flex-start}
+.ctrow i{flex:0 0 76px;height:76px;border-radius:50%;background:var(--glass2);border:1.5px solid var(--line);display:grid;place-items:center}
+.ctrow i svg{width:36px;height:36px}
+.ctrow small{display:block;font-size:18px;letter-spacing:.18em;text-transform:uppercase;opacity:.65;font-weight:700}
+.ctrow b{display:block;font-size:30px;font-weight:700;margin-top:4px;line-height:1.3}
+.ct-card{position:absolute;right:120px;top:200px;width:560px;border-radius:40px;padding:48px;text-align:center;background:linear-gradient(150deg,rgba(255,255,255,.16),rgba(255,255,255,.05));border:1.5px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.qrbox{margin:0 auto;width:380px;height:380px;border-radius:28px;background:#fff;display:grid;place-items:center;overflow:hidden;padding:22px}
+.qrbox img{width:100%;height:100%;object-fit:contain}
+.qrph{color:var(--navy);text-align:center;font-size:20px;font-weight:700;line-height:1.35;border:4px dashed #9bb3d1;border-radius:16px;width:100%;height:100%;display:grid;place-items:center;padding:14px;word-break:break-all}
+.ct-card h3{font-size:40px;font-weight:800;margin-top:30px}
+.ct-card p{font-size:24px;opacity:.8;margin-top:8px}
+.ct-actions{position:absolute;left:120px;top:860px;display:flex;gap:30px}
+.ct-actions .btn{width:520px;height:96px;font-size:30px}
+.ctbtn{position:absolute;right:120px;top:168px;height:70px;padding:0 40px;font-size:28px;z-index:4}
+.ctbtn svg{width:34px;height:34px}
+.ctbtn.sites{top:174px;right:430px;height:62px;padding:0 30px;font-size:23px}
+.ctbtn.sites svg{width:28px;height:28px}
+/* spotlight: Property deck maps */
+.sp-tabs.n4{grid-template-columns:repeat(2,1fr);gap:12px}
+.sp-tabs.n4 .tab{height:66px}
+.sp-tabs.n1{grid-template-columns:1fr}
+#spot .sp-side{bottom:180px}
+#spot .sp-body{min-height:0;max-height:440px;overflow:hidden}
+.sp-img.zoomable{cursor:zoom-in}
+.sp-img .zhint{position:absolute;right:16px;bottom:14px;display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:30px;background:rgba(4,26,58,.75);font-size:17px;font-weight:700}
+.sp-img .zhint svg{width:20px;height:20px}
+.sp-note{font-size:24px;line-height:1.4;opacity:.88;margin-top:16px}
+.sp-bnd i.star{border:0;background:none;color:#F6B700;font-size:34px;font-style:normal;height:auto;text-align:center}
+.conn{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+.conn .cr{display:flex;gap:14px;align-items:center;padding:5px 16px;border-radius:16px;background:var(--glass);border:1px solid var(--line)}
+.conn .ct{flex:1;min-width:0}
+.conn .ct b{display:block;font-size:22px;font-weight:800}
+.conn .ct small{display:block;font-size:16px;opacity:.75;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conn .cm{text-align:right;flex:0 0 auto}
+.conn .cm b{font-size:28px;font-weight:800;color:var(--yellow)}
+.conn .cm b i{font-style:normal;font-size:16px;margin-left:2px}
+.conn .cm small{display:block;font-size:15px;opacity:.75}
+.amen{list-style:none;margin-top:12px;columns:2;column-gap:20px;font-size:15.5px;line-height:1.25}
+.amen li{break-inside:avoid;padding:3px 0 3px 16px;position:relative;opacity:.92}
+.amen li::before{content:"";position:absolute;left:0;top:10px;width:7px;height:7px;border-radius:50%;background:var(--yellow)}
+#zoom{position:absolute;inset:0;z-index:40;background:rgba(2,14,34,.94);display:none;place-items:center;cursor:zoom-out}
+#zoom.on{display:grid}
+#zoom img{max-width:1840px;max-height:1000px;object-fit:contain;border-radius:16px}
+#zoom .pclose{position:absolute;right:40px;top:30px}
+/* 19 Oct: site maps fill their frame (trims the thin white strips in the deck exports); zoom uses the whole screen */
+.sp-img img{object-fit:cover;transform:scale(1.03)}
+#zoom img{position:absolute;inset:0;width:100%;height:100%;max-width:none;max-height:none;object-fit:contain;border-radius:0}
+#zoom.fill img{object-fit:cover;transform:scale(1.025)}
+#zoom .pclose{z-index:2;background:rgba(4,26,58,.8)}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="grid"></div>
+  <svg id="bgLines" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+    <path d="M-50 980 C 400 980 520 760 900 760 S 1500 900 1980 700" stroke="#E42132"/>
+    <path d="M-50 120 C 300 120 600 300 980 260 S 1600 80 1980 180" stroke="#2771CC"/>
+    <path d="M1600 -40 C 1600 300 1780 500 1780 1120" stroke="#F6B700"/>
+    <path d="M-50 600 C 250 560 300 900 700 1120" stroke="#269C95"/>
+  </svg>
+
+  <!-- ===== HOME ===== -->
+  <section class="screen active" id="attract">
+    <div id="attractFallback">
+      <svg viewBox="0 0 1920 1080" width="1920" height="1080" style="position:absolute;inset:0">
+        <path d="M-40 860 H 700 L 900 660 H 1960" stroke="#E42132"/>
+        <path d="M1240 -40 V 400 L 1060 580 V 1120" stroke="#2771CC" style="animation-delay:.4s,5.4s"/>
+        <path d="M-40 980 H 1100 L 1400 680 H 1960" stroke="#F6B700" style="animation-delay:.8s,5.8s"/>
+        <path d="M1560 -40 V 300 L 1760 500 V 1120" stroke="#269C95" style="animation-delay:1.2s,6.2s"/>
+      </svg>
+      <div class="fbHead">
+
+        <h1 data-i18n="att_h"></h1>
+        <p data-i18n="att_p"></p>
+      </div>
+    </div>
+    <div class="video-frame" id="videoFrame">
+      <video id="loopVideo" muted loop playsinline autoplay preload="auto"></video>
+      <div class="vph"><div><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></svg><b data-i18n="att_vph"></b></div></div>
+    </div>
+    <div class="shade"></div>
+    <div class="topbar"><div class="brand" data-logo></div><div class="navbtns" data-nav="lang"></div></div>
+
+    <button class="fab" id="fab">
+      <svg class="ic" viewBox="0 0 24 24"><path d="M9 11V5a2 2 0 0 1 4 0v5M13 10V8.5a2 2 0 0 1 4 0V12M17 11a2 2 0 0 1 4 0v3a7 7 0 0 1-7 7h-1.5a6 6 0 0 1-4.6-2.2L4 14.5a1.8 1.8 0 0 1 2.7-2.4L9 14"/></svg>
+      <span data-i18n="att_fab"></span>
+    </button>
+
+    <!-- Add the disclaimer here -->
+    <div class="attract-disclaimer" data-i18n="att_disc"></div>
+  </section>
+
+  <!-- ===== MENU ===== -->
+  <section class="screen" id="hub">
+    <div class="topbar"><div class="brand" data-logo></div><div class="navbtns" data-nav="lang,home"></div></div>
+    <div class="hero-title" style="top:150px">
+      <div class="eyebrow" data-i18n="hub_k"></div>
+      <h2 data-i18n="hub_h"></h2>
+
+    </div>
+    <div class="journeys four" id="hubCards"></div>
+    <div class="linebar"><i style="background:var(--red)"></i><i style="background:var(--blue)"></i><i style="background:var(--yellow)"></i><i style="background:var(--teal)"></i></div>
+    <div class="footer"><span data-i18n="foot_l"></span><span data-i18n="foot_r"></span></div>
+  </section>
+
+  <!-- ===== OUR DEVELOPMENTS ===== -->
+  <section class="screen" id="devs">
+    <div class="topbar"><div class="brand" data-logo></div><div class="navbtns" data-nav="lang,menu,home"></div></div>
+    <div class="phead"><div class="eyebrow" data-i18n="dev_k"></div><h2 data-i18n="dev_h"></h2><p data-i18n="dev_p"></p></div>
+    <div class="devs" id="devCards"></div>
+    <div class="linebar"><i style="background:var(--red)"></i><i style="background:var(--blue)"></i><i style="background:var(--yellow)"></i><i style="background:var(--teal)"></i></div>
+    <div class="footer"><span data-i18n="foot_l"></span><span data-i18n="foot_r"></span></div>
+  </section>
+
+  <!-- ===== DEVELOPMENT DETAIL ===== -->
+  <section class="screen" id="devd">
+    <div class="topbar"><div class="brand" data-logo></div><div class="navbtns" data-nav="lang,back:devs,home"></div></div>
+    <div id="devArea"></div>
+    <div class="linebar"><i style="background:var(--red)"></i><i style="background:var(--blue)"></i><i style="background:var(--yellow)"></i><i style="background:var(--teal)"></i></div>
+    <div class="footer"><span data-i18n="foot_l"></span><span data-i18n="foot_r"></span></div>
+  </section>
+
+  <!-- ===== DESIGN PHILOSOPHY ===== -->
+  <section class="screen" id="phil">
+    <div class="topbar"><div class="brand" data-logo></div><div class="navbtns" data-nav="lang,menu,home"></div></div>
+    <div class="rail" id="jRail"></div>
+    <div id="jArea"></div>
+    <div class="jnav">
+      <button class="btn ghost" id="jPrev"><svg class="ic" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span data-i18n="prev"></span></button>
+      <div>
+        <div class="dots" id="jDots"></div>
+        <!-- <div class="swipehint" data-i18n="swipe"></div> -->
+      </div>
+      <button class="btn primary" id="jNext"></button>
+    </div>
+    <div class="linebar"><i style="background:var(--red)"></i><i style="background:var(--blue)"></i><i style="background:var(--yellow)"></i><i style="background:var(--teal)"></i></div>
+    <div class="footer"><span data-i18n="foot_l"></span><span data-i18n="foot_r"></span></div>
+  </section>
+
+  <!-- ===== AVAILABLE SITES ===== -->
+  <section class="screen" id="sites">
+    <div class="topbar"><div class="brand" data-logo></div><div class="navbtns" data-nav="lang,menu,home"></div></div>
+    <div class="net-head"><div class="eyebrow" data-i18n="st_k"></div><h2 id="stH"></h2></div>
+    <div class="net-legend" id="slegend"></div>
+    <div class="net-hint"><svg class="ic" viewBox="0 0 24 24"><path d="M9 11V5a2 2 0 0 1 4 0v5M13 10V8.5a2 2 0 0 1 4 0V12M17 11a2 2 0 0 1 4 0v3a7 7 0 0 1-7 7h-1.5a6 6 0 0 1-4.6-2.2L4 14.5a1.8 1.8 0 0 1 2.7-2.4L9 14"/></svg><span data-i18n="st_hint"></span></div>
+    <svg id="smap" viewBox="0 0 1920 1080"></svg>
+    <!-- <button class="btn primary ctbtn sites" data-go="contact"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></svg><span data-i18n="ct_btn"></span></button> -->
+    <div class="linebar"><i style="background:var(--red)"></i><i style="background:var(--blue)"></i><i style="background:var(--yellow)"></i><i style="background:var(--teal)"></i></div>
+    <div class="footer">
+      <span data-i18n="foot_l"></span>
+      <span data-i18n="foot_r"></span>
+    </div>
+    <div id="scrim"></div>
+    <aside id="panel"></aside>
+  </section>
+
+  <!-- ===== SITE SPOTLIGHT ===== -->
+  <section class="screen" id="spot">
+    <div class="topbar"><div class="brand" data-logo></div><div class="navbtns" data-nav="lang,back:spotback,home"></div></div>
+    <div id="spotArea"></div>
+    <div class="linebar"><i style="background:var(--red)"></i><i style="background:var(--blue)"></i><i style="background:var(--yellow)"></i><i style="background:var(--teal)"></i></div>
+    <div class="footer"><span data-i18n="foot_l"></span><span data-i18n="foot_r"></span></div>
+  </section>
+
+  <!-- ===== EXPLORE OPPORTUNITIES (replaces Videos, v0.3) ===== -->
+  <section class="screen" id="explore">
+    <div class="topbar"><div class="brand" data-logo></div><div class="navbtns" data-nav="lang,menu,home"></div></div>
+    <div class="phead"><div class="eyebrow" data-i18n="ex_k"></div><h2 id="exH"></h2><p data-i18n="ex_p"></p></div>
+    <div class="exgrid" id="exGrid"></div>
+    <div class="linebar"><i style="background:var(--red)"></i><i style="background:var(--blue)"></i><i style="background:var(--yellow)"></i><i style="background:var(--teal)"></i></div>
+    <div class="footer"><span data-i18n="foot_l"></span><span data-i18n="foot_r"></span></div>
+  </section>
+
+  <!-- ===== CONNECT WITH US ===== -->
+  <section class="screen" id="contact">
+    <div class="topbar"><div class="brand" data-logo></div><div class="navbtns" data-nav="lang,back:ctback,home"></div></div>
+    <div class="ct-left">
+      <div class="eyebrow" data-i18n="ct_k"></div>
+      <h2 data-i18n="ct_h"></h2>
+      <p data-i18n="ct_p"></p>
+      <div class="ctlist" id="ctlist"></div>
+    </div>
+    <div class="ct-card"><div class="qrbox" id="ctQR"></div><h3 data-i18n="ct_scan"></h3><p data-i18n="ct_scan_p"></p></div>
+    <div class="ct-actions">
+      <button class="btn ghost" data-go="sites"><svg class="ic" viewBox="0 0 24 24"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/></svg><span data-i18n="ct_sites"></span></button>
+      <button class="btn primary" data-home><svg class="ic" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><span data-i18n="ct_done"></span></button>
+    </div>
+    <div class="linebar"><i style="background:var(--red)"></i><i style="background:var(--blue)"></i><i style="background:var(--yellow)"></i><i style="background:var(--teal)"></i></div>
+    <div class="footer"><span data-i18n="foot_l"></span><span data-i18n="foot_r"></span></div>
+  </section>
+
+  <div id="zoom"><img alt=""><button class="pclose" id="zoomClose"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div id="player"><video id="pv" playsinline></video><div class="soon"><div><h3 data-i18n="soon_h"></h3><p data-i18n="soon_p"></p></div></div>
+    <button class="pclose" id="pvClose"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div id="wipe"><i style="background:var(--red)"></i><i style="background:var(--blue)"></i><i style="background:var(--yellow)"></i><i style="background:var(--teal)"></i></div>
+  <div id="idle"><div class="box"><div class="num" id="idleNum">10</div><h3 data-i18n="idle_h"></h3><p data-i18n="idle_p"></p></div></div>
+  <div id="hot"></div>
+  <div id="admin"></div>
+</div>
+
+<!-- =====================================================================
+     CONTENT & SETTINGS — all text, data and settings for this kiosk.
+     Every text has English (en) and Bahasa Malaysia (ms).
+     Items marked  verify:true  still need owner confirmation (listed in the QA panel).
+     ===================================================================== -->
+<script>
+const SETTINGS = {
+  homeVideos: { folder: "home-videos/", muted: false, fallback: "" },   // home page videos: every video in this folder plays A-Z in a loop (01_, 02_ ... sets the order)
+  logo: "media/logo.png",
+  defaultLang: "en",             // "ms" = start in BM, "en" = start in English
+  qrContact: "media/img/qr-contact.png",   // Connect with us QR code (Property to supply)
+  idleSeconds: 90,                // back to home after 90 s without a touch (paused while a video plays)
+  idleWarnSeconds: 10,
+  hideCursor: false,             // set true on the kiosk
+  adminTaps: 5
+};
+
+/* fixed screen text */
+const UI = {
+  att_h:   {en:"Building<br>around every<br><span>station.</span>", ms:"Membangun<br>di setiap<br><span>stesen.</span>"},
+  att_p:   {en:"Multi-Modal Transit Hubs by MRT Corp.", ms:"Hab Transit Pelbagai Mod oleh MRT Corp."},
+  att_vph: {en:"Video coming soon", ms:"Video akan datang"},
+  att_fab: {en:"Find out more", ms:"Ketahui lebih lanjut"},
+  att_disc: {en: "DISCLAIMER: All visuals and information presented herein are for conceptual and illustrative purposes only and are subject to change without prior notice, as may be required by the relevant authorities or the Developer. Whilst reasonable care has been taken to ensure accuracy, the Owner, Developer and Management shall not be liable for any variations or discrepancies, to the extent permitted by law. This presentation is intended solely for informational purposes, is subject to relevant authority approvals, and does not constitute an offer for sale or an invitation to purchase.",ms: "PENAFIAN: Semua visual dan maklumat yang dikemukakan di sini adalah untuk tujuan konsep dan ilustrasi sahaja dan tertakluk kepada perubahan tanpa notis awal, seperti yang mungkin dikehendaki oleh pihak berkuasa yang berkaitan atau Pemaju. Walaupun langkah munasabah telah diambil untuk memastikan ketepatan, Pemilik, Pemaju dan Pengurusan tidak akan bertanggungjawab atas sebarang perubahan atau percanggahan, setakat yang dibenarkan oleh undang-undang. Pembentangan ini bertujuan semata-mata untuk tujuan maklumat, tertakluk kepada kelulusan pihak berkuasa yang berkaitan, dan tidak merupakan tawaran jualan atau pelawaan untuk membeli."},
+  head_t:{en:"Property", ms:"Hartanah"},
+  home:{en:"Home", ms:"Utama"}, menu:{en:"Menu", ms:"Menu"}, back:{en:"Back", ms:"Kembali"},
+  hub_k:{en:"Property · Transit-oriented development", ms:"Hartanah · Pembangunan berorientasikan transit"},
+  hub_h:{en:"Life, built around the station.", ms:"Kehidupan, dibina di sekitar stesen."},
+  explore:{en:"Explore", ms:"Teroka"},
+  foot_l:{en:"Property · TXA 2026", ms:"Hartanah · TXA 2026"},
+  foot_r:{en:"Enhancing Mobility, Enriching Communities", ms:"Meningkatkan Mobiliti, Memperkaya Komuniti"},
+  dev_k:{en:"Developments in focus", ms:"Sorotan pembangunan"},
+  dev_h:{en:"Homes and hubs, right at the station.", ms:"Kediaman dan hab, terus di stesen."},
+  dev_p:{en:"Tap a development to see its details or watch a video.", ms:"Sentuh salah satu pembangunan untuk melihat butiran atau menonton video."},
+  view:{en:"View details", ms:"Lihat butiran"},
+  watch:{en:"Watch video", ms:"Tonton video"},
+  watch_desgn:{en:"Design overview", ms:"Gambaran reka bentuk"},
+  watch_art:{en:"Construction progress", ms:"Perkembangan terkini"},
+  back_dev:{en:"All developments", ms:"Semua pembangunan"},
+  back_map:{en:"Property map", ms:"Peta hartanah"},
+  phasing:{en:"Development phasing", ms:"Fasa pembangunan"},
+  prev:{en:"Previous", ms:"Sebelumnya"},
+  next:{en:"Next", ms:"Seterusnya"},
+  swipe:{en:"Swipe or tap a station", ms:"Leret atau sentuh stesen"},
+  back_menu:{en:"Back to menu", ms:"Kembali ke menu"},
+  st_k:{en:"Available sites", ms:"Tapak tersedia"},
+  st_h:{en:"{n} sites ready for the future.", ms:"{n} tapak sedia untuk masa depan."},
+  st_hint:{en:"Tap a pulsing station", ms:"Sentuh stesen yang bercahaya"},
+  ln_stat:{en:"{s} stations · {n} available sites", ms:"{s} stesen · {n} tapak tersedia"},
+  lg_ug:{en:"Underground", ms:"Bawah tanah"},
+
+  lg_aw:{en:"Awarded", ms:"Telah dianugerahkan"},
+  lg_rfp:{en:"In negotiation", ms:"Dalam rundingan"},
+  lg_fut:{en:"Future opportunity", ms:"Peluang masa depan"},
+  spots:{en:"Site spotlights", ms:"Sorotan tapak"},
+  status:{en:"Status", ms:"Status"},
+
+  sp_assets:{en:"MRT assets on site", ms:"Aset MRT di tapak"},
+  sp_bnd:{en:"Potential development land (outlined in red)", ms:"Tanah berpotensi untuk dibangunkan (bergaris merah)"},
+  sp_plan:{en:"Site plan", ms:"Pelan tapak"},
+  sp_transit:{en:"Transit", ms:"Transit"},
+  sp_amen:{en:"Amenities", ms:"Kemudahan"},
+  sp_tbc:{en:"Details to be shared.", ms:"Butiran akan dikongsi."},
+  sp_noplan:{en:"Site plan coming soon", ms:"Pelan tapak akan datang"},
+  sp_subject:{en:"Subject property", ms:"Hartanah subjek"},
+  img_soon:{en:"Image coming soon", ms:"Imej akan datang"},
+  dev_tbc:{en:"Details of this development will be shared.", ms:"Butiran pembangunan ini akan dikongsi."},
+  ex_k:{en:"Explore opportunities", ms:"Teroka peluang"},
+  ct_k:{en:"Connect with us", ms:"Hubungi kami"},
+  ct_h:{en:"Let's build around<br>the next station together.", ms:"Mari bersama-sama kita bina<br>di sekitar stesen seterusnya."},
+  ct_p:{en:"Talk to the MRT Corp Property team about development opportunities along the Kajang and Putrajaya Lines.", ms:"Bincang dengan pasukan Hartanah MRT Corp tentang peluang pembangunan di sepanjang Laluan Kajang dan Putrajaya."},
+  ct_scan:{en:"Scan to connect", ms:"Imbas untuk berhubung"},
+  ct_scan_p:{en:"Reach the Property team from your phone.", ms:"Hubungi pasukan Hartanah dari telefon anda."},
+  ct_sites:{en:"Back to available sites", ms:"Kembali ke tapak tersedia"},
+  ct_done:{en:"Finish", ms:"Selesai"},
+  ct_email:{en:"Email", ms:"E-mel"}, ct_phone:{en:"Phone", ms:"Telefon"}, ct_addr:{en:"Address", ms:"Alamat"},
+  ct_btn:{en:"Connect with us", ms:"Hubungi kami"},
+  sp_tab_assets:{en:"MRT assets", ms:"Aset MRT"},
+  sp_tab_loc:{en:"Location", ms:"Lokasi"},
+  sp_tab_conn:{en:"Connectivity", ms:"Ketersambungan"},
+  sp_tab_amen:{en:"Amenities", ms:"Kemudahan"},
+  sp_loc_h:{en:"Location", ms:"Lokasi"},
+  sp_loc_p:{en:"The subject property in its neighbourhood, with the main roads and highways around it.", ms:"Hartanah subjek dalam kejiranannya, bersama jalan utama dan lebuh raya di sekitarnya."},
+  sp_conn_h:{en:"By MRT from this station", ms:"Dengan MRT dari stesen ini"},
+  sp_stops:{en:"{n} stations", ms:"{n} stesen"}, sp_stop1:{en:"1 station", ms:"1 stesen"},
+  sp_amen_h:{en:"Within 2 km", ms:"Dalam lingkungan 2 km"},
+  sp_zoom:{en:"Tap the map to enlarge", ms:"Sentuh peta untuk besarkan"},
+  sp_zoom2:{en:"Tap the image to enlarge", ms:"Sentuh gambar untuk besarkan"},
+  sp_site:{en:"The site", ms:"Tapak"},
+  sp_nolist:{en:"The site is the land outlined next to the MRT station.", ms:"Tapak ialah tanah yang bergaris di sebelah stesen MRT."},
+  ex_h:{en:"{n} stations open for RFP.", ms:"{n} stesen terbuka untuk RFP."},
+  ex_p:{en:"Partner with us. Tap a station to see the site plan, transit links and amenities.", ms:"Bekerjasama dengan kami. Sentuh stesen untuk melihat pelan tapak, rangkaian transit dan kemudahan."},
+  soon_h:{en:"Video coming soon", ms:"Video akan datang"},
+  soon_p:{en:"This video will be available at the booth.", ms:"Video ini akan tersedia di reruai."},
+  idle_h:{en:"Still exploring?", ms:"Masih meneroka?"},
+  idle_p:{en:"Tap anywhere to continue", ms:"Sentuh di mana-mana untuk teruskan"},
+  min:{en:"min", ms:"minit"}
+};
+
+/* menu tiles */
+const HUB = [
+  { go:"devs",   color:"#E42132", icon:"building", t:{en:"Developments in focus", ms:"Sorotan<br>pembangunan"}, p:{en:"80300 Bukit Chagar, The Linque Cochrane and Kota Madani Emas", ms:"80300 Bukit Chagar, The Linque Cochrane dan Kota Madani Emas"} },
+  { go:"phil",   color:"#2771CC", icon:"bulb",     t:{en:"Design<br>philosophy", ms:"Falsafah<br>reka bentuk"}, p:{en:"Our guide in undertaking every development", ms:"Panduan kami dalam merealisasikan setiap pembangunan"} },
+  { go:"sites",  color:"#F6B700", icon:"map",      t:{en:"Explore<br>opportunities", ms:"Terokai<br>peluang"}, p:{en:"{n} sites along the Kajang and Putrajaya Lines", ms:"{n} tapak di sepanjang Laluan Kajang dan Putrajaya"} },
+  { go:"contact", color:"#269C95", icon:"qr",     t:{en:"Connect<br>with us", ms:"Hubungi<br>kami"}, p:{en:"Register now to be notified of future opportunities", ms:"Daftar sekarang untuk menerima makluman tentang peluang akan datang."} }
+];
+
+/* developments */
+const DEVS = [
+  { id:"bukitchagar", color:"#2771CC", img:"media/img/bukit-chagar-phasing.png", video:"bukit-chagar", videoArt:"bukit-chagar-progress",
+    chip:{en:"RTS Link · Johor Bahru", ms:"RTS Link · Johor Bahru"},
+    name:{en:"80300 Bukit Chagar", ms:"80300 Bukit Chagar"},
+    at:{en:"at the RTS Link Station", ms:"di Stesen RTS Link"},
+    joint: {label: { en: "A joint development by", ms: "Pembangunan bersama oleh" },logos: ["media/img/logo-mrt-corp.png","media/img/logo-sunway.png"]},
+    /* Figures shown (statsConfirmed:true). Property to confirm before the event; set statsConfirmed:false to hide them. */
+    statsConfirmed:true, verify:true, stats:[
+      { v:"1,586", l:{en:"Total units", ms:"Jumlah unit"} },
+      { v:{en:"RM2.6 billion", ms:"RM2.6 bilion"}, l:{en:"Gross development value", ms:"Nilai pembangunan kasar"} },
+      { v:{en:"2.5 million sqft", ms:"2.5 milion sqft"}, l:{en:"Net floor area", ms:"Keluasan lantai bersih"} },
+      { v:{en:"Development Components", ms:"Komponen Pembangunan"}, l:{en:"• Serviced Apartment\n• Retail Mall\n• Hotel\n• Office Space\n• Multi-storey Park & Ride", ms:"• Pangsapuri Servis\n• Pusat Beli-belah\n• Hotel\n• Ruang Pejabat\n• Tempat Letak Kereta Bertingkat"}, wide:true }
+    ],
+    disclaimer: {
+      en: "<b>DISCLAIMER</b>All visuals and information presented herein are for conceptual and illustrative purposes only and are subject to change without prior notice, as may be required by the relevant authorities or the Developer. Whilst reasonable care has been taken to ensure accuracy, the Owner, Developer and Management shall not be liable for any variations or discrepancies, to the extent permitted by law. This presentation is intended solely for informational purposes, is subject to relevant authority approvals, and does not constitute an offer for sale or an invitation to purchase.",
+      ms: "<b>PENAFIAN</b>Semua visual dan maklumat yang dikemukakan di sini adalah untuk tujuan konsep dan ilustrasi sahaja dan tertakluk kepada perubahan tanpa notis awal, seperti yang mungkin dikehendaki oleh pihak berkuasa yang berkaitan atau Pemaju. Walaupun langkah munasabah telah diambil untuk memastikan ketepatan, Pemilik, Pemaju dan Pengurusan tidak akan bertanggungjawab atas sebarang perubahan atau percanggahan, setakat yang dibenarkan oleh undang-undang. Pembentangan ini bertujuan semata-mata untuk tujuan maklumat, tertakluk kepada kelulusan pihak berkuasa yang berkaitan, dan tidak merupakan tawaran jualan atau pelawaan untuk membeli."
+    } 
+    // phases:[
+    //   { when:{en:"Dec 2026", ms:"Dis 2026"}, what:{en:"MSPR Phase 1", ms:"MSPR Fasa 1"} },
+    //   { when:{en:"Dec 2027", ms:"Dis 2027"}, what:{en:"MSPR Phase 2 and MSPR car park", ms:"MSPR Fasa 2 dan tempat letak kereta MSPR"} },
+    //   { when:{en:"Nov 2028", ms:"Nov 2028"}, what:{en:"Retail & education centre, medical hub", ms:"Pusat runcit & pendidikan, hab perubatan"} },
+    //   { when:{en:"2031", ms:"2031"}, what:{en:"Hotel, serviced suites and podium facilities", ms:"Hotel, suite servis dan kemudahan podium"} },
+    //   { when:{en:"2032", ms:"2032"}, what:{en:"Residential towers 2, 3 & 4 and TOD car park", ms:"Menara kediaman 2, 3 & 4 dan tempat letak kereta TOD"} } ],
+    // note:{en:"Direct access to the ICQC building. Target dates as shown in the development plan.", ms:"Akses terus ke bangunan ICQC. Tarikh sasaran seperti dalam pelan pembangunan."} 
+  },
+  { id:"cochrane", color:"#047136", img:"media/img/cochrane-linque.png", video:"cochrane",
+    chip:{en:"MRT Kajang Line", ms:"MRT Laluan Kajang"},
+    name:{en:"The Linque Cochrane", ms:"The Linque Cochrane"},
+    at:{en:"at Cochrane MRT Station", ms:"di Stesen MRT Cochrane"},
+    joint: {label: { en: "A joint development by", ms: "Pembangunan bersama oleh" },logos: ["media/img/logo-mrt-corp.png","media/img/logo-ijm.png"]},
+    stats:[
+      { v:"586", l:{en:"Total units", ms:"Jumlah unit"} },
+      { v:{en:"RM600 million", ms:"RM600 juta"}, l:{en:"Gross development value", ms:"Nilai pembangunan kasar"} },
+      { v:"705,300 sqft", l:{en:"Gross floor area (GFA)", ms:"Keluasan lantai kasar (GFA)"} },
+      { v:{en:"Development Components", ms:"Komponen Pembangunan"}, l:{en:"• Serviced Apartment\n• Retail Mall\n• Co-working Space", ms:"• Pangsapuri Servis\n• Pusat Beli-belah\n• Ruang kerja bersama"}, wide:true } ],
+    disclaimer: {
+      en: "<b>DISCLAIMER</b>All visuals and information presented herein are for conceptual and illustrative purposes only and are subject to change without prior notice, as may be required by the relevant authorities or the Developer. Whilst reasonable care has been taken to ensure accuracy, the Owner, Developer and Management shall not be liable for any variations or discrepancies, to the extent permitted by law. This presentation is intended solely for informational purposes, is subject to relevant authority approvals, and does not constitute an offer for sale or an invitation to purchase.",
+      ms: "<b>PENAFIAN</b>Semua visual dan maklumat yang dikemukakan di sini adalah untuk tujuan konsep dan ilustrasi sahaja dan tertakluk kepada perubahan tanpa notis awal, seperti yang mungkin dikehendaki oleh pihak berkuasa yang berkaitan atau Pemaju. Walaupun langkah munasabah telah diambil untuk memastikan ketepatan, Pemilik, Pemaju dan Pengurusan tidak akan bertanggungjawab atas sebarang perubahan atau percanggahan, setakat yang dibenarkan oleh undang-undang. Pembentangan ini bertujuan semata-mata untuk tujuan maklumat, tertakluk kepada kelulusan pihak berkuasa yang berkaitan, dan tidak merupakan tawaran jualan atau pelawaan untuk membeli."
+    } 
+  },
+  /* videoOnly:true = "Watch video" button only (no details page) */
+  { id:"naga-emas", color:"#f6b700", img:"media/img/naga-emas.jpg", video:"naga-emas", videoOnly:false,      /* image to be supplied */
+    chip:{en:"MRT Putrajaya Line", ms:"MRT Laluan Putrajaya"},
+    name:{en:"Kota Madani Emas", ms:"Kota Madani Emas"},
+    at:{en:"at Taman Naga Emas MRT Station", ms:"di Stesen MRT Taman Naga Emas"},
+    stats:[
+      { v:{en:"33.99 acres", ms:"33.99 ekar"}, l:{en:"Total land area", ms:"Jumlah keluasan kawasan tanah"}, wide:true },
+      { v:{en:"Development Components", ms:"Komponen Pembangunan"}, l:{en: "• Integrated Transit Hub\n• Vertical School\n• Centralised Green Space\n• Serviced Apartment\n• Residensi Madani\n• Civil Servant Homes", ms: "• Hub Transit Bersepadu\n• Sekolah Menegak\n• Ruang Hijau Berpusat\n• Pangsapuri Servis\n• Residensi Madani\n• Kediaman Penjawat Awam"}, wide:true }
+    ], verify:true,
+    disclaimer: {
+      en: "<b>DISCLAIMER</b>All visuals and information presented herein are for conceptual and illustrative purposes only and are subject to change without prior notice, as may be required by the relevant authorities or the Developer. Whilst reasonable care has been taken to ensure accuracy, the Owner, Developer and Management shall not be liable for any variations or discrepancies, to the extent permitted by law. This presentation is intended solely for informational purposes, is subject to relevant authority approvals, and does not constitute an offer for sale or an invitation to purchase.",
+      ms: "<b>PENAFIAN</b>Semua visual dan maklumat yang dikemukakan di sini adalah untuk tujuan konsep dan ilustrasi sahaja dan tertakluk kepada perubahan tanpa notis awal, seperti yang mungkin dikehendaki oleh pihak berkuasa yang berkaitan atau Pemaju. Walaupun langkah munasabah telah diambil untuk memastikan ketepatan, Pemilik, Pemaju dan Pengurusan tidak akan bertanggungjawab atas sebarang perubahan atau percanggahan, setakat yang dibenarkan oleh undang-undang. Pembentangan ini bertujuan semata-mata untuk tujuan maklumat, tertakluk kepada kelulusan pihak berkuasa yang berkaitan, dan tidak merupakan tawaran jualan atau pelawaan untuk membeli."
+    } 
+  },
+  { id:"tt-nexus", color:"#a158f5", img: "media/img/tt-nexus.jpg",
+    imgs: ["media/img/tt-nexus.jpg","media/img/tt-nexus-2.jpg","media/img/tt-nexus-3.jpg","media/img/tt-nexus-4.jpg"], /* Update paths as needed */
+    video:"tt-nexus", videoOnly:false, noVideo:true,     /* image to be supplied */
+    chip:{en:"MRT Circle Line", ms:"MRT Laluan Lingkaran"},
+    name:{en:"TT Nexus", ms:"TT Nexus"},
+    at:{en:"at Titiwangsa MRT Station", ms:"di Stesen MRT Titiwangsa"},
+    stats:[
+      { v:{en:"10.6 acres", ms:"10.6 ekar"}, l:{en:"Total land area", ms:"Jumlah keluasan kawasan tanah"}, wide:true },
+      { v:{en:"Development Components", ms:"Komponen Pembangunan"}, l:{en: "• Integrated Multi Modal Transit Hub integrating LRT, Monorail, MRT 2, MRT 3 and Bus\n• Serviced Apartment\n• Retail Spaces\n• Commercial Spaces", ms: "• Hab Transit Pelbagai Mod Bersepadu yang mengintegrasikan LRT, Monorel, MRT 2, MRT 3 dan Bas\n• Pangsapuri Servis\n• Ruang Runcit\n• Ruang Komersial"}, wide:true }
+    ], verify:true,
+    disclaimer: {
+      en: "<b>DISCLAIMER</b>All visuals and information presented herein are for conceptual and illustrative purposes only and are subject to change without prior notice, as may be required by the relevant authorities or the Developer. Whilst reasonable care has been taken to ensure accuracy, the Owner, Developer and Management shall not be liable for any variations or discrepancies, to the extent permitted by law. This presentation is intended solely for informational purposes, is subject to relevant authority approvals, and does not constitute an offer for sale or an invitation to purchase.",
+      ms: "<b>PENAFIAN</b>Semua visual dan maklumat yang dikemukakan di sini adalah untuk tujuan konsep dan ilustrasi sahaja dan tertakluk kepada perubahan tanpa notis awal, seperti yang mungkin dikehendaki oleh pihak berkuasa yang berkaitan atau Pemaju. Walaupun langkah munasabah telah diambil untuk memastikan ketepatan, Pemilik, Pemaju dan Pengurusan tidak akan bertanggungjawab atas sebarang perubahan atau percanggahan, setakat yang dibenarkan oleh undang-undang. Pembentangan ini bertujuan semata-mata untuk tujuan maklumat, tertakluk kepada kelulusan pihak berkuasa yang berkaitan, dan tidak merupakan tawaran jualan atau pelawaan untuk membeli."
+    }
+  },
+  { id:"um-campus", color:"#a158f5",
+    img:"media/img/um-campus.jpg",
+    imgs: ["media/img/um-campus.jpg", "media/img/um-campus-2.jpg", "media/img/um-campus-3.jpg", "media/img/um-campus-4.jpg", "media/img/um-campus-5.jpg", "media/img/um-campus-6.jpg", "media/img/um-campus-7.jpg", "media/img/um-campus-8.jpg", "media/img/um-campus-9.jpg"], /* Triggers the carousel */
+    video:"um-campus", videoOnly:false, noVideo:true,      /* image to be supplied */
+    chip:{en:"MRT Circle Line", ms:"MRT Laluan Lingkaran"},
+    name:{en:"Potential Development", ms:"Potensi Pembangunan"},
+    at:{en:"at Universiti Malaya Campus", ms:"di Kampus Universiti Malaya"},
+    stats:[
+      { v:{en:"23 acres", ms:"23 ekar"}, l:{en:"Total land area", ms:"Jumlah keluasan kawasan tanah"}, wide:true },
+      { v:{en:"Development Components", ms:"Komponen Pembangunan"}, l:{en: "• Residences\n• Communal spaces\n• Faculty buildings\n• Assisted living facilities\n• Medical tourism hotel\n• Retail spaces\n• Convention centre", ms: "• Kediaman\n• Ruang komuniti\n• Bangunan fakulti\n• Kemudahan tempat tinggal dibantu\n• Hotel pelancongan perubatan\n• Ruang runcit\n• Pusat konvensyen"}, wide:true }
+    ], verify:true,
+    disclaimer: {
+      en: "<b>DISCLAIMER</b>All visuals and information presented herein are for conceptual and illustrative purposes only and are subject to change without prior notice, as may be required by the relevant authorities or the Developer. Whilst reasonable care has been taken to ensure accuracy, the Owner, Developer and Management shall not be liable for any variations or discrepancies, to the extent permitted by law. This presentation is intended solely for informational purposes, is subject to relevant authority approvals, and does not constitute an offer for sale or an invitation to purchase.",
+      ms: "<b>PENAFIAN</b>Semua visual dan maklumat yang dikemukakan di sini adalah untuk tujuan konsep dan ilustrasi sahaja dan tertakluk kepada perubahan tanpa notis awal, seperti yang mungkin dikehendaki oleh pihak berkuasa yang berkaitan atau Pemaju. Walaupun langkah munasabah telah diambil untuk memastikan ketepatan, Pemilik, Pemaju dan Pengurusan tidak akan bertanggungjawab atas sebarang perubahan atau percanggahan, setakat yang dibenarkan oleh undang-undang. Pembentangan ini bertujuan semata-mata untuk tujuan maklumat, tertakluk kepada kelulusan pihak berkuasa yang berkaitan, dan tidak merupakan tawaran jualan atau pelawaan untuk membeli."
+    }
+  }
+];
+
+const DEV_MAP = {
+  'taman-naga-emas': 'naga-emas',
+  'cochrane': 'cochrane'
+};
+
+/* design philosophy: one station per idea */
+const PHILOSOPHY = [
+  { color:"#E42132", icon:"train", img:"media/img/design-mobility.jpg",
+    st:{en:"Mobility", ms:"Mobiliti"},
+    h:{en:"Enhancing Mobility", ms:"Meningkatkan Mobiliti"},
+    lead:{en:"We shape our entire spatial design around the transit infrastructure.", ms:"Kami merangka keseluruhan reka bentuk ruang berteraskan infrastruktur transit."},
+    body:{en:"Imagine a neighbourhood where your commute flows effortlessly from the moment you step outside. Because the station serves as the central spine of our development, we design concourse connections, passenger pathways, drop-off zones, and parking as one unified masterplan—making every movement between train and building completely intuitive.",
+          ms:"Bayangkan sebuah kejiranan yang menawarkan perjalanan harian yang lancar sebaik sahaja anda melangkah keluar. Dengan stesen sebagai nadi utama pembangunan kami, kami merancang hubungan antara ruang legar stesen, laluan penumpang, kawasan turun-naik penumpang dan kemudahan parkir secara bersepadu melalui satu pelan induk yang menyeluruh. Hasilnya, setiap pergerakan antara tren dan bangunan menjadi lebih mudah, lancar dan intuitif."},
+    q:{en:"The train station isn't just an added bonus, it's the heartbeat of your daily routine.", ms:"Stesen kereta api bukan sekadar bonus, ia nadi rutin harian anda."} },
+  { color:"#269C95", icon:"people", img:"media/img/enrich-community.jpg",
+    st:{en:"Communities", ms:"Komuniti"},
+    h:{en:"Enriching Communities", ms:"Memperkaya Komuniti"},
+    lead:{en:"We erase the boundaries between transit infrastructure and the surrounding urban environment.", ms:"Kami merapatkan jurang antara infrastruktur transit dengan persekitaran bandar di sekitarnya."},
+    body:{en:"Picture stepping off the train and arriving directly at your home, workspace, a café, or a park without needing to cross a road. We integrate transit, living spaces, commerce, and public areas into one continuous, connected ecosystem.",
+          ms:"Bayangkan anda melangkah keluar dari tren dan terus tiba di kediaman, ruang kerja, kafe atau taman tanpa perlu melintas jalan. Kami mengintegrasikan kemudahan transit, ruang kediaman, kawasan komersial dan ruang awam ke dalam satu ekosistem yang saling berhubung secara lancar dan bersepadu."},
+    q:{en:"Seamless integration: creating one continuous, connected environment.", ms:"Kelancaran Integrasi: Mewujudkan persekitaran yang bersambung secara menyeluruh dan bersepadu."} },
+  { color:"#F6B700", icon:"leaf", img:"media/img/sustain-city.jpg",
+    st:{en:"Sustainability", ms:"Kelestarian"},
+    h:{en:"Sustainability of Cities\n& Mobility of People", ms:"Kelestarian Bandar\n& Mobiliti Rakyat"},
+    lead:{en:"Serving as growth anchors, designed to benefit others.", ms:"Berperanan sebagai pemangkin pertumbuhan yang direka untuk membawa manfaat kepada semua."},
+    body:{en:"We view every development as part of a wider urban ecosystem. By designing integrated connectivity networks and vibrant public links today, we create open pathways that make surrounding lands more accessible to transit and unlock long-term commercial opportunities for adjacent communities.",
+          ms:"Kami melihat setiap pembangunan sebagai sebahagian daripada ekosistem bandar yang lebih menyeluruh. Melalui perancangan rangkaian perhubungan bersepadu dan laluan awam yang dinamik, kami mewujudkan akses yang lebih terbuka bagi memudahkan kawasan sekitar dihubungkan dengan kemudahan transit, sekali gus membuka peluang komersial jangka panjang yang memberi manfaat kepada komuniti berdekatan."},
+    q:{en:"Generating a positive ripple effect that connects, uplifts, and energizes the broader district.", ms:"Mencetuskan kesan limpahan positif yang menghubungkan, memperkasa dan menghidupkan seluruh kawasan sekitarnya."} },
+  { color:"#2771CC", icon:"flag", img:"media/img/longterm-impact.jpg",
+    st:{en:"Impact", ms:"Impak"},
+    h:{en:"Creating Long-Term Impact", ms:"Mencipta Impak Jangka Panjang"},
+    lead:{en:"Great visions demand the right execution: built on clear, robust commercial frameworks.", ms:"Visi yang hebat memerlukan pelaksanaan yang tepat, berteraskan kerangka komersial yang jelas dan kukuh."},
+    body:{en:"It starts behind the scenes. Clear expectations and timelines from day one let our partners move quickly, and streamlined processes take ambitious plans from the drawing board into reality.",
+          ms:"Semuanya bermula di sebalik tabir. Penetapan jangkaan dan garis masa yang jelas sejak hari pertama membolehkan rakan kerjasama bergerak pantas, manakala proses yang diperkemas memastikan perancangan berwawasan dapat direalisasikan daripada pelan di atas kertas kepada kenyataan."},
+    q:{en:"Strong commercial and contractual frameworks: clear timelines, accountable partners, and a community built as promised.", ms:"Rangka kerja komersial dan kontrak yang kukuh: garis masa yang jelas, rakan yang bertanggungjawab, dan komuniti yang dibina seperti dijanjikan."} }
+];
+
+/* ---------- available sites ----------
+   Network for the line map (same layout as the Commercial kiosk network map): [station id, name] in line order. */
+const NET = {
+  kgl:{ color:"#00953B", name:{en:"Kajang Line", ms:"Laluan Kajang"}, stations:[
+    ["kwasa-damansara","Kwasa Damansara"],["kwasa-sentral","Kwasa Sentral"],["kota-damansara","Kota Damansara"],["surian","Surian"],["mutiara-damansara","Mutiara Damansara"],
+    ["bandar-utama","Bandar Utama"],["ttdi","Taman Tun Dr Ismail"],["phileo-damansara","Phileo Damansara"],["pusat-bandar-damansara","Pusat Bandar Damansara"],["semantan","Semantan"],
+    ["muzium-negara","Muzium Negara"],["pasar-seni","Pasar Seni"],["merdeka","Merdeka"],["bukit-bintang","Bukit Bintang"],["trx","Tun Razak Exchange (TRX)"],["cochrane","Cochrane"],
+    ["maluri","Maluri"],["taman-pertama","Taman Pertama"],["taman-midah","Taman Midah"],["taman-mutiara","Taman Mutiara"],["taman-connaught","Taman Connaught"],["taman-suntex","Taman Suntex"],
+    ["sri-raya","Sri Raya"],["bandar-tun-hussein-onn","Bandar Tun Hussein Onn"],["batu-11-cheras","Batu 11 Cheras"],["bukit-dukung","Bukit Dukung"],["sungai-jernih","Sungai Jernih"],
+    ["stadium-kajang","Stadium Kajang"],["kajang","Kajang"] ]},
+  pyl:{ color:"#F6B700", name:{en:"Putrajaya Line", ms:"Laluan Putrajaya"}, stations:[
+    ["kwasa-damansara","Kwasa Damansara"],["kampung-selamat","Kampung Selamat"],["sungai-buloh","Sungai Buloh"],["damansara-damai","Damansara Damai"],["sri-damansara-barat","Sri Damansara Barat"],
+    ["sri-damansara-sentral","Sri Damansara Sentral"],["sri-damansara-timur","Sri Damansara Timur"],["metro-prima","Metro Prima"],["kepong-baru","Kepong Baru"],["jinjang","Jinjang"],
+    ["sri-delima","Sri Delima"],["kampung-batu","Kampung Batu"],["kentonmen","Kentonmen"],["jalan-ipoh","Jalan Ipoh"],["sentul-barat","Sentul Barat"],["titiwangsa","Titiwangsa"],
+    ["hospital-kuala-lumpur","Hospital Kuala Lumpur"],["raja-uda","Raja Uda"],["ampang-park","Ampang Park"],["persiaran-klcc","Persiaran KLCC"],["conlay","Conlay"],
+    ["trx","Tun Razak Exchange (TRX)"],["chan-sow-lin","Chan Sow Lin"],["kuchai","Kuchai"],["taman-naga-emas","Taman Naga Emas"],["sungai-besi","Sungai Besi"],
+    ["serdang-raya-utara","Serdang Raya Utara"],["serdang-raya-selatan","Serdang Raya Selatan"],["serdang-jaya","Serdang Jaya"],["upm","UPM"],["taman-equine","Taman Equine"],
+    ["putra-permai","Putra Permai"],["16-sierra","16 Sierra"],["cyberjaya-utara","Cyberjaya Utara"],["cyberjaya-city-centre","Cyberjaya City Centre"],["putrajaya-sentral","Putrajaya Sentral"] ]}
+};
+/* Stations with information: only these can be tapped and pulse on the map.
+   line + no = number in the deck's site list ("Property interactive display content", slide 13).
+   s: "aw" awarded · "rfp" in RFP / negotiation · "fut" open for RFP.
+   Only "fut" stations can be tapped (they pulse and open the spotlight); awarded and * stations are shown but not tappable.
+   spot = id in SPOTS below. */
+const SITES = {
+  "phileo-damansara":       { line:"kgl", no:1, s:"rfp" },
+  "pasar-seni":             { line:"kgl", no:2, s:"fut", spot:"pasar-seni" },
+  "cochrane":               { line:"kgl", no:3, s:"aw" },
+  "bandar-tun-hussein-onn": { line:"kgl", no:4, s:"fut", spot:"bandar-tun-hussein-onn" },
+  "bukit-dukung":           { line:"kgl", no:5, s:"fut", spot:"bukit-dukung" },
+  "sungai-jernih":          { line:"kgl", no:6, s:"rfp" },
+  "sri-damansara-sentral":  { line:"pyl", no:1, s:"fut", spot:"sri-damansara-sentral" },
+  "kentonmen":              { line:"pyl", no:2, s:"fut", spot:"kentonmen" },
+  "titiwangsa":             { line:"pyl", no:3, s:"fut", spot:"titiwangsa" },
+  "hospital-kuala-lumpur":  { line:"pyl", no:4, s:"fut", spot:"hospital-kuala-lumpur" },
+  "ampang-park":            { line:"pyl", no:5, s:"fut", spot:"ampang" },
+  "chan-sow-lin":           { line:"pyl", no:6, s:"fut", spot:"chan-sow-lin" },
+  "kuchai":                 { line:"pyl", no:7, s:"rfp" },
+  "taman-naga-emas":        { line:"pyl", no:8, s:"fut", spot:"taman-naga-emas" },
+  "sungai-besi":            { line:"pyl", no:9, s:"fut", spot:"sungai-besi" },
+  "serdang-raya-utara":     { line:"pyl", no:10, s:"fut", spot:"serdang-raya-utara" },
+  "cyberjaya-utara":        { line:"pyl", no:11, s:"fut", spot:"cyberjaya-utara" },
+};
+/* site spotlights (aerial site plans)
+   transit / amenities: to be shared by Property. Fill in per station, e.g.
+     transit:[ {en:"LRT Kelana Jaya Line", ms:"LRT Laluan Kelana Jaya"}, {en:"KTM Komuter", ms:"KTM Komuter"} ],
+     amenities:[ {en:"Mosque", ms:"Masjid"}, {en:"Shopping mall", ms:"Pusat beli-belah"} ]
+   Until filled, the Transit / Amenities buttons show "Details to be shared". */
+const SPOTS = {
+  ampang: { name:"Ampang Park", line:{en:"Putrajaya Line", ms:"Laluan Putrajaya"}, color:"#F6B700",
+    views:[ { img:"media/img/ampang-park-site.jpg", t:"sp_plan" } ],
+    assets:[ {en:"Entrance A", ms:"Pintu A"}, {en:"Ventilation shaft A", ms:"Saluran Pengudaraan A"}, {en:"Entrance B", ms:"Pintu B"},
+             {en:"Ventilation shaft B", ms:"Saluran Pengudaraan B"}, {en:"Skate park", ms:"Taman Papan Luncur"} ] },
+  "taman-naga-emas": { name:"Taman Naga Emas", line:{en:"Putrajaya Line", ms:"Laluan Putrajaya"}, color:"#F6B700",
+    views:[ { img:"media/img/sites/taman-naga-emas.jpg", t:"sp_plan", nocap:true } ],   /* site plan to be supplied */
+    assets:[] },
+  /* site plans; numbers match the plan */
+  "sri-damansara-sentral": { name:"Sri Damansara Sentral", line:{en:"Putrajaya Line", ms:"Laluan Putrajaya"}, color:"#F6B700",
+    views:[ { img:"media/img/sites/sri-damansara-sentral.jpg", t:"sp_plan", nocap:true } ],
+    assets:[ {en:"At-grade park & ride (AGPR)", ms:"Park & ride aras tanah (AGPR)"}, {en:"Entrance A", ms:"Pintu A"}, {en:"Entrance B", ms:"Pintu B"} ] },
+  "kentonmen": { name:"Kentonmen", line:{en:"Putrajaya Line", ms:"Laluan Putrajaya"}, color:"#F6B700",
+    views:[ { img:"media/img/sites/kentonmen.jpg", t:"sp_plan", nocap:true } ],
+    assets:[ {en:"At-grade park & ride (AGPR)", ms:"Park & ride aras tanah (AGPR)"}, {en:"Entrance A", ms:"Pintu A"}, {en:"Entrance B", ms:"Pintu B"} ] },
+  "hospital-kuala-lumpur": { name:"Hospital Kuala Lumpur", line:{en:"Putrajaya Line", ms:"Laluan Putrajaya"}, color:"#F6B700",
+    views:[ { img:"media/img/sites/hospital-kuala-lumpur.jpg", t:"sp_plan", nocap:true } ],
+    assets:[ {en:"Entrance A", ms:"Pintu A"}, {en:"Entrance B", ms:"Pintu B"} ] },
+  "chan-sow-lin": { name:"Chan Sow Lin", line:{en:"Putrajaya Line", ms:"Laluan Putrajaya"}, color:"#F6B700",
+    views:[ { img:"media/img/sites/chan-sow-lin.jpg", t:"sp_plan", nocap:true } ],
+    assets:[ {en:"Entrance A", ms:"Pintu A"}, {en:"Entrance B", ms:"Pintu B"}, {en:"Entrance C", ms:"Pintu C"}, {en:"Pedestrian walkway to LRT / Monorail station", ms:"Laluan pejalan kaki ke stesen LRT / Monorel"} ] },
+  "sungai-besi": { name:"Sungai Besi", line:{en:"Putrajaya Line", ms:"Laluan Putrajaya"}, color:"#F6B700",
+    views:[ { img:"media/img/sites/sungai-besi.jpg", t:"sp_plan", nocap:true } ],
+    assets:[ {en:"At-grade park & ride (AGPR)", ms:"Park & ride aras tanah (AGPR)"} ] },
+  "serdang-raya-utara": { name:"Serdang Raya Utara", line:{en:"Putrajaya Line", ms:"Laluan Putrajaya"}, color:"#F6B700",
+    views:[ { img:"media/img/sites/serdang-raya-utara.jpg", t:"sp_plan", nocap:true } ],
+    assets:[ {en:"At-grade park & ride (AGPR)", ms:"Park & ride aras tanah (AGPR)"} ] },
+  "cyberjaya-utara": { name:"Cyberjaya Utara", line:{en:"Putrajaya Line", ms:"Laluan Putrajaya"}, color:"#F6B700",
+    views:[ { img:"media/img/sites/cyberjaya-utara.jpg", t:"sp_plan", nocap:true } ],
+    assets:[ {en:"At-grade park & ride (AGPR)", ms:"Park & ride aras tanah (AGPR)"} ] },
+  "pasar-seni": { name:"Pasar Seni", line:{en:"Kajang Line", ms:"Laluan Kajang"}, color:"#00953B",
+    views:[ { img:"media/img/sites/pasar-seni.jpg", t:"sp_plan", nocap:true } ],
+    assets:[ {en:"Entrance A", ms:"Pintu A"}, {en:"Entrance B", ms:"Pintu B"}, {en:"Pedestrian walkway to LRT / Monorail station", ms:"Laluan pejalan kaki ke stesen LRT / Monorel"} ] },
+  "bandar-tun-hussein-onn": { name:"Bandar Tun Hussein Onn", line:{en:"Kajang Line", ms:"Laluan Kajang"}, color:"#00953B",
+    views:[ { img:"media/img/sites/bandar-tun-hussein-onn.jpg", t:"sp_plan", nocap:true } ],
+    assets:[ {en:"Pedestrian bridge from the MRT station", ms:"Jejantas pejalan kaki dari stesen MRT"}, {en:"At-grade park & ride (AGPR)", ms:"Park & ride aras tanah (AGPR)"} ] },
+  "bukit-dukung": { name:"Bukit Dukung", line:{en:"Kajang Line", ms:"Laluan Kajang"}, color:"#00953B",
+    views:[ { img:"media/img/sites/bukit-dukung.jpg", t:"sp_plan", nocap:true } ],
+    assets:[ {en:"Multi-storey park & ride (MSPR)", ms:"Park & ride bertingkat (MSPR)"} ] }
+};
+
+/* station info from "Property interactive display content" deck:
+   maps in media/img/sites/<id>-assets.jpg, -location.jpg, -connect.jpg, -amenities.jpg; conn = travel by MRT; amen = within 2 km */
+const SITE_INFO = {"ampang": {"deck": true,"conn": [{"to": "Persiaran KLCC","n": 1,"min": "2","at": "Petronas Twin Towers KLCC, Suria KLCC"},{"to": "Conlay","n": 2,"min": "3","at": "Pavilion KL, Bukit Bintang"},{"to": "TRX","n": 3,"min": "4","at": "The Exchange TRX"},{"to": "Putrajaya Sentral","n": 17,"min": "37","at": "IOI City Mall"}],"amen": ["Ombak KLCC","Suria KLCC","Ibis Kuala Lumpur City Centre","Four Seasons Hotel","KLCC Park","Menara Kuala Lumpur","National Heart Institute","Taman Tasik Datuk Keramat","The Royal Selangor Golf Club","Aquaria KLCC","The Mews KLCC","Scarletz Suites KLCC","Armani Residence Kuala Lumpur","Tunku Azizah Hospital","Tamu Hotel & Suites Kuala Lumpur","Saloma Bridge","Neu Suites @ 3rdNVnue"]},"titiwangsa": {"deck": true,"conn": [{"to": "Ampang Park","n": 2,"min": "4","at": "Petronas Twin Towers KLCC, Suria KLCC"},{"to": "Persiaran KLCC","n": 3,"min": "5","at": "Pavillion KL, KL Convention Centre"},{"to": "Conlay","n": 4,"min": "6","at": "Pavilion Bukit Bintang"},{"to": "TRX","n": 5,"min": "8","at": "The Exchange TRX"}],"amen": ["Titiwangsa Lake Garden","PDRM Titiwangsa Driving Range","Sekolah Menengah Sains Seri Puteri","Sunway Putra Mall","Kuala Lumpur Hospital","Institute of Respiratory Medicine","National Art Gallery","SK Seri Titiwangsa","AC Hotel Kuala Lumpur","National Heart Institute","IJN University College","Sekolah Jenis Kebangsaan Tamil","SJK(C) Chong Hwa","Sekolah Kebangsaan Convent Sentul 1","St Joseph Tamil Primary School","Sentul Park","Rica Residence Sentul"]},"sri-damansara-sentral": {"deck": true,"conn": [{"to": "Metro Prima","n": 2,"min": "13","at": "AEON Metro Prima"},{"to": "Titiwangsa","n": 10,"min": "16","at": "Titiwangsa Lake Gardens, HKL"},{"to": "Ampang Park","n": 12,"min": "20","at": "Petronas Twin Towers, Suria KLCC"},{"to": "TRX","n": 15,"min": "25","at": "The Exchange TRX"}],"amen": ["Ativo Plaza","Taman Tasik Menjalara","Lotus’s Kepong","The Central Park","JBR Bundle Bandar Sri Damansara","SMKA Kuala Lumpur","UNIQLO DA Square","Sri Bestari International School","The Waterfront Park City","SMK Bukit Maluri","SK Bandar Baru Sri Damansara 2","Ibis Styles Kuala Lumpur Sri Damansara","Decathlon Sri Damansara"]},"kentonmen": {"deck": true,"conn": [{"to": "Titiwangsa","n": 3,"min": "5","at": "Titiwangsa Lake Gardens, HKL"},{"to": "Metro Prima","n": 5,"min": "16","at": "AEON Metro Prima"},{"to": "Ampang Park","n": 6,"min": "10","at": "Petronas Twin Towers KLCC, Suria KLCC"},{"to": "Conlay","n": 8,"min": "12","at": "Pavilion KL"},{"to": "TRX","n": 9,"min": "14","at": "The Exchange TRX"}],"amen": ["Sentul Park","SK Seri Delima","Brem Mall Shopping Complex","SMK Raja Abdullah","Chong Hwa (Private) School","Kompleks Mutiara","Chi Man Chinese Primary School","Crystal Crown Hotel Kuala Lumpur (CCHKL)","Segambut Secondary School","SJK(C) Lai Chee","Casa Idaman Condominium","Tuan 2egacy"]},"hospital-kuala-lumpur": {"deck": true,"conn": [{"to": "Ampang Park","n": 2,"min": "4","at": "Petronas Twin Towers KLCC, Suria KLCC"},{"to": "Persiaran KLCC","n": 3,"min": "5","at": "Pavillion Kuala Lumpur, HKL"},{"to": "TRX","n": 5,"min": "8","at": "The Exchange TRX"},{"to": "Putrajaya Sentral","n": 21,"min": "40","at": "IOI City Mall"}],"amen": ["Titiwangsa Lake Garden","PDRM Titiwangsa Driving Range","UTM Kuala Lumpur","Sekolah Menengah Sains Seri Puteri","Sunway Putra Mall","Kuala Lumpur Hospital","Institute of Respiratory Medicine","National Art Gallery","SK Seri Titiwangsa","AC Hotel Kuala Lumpur","National Heart Institute","IJN University College","Sekolah Jenis Kebangsaan Tamil","SJK(C) Chong Hwa","Sekolah Kebangsaan Convent Sentul 1","St Joseph Tamil Primary School","Sentul Park","Rica Residence Sentul"]},"chan-sow-lin": {"deck": true,"conn": [{"to": "TRX","n": 1,"min": "3","at": "The Exchange TRX"},{"to": "Conlay","n": 2,"min": "4","at": "Pavilion KL, Bukit Bintang"},{"to": "Ampang Park","n": 4,"min": "6","at": "Petronas Twin Towers KLCC, Suria KLCC"},{"to": "Putrajaya Sentral","n": 14,"min": "32","at": "IOI City Mall"}],"amen": ["MyTOWN Shopping Center","AEON Mall Taman Maluri","Taman Pudu Ulu","Sunway Velocity Mall","Viva Shopping Mall","KWC Fashion Wholesale","IKEA Cheras","Lalaport Bukit Bintang","Dewan Bahasa Dan Pustaka","Viva Hotel Kuala Lumpur","Mercure Kuala Lumpur Trion","SJKC Naam Keung","SMK Seri Bintang Utara","SMK Aminuddin Baki, Kuala Lumpur","Taylor’s International School","Sekolah Rendah Kebangsaan St. Gabriel"]},"sungai-besi": {"deck": true,"conn": [{"to": "TRX","n": 6,"min": "13","at": "The Exchange TRX"},{"to": "Conlay","n": 7,"min": "14","at": "Pavilion KL, Bukit Bintang"},{"to": "Persiaran KLCC","n": 8,"min": "15","at": "KL Convention Centre, Pavilion KL"},{"to": "Ampang Park","n": 9,"min": "16","at": "Petronas Twin Towers KLCC, Suria KLCC"},{"to": "Titiwangsa","n": 12,"min": "21","at": "Titiwangsa Lake Gardens, HKL"}],"amen": ["Endah Parade","Asia Pacific University","Hutan Rizab Sungai Besi","Jeram Besar Bukit Besi","Kompleks Sukan Desa Tasik","Sekolah Jenis Kebangsaan (Cina) Kwong Hon","SK Sungai Besi","SMK Sungai Besi","Sekolah Kebangsaan Pengkalan Tentera Darat"]},"serdang-raya-utara": {"deck": true,"conn": [{"to": "TRX","n": 7,"min": "16","at": "The Exchange TRX"},{"to": "Persiaran KLCC","n": 9,"min": "18","at": "Pavilion KL, KL Convention Centre"},{"to": "Putrajaya Sentral","n": 9,"min": "10","at": "IOI City Mall"},{"to": "Ampang Park","n": 10,"min": "18","at": "Petronas Twin Towers KLCC, Suria KLCC"}],"amen": ["Selangor Turf Club","The Mines Resort & Golf Club","Kompleks 3K MBSJ Serdang Raya","IMU Univeristy","One South Street Mall","Palace of the Golden Horses","DJI Academy Malaysia","South City Plaza","Blenz Hotel","The Mines Shopping Mall"]},"pasar-seni": {"deck": true,"conn": [{"to": "Muzium Negara","n": 1,"min": "13","at": "KL Sentral, National Museum"},{"to": "Pavilion Bukit Bintang","n": 2,"min": "10","at": "Pavilion KL"},{"to": "Cochrane","n": 4,"min": "19","at": "IKEA Cheras, MyTOWN Shopping Centre"},{"to": "Aeon Maluri","n": 5,"min": "23","at": "AEON Taman Maluri, Sunway Velocity"},{"to": "Taman Mutiara","n": 7,"min": "32","at": "Cheras LeisureMall"}],"amen": ["Central Market","Petaling Street Market","Stadium Merdeka","KL Bird Park","Kuala Lumpur Butterfly Park","Lalaport Bukit Bintang","Plaza Low Yat","Perdana Botanical Gardens","ASEAN Sculpture Garden","NU Sentral","Tung Shin Hospital","Menara Kuala Lumpur","St John’s Institution","Merdeka Square","KWC Fashion Wholsale","Kuala Lumpur Orchid Garden","Taman Hikayat @ Taman Tasik Perdana","Fantasy Planet @ Dinosour Park","Sunken Garden","The Majestic Hotel Kuala Lumpur","OPUS Kuala Lumpur","Victoria Institution","SK Jalan Hang Tuah","SJK(C) Kuen Cheng 1","The St. Regis Kuala Lumpur"]},"bandar-tun-hussein-onn": {"deck": true,"conn": [{"to": "Aeon Maluri","n": 7,"min": "31","at": "AEON Mall Taman Maluri, Sunway Velocity"},{"to": "Cochrane","n": 8,"min": "32","at": "IKEA Cheras, MyTOWN Shopping Centre"},{"to": "Pavilion Bukit Bintang","n": 10,"min": "35","at": "Pavilion KL"},{"to": "Pasar Seni","n": 12,"min": "45","at": "Central Market, Petaling Street"},{"to": "Muzium Negara","n": 13,"min": "44","at": "KL Sentral, NU Sentral"}],"amen": ["BMC Mall","Gadek Nursery","Lake Valley","AEON Big Hypermarket","SJK(C) Batu 11 Cheras","SMK Cheras Perdana","SK Bandar Tun Hussein Onn","Avenue Two, Lake Valley","Livia Residence"]},"bukit-dukung": {"deck": true,"conn": [{"to": "Bandar Tun Hussein Onn","n": 4,"min": "14","at": "AEON Cheras Selatan"},{"to": "Aeon Maluri","n": 10,"min": "37","at": "AEON Mall Taman Maluri, Sunway Velocity"},{"to": "Cochrane","n": 11,"min": "38","at": "IKEA Cheras, MYTOWN Shopping Centre"},{"to": "Pavilion Bukit Bintang","n": 14,"min": "41","at": "Pavilion KL"},{"to": "Pasar Seni","n": 16,"min": "50","at": "Central Market, Petaling Street"}],"amen": ["Long River Sport","Sekolah Kebangsaan Seri Sekamat","AEON Mall Cheras Selatan","Columbia Asia Hospital Cheras","SMK Cheras Jaya","LifeCare Diagnostic","SMK Bandar Tun Hussein On","Amerin Mall"]},"cyberjaya-utara": {"deck": true,"conn": [{"to": "Putrajaya Sentral","n": 2,"min": "4","at": "IOI City Mall"},{"to": "TRX","n": 14,"min": "30","at": "The Exchange TRX"},{"to": "Conlay","n": 15,"min": "32","at": "Pavilion KL, Bukit Bintang"},{"to": "Ampang Park","n": 17,"min": "34","at": "Petronas Twin Towers KLCC, Suria KLCC"}],"amen": ["Taman Saujana Hijau","Cyberjaya Lake Park","Abedeen Academy","Limkokwing University","DXN Cyberjaya Phase 2","Vision Residence","Taman Awam Cyber 3","Tower 3, Skypark @ Cyberjaya","Semarak Range"]}};
+SPOTS.titiwangsa = { name:"Titiwangsa", line:{en:"Putrajaya Line", ms:"Laluan Putrajaya"}, color:"#F6B700",
+  views:[ { img:"media/img/sites/titiwangsa-assets.jpg", t:"sp_plan", nocap:true } ], assets:[] };
+/* MRT assets as numbered on the deck maps */
+(()=>{ const A={ en:{ea:"Entrance A",eb:"Entrance B",va:"Vent shaft A",vb:"Vent shaft B",sk:"Skate park",ct:"Cooling tower and vent shaft",pw:"Pedestrian walkway to LRT / Monorail station",ub:"Utility building",ag:"At-grade park & ride (AGPR)",dp:"MRT drop-off & pick-up",pl:"Pedestrian link to LRT"},
+               ms:{ea:"Pintu A",eb:"Pintu B",va:"Saluran pengudaraan A",vb:"Saluran pengudaraan B",sk:"Taman papan luncur",ct:"Menara penyejuk dan saluran pengudaraan",pw:"Laluan pejalan kaki ke stesen LRT / Monorel",ub:"Bangunan utiliti",ag:"Park & ride aras tanah (AGPR)",dp:"Kawasan turun & ambil penumpang MRT",pl:"Laluan pejalan kaki ke LRT"} };
+  const L={ ampang:"ea va eb vb sk", titiwangsa:"ct pw ea eb ub", "sri-damansara-sentral":"ag", kentonmen:"ag", "hospital-kuala-lumpur":"ub ea eb",
+            "chan-sow-lin":"ub dp pl", "sungai-besi":"ag", "serdang-raya-utara":"ag", "pasar-seni":"ea eb pw", "bandar-tun-hussein-onn":"", "bukit-dukung":"", "cyberjaya-utara":"" };
+  Object.entries(L).forEach(([id,k])=>{ if(SPOTS[id]) SPOTS[id].assets=k?k.split(' ').map(c=>({en:A.en[c],ms:A.ms[c]})):[]; }); })();
+Object.keys(SITE_INFO).forEach(id=>{ if(SPOTS[id]) SPOTS[id].views[0].img=`media/img/sites/${id}-assets.jpg`; });
+
+/* videos: files go in media/videos/<id>.mp4 (played from the development cards) */
+const VIDEOS = [
+  { id:"cochrane", mins:"2.5", img:"media/img/cochrane-linque.png", t:{en:"The Linque at Cochrane", ms:"The Linque di Cochrane"}, s:{en:"MRT Kajang Line", ms:"MRT Laluan Kajang"} },
+  { id:"bukit-chagar", mins:"3.5", img:"media/img/bukit-chagar-phasing.png", t:{en:"80300 Bukit Chagar", ms:"80300 Bukit Chagar"}, s:{en:"RTS Link · Johor Bahru", ms:"RTS Link · Johor Bahru"} },
+  { id:"bukit-chagar-progress" },
+  { id:"naga-emas", mins:"3", img:null, t:{en:"Taman Naga Emas", ms:"Taman Naga Emas"}, s:{en:"MRT Putrajaya Line", ms:"MRT Laluan Putrajaya"} }
+];
+
+</script>
+
+<!-- ============================ APP LOGIC ============================ -->
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const stage=$('#stage');
+const ICONS={
+  building:'<path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6M9 10h.01M15 10h.01"/>',
+  bulb:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.9.7 1.5 1.7 1.5 2.9V17h4v-.2c0-1.2.6-2.2 1.5-2.9A6 6 0 0 0 12 3z"/>',
+  map:'<path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/>',
+  play:'<circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/>',
+  train:'<rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 11h14M9 21l-2-4M15 21l2-4M9 14h.01M15 14h.01"/>',
+  people:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/>',
+  leaf:'<path d="M5 19c0-8 5-13 15-14-1 10-6 15-14 15"/><path d="M5 19l7-7"/>',
+  flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+  arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>', back:'<path d="M19 12H5M11 6l-6 6 6 6"/>',
+  qr:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/>',
+  mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
+  phone:'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
+  car:'<path d="M5 16V11l2-5h10l2 5v5M5 16h14M5 16v3M19 16v3M7.5 13.5h.01M16.5 13.5h.01"/>',
+  home:'<path d="M3 11l9-7 9 7M5 10v10h14V10"/>', close:'<path d="M6 6l12 12M18 6L6 18"/>', pin:'<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>'
+};
+const ic=n=>`<svg class="ic" viewBox="0 0 24 24">${ICONS[n]||''}</svg>`;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- language ---------- */
+let lang=SETTINGS.defaultLang==='en'?'en':'ms';
+const tx=o=>o==null?'':(typeof o==='string'?o:(o[lang]??o.en??''));
+const t=k=>tx(UI[k]);
+function applyStatic(){
+  $$('[data-i18n]').forEach(el=>el.innerHTML=t(el.dataset.i18n));
+  $$('[data-lang] b').forEach(b=>b.classList.toggle('on',b.dataset.l===lang));
+  document.documentElement.lang=lang==='ms'?'ms':'en';
+}
+function setLang(l){ if(l===lang) return; lang=l; renderAll(); }
+document.addEventListener('click',e=>{const b=e.target.closest('[data-lang]'); if(!b) return; e.stopPropagation(); e.preventDefault();
+  const hit=e.target.closest('b[data-l]'); setLang(hit?hit.dataset.l:(lang==='ms'?'en':'ms'));},true);
+
+/* ---------- stage + hardening ---------- */
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform=`translate(-50%,-50%) scale(${s})`;}
+addEventListener('resize',fit);fit();
+if(SETTINGS.hideCursor)document.body.classList.add('nocursor');
+['contextmenu','gesturestart','dragstart','selectstart'].forEach(e=>document.addEventListener(e,ev=>ev.preventDefault(),{passive:false}));
+document.addEventListener('wheel',e=>{if(e.ctrlKey)e.preventDefault();},{passive:false});
+document.addEventListener('touchmove',e=>{if(e.touches.length>1)e.preventDefault();},{passive:false});
+
+/* ---------- media ---------- */
+const media={video:false,logo:false,videos:{},imgs:{}};
+function probe(src,cb){const i=new Image();i.onload=()=>cb(true);i.onerror=()=>cb(false);i.src=src;}
+const vid = $('#loopVideo');
+
+probe(SETTINGS.logo,ok=>{media.logo=ok;renderLogo();});
+[...DEVS.filter(d=>d.img).map(d=>d.img),...PHILOSOPHY.filter(p=>p.img).map(p=>p.img),...Object.values(SPOTS).flatMap(s=>s.views.map(v=>v.img))].forEach(p=>probe(p,ok=>media.imgs[p]=ok));
+VIDEOS.forEach(v=>{const el=document.createElement('video');el.preload='metadata';el.onloadedmetadata=()=>media.videos[v.id]=true;el.onerror=()=>media.videos[v.id]=false;el.src=`media/videos/${v.id}.mp4`;});
+function renderLogo(){$$('[data-logo]').forEach(b=>b.innerHTML=media.logo?`<img src="${SETTINGS.logo}" alt="MRT Corp"><span class="tag">${esc(t('head_t'))}</span>`:`<span class="wordmark">MRT <b>CORP</b></span><span class="tag">${esc(t('head_t'))}</span>`);}
+
+/* ---------- top-bar buttons ---------- */
+function renderNav(){
+  $$('[data-nav]').forEach(n=>{ n.innerHTML=n.dataset.nav.split(',').map(tok=>{
+    if(tok==='lang') return `<button class="lang" data-lang aria-label="Bahasa / Language"><b data-l="ms" class="${lang==='ms'?'on':''}">BM</b><b data-l="en" class="${lang==='en'?'on':''}">EN</b></button>`;
+    if(tok==='home') return `<button class="iconbtn" data-home>${ic('home')}${n.dataset.nav==='lang,home'?`<span>${t('home')}</span>`:''}</button>`;
+    if(tok==='menu') return `<button class="iconbtn" data-go="hub">${ic('back')}<span>${t('menu')}</span></button>`;
+    if(tok.startsWith('back:')) return `<button class="iconbtn" data-go="${tok.slice(5)}">${ic('back')}<span>${t('back')}</span></button>`;
+    return ''; }).join(''); });
+}
+
+/* ---------- navigation ---------- */
+let current='attract',busy=false;
+
+function show(id){ $$('.screen').forEach(s=>s.classList.toggle('active',s.id===id)); current=id;
+  if(id!=='devd'&&devCarouselTimer){ clearInterval(devCarouselTimer); devCarouselTimer=null; }   // stop the image carousel off-page
+  $('#bgLines').style.display=(id==='attract'||id==='sites')?'none':'block';
+  if(window.HomeVideo) HomeVideo.onScreen(id); else if(id!=='attract') vid.pause();
+  if(id==='sites') buildMap(); else closePanel(); closePlayer(); }
+function go(id,wipe){ if(busy||id===current) return; if(!wipe){show(id);return;}
+  busy=true; const w=$('#wipe'); w.classList.remove('run'); void w.offsetWidth; w.classList.add('run');
+  setTimeout(()=>show(id),470); setTimeout(()=>{w.classList.remove('run');busy=false;},1150); }
+function home(){ go('attract',true); }
+document.addEventListener('click', e => {
+  const g = e.target.closest('[data-go]');
+  if (g) {
+    const id = g.dataset.go;
+    if (id === 'phil') { openPhil(); return; }
+    if (id === 'spotback') { go(spotFrom, true); return; }
+    if (id === 'ctback') { go(ctFrom, true); return; }
+    if (id === 'devback') { go(devFrom, true); return; } // Added handler
+    if (id === 'contact') ctFrom = (current === 'contact' ? ctFrom : current);
+    go(id, current === 'hub');
+  }
+  if (e.target.closest('[data-home]')) home();
+});
+$('#attract').addEventListener('click',()=>go('hub',true));
+
+/* ---------- menu ---------- */
+function renderHub(){ $('#hubCards').innerHTML=HUB.map(h=>`<button class="journey" style="--c:${h.color}" data-go="${h.go}"><div class="bigring"></div>
+  <div class="jic">${ic(h.icon)}</div><h3>${tx(h.t)}</h3><p>${esc(tx(h.p).replace('{n}',SITE_COUNT).replace('{r}',OPEN_SITES.length))}</p><div class="go">${t('explore')} ${ic('arrow')}</div></button>`).join(''); }
+
+/* ---------- developments ---------- */
+const imgBox=(src,cls)=>`<div class="${cls}">${src?`<img src="${src}" alt="" onerror="this.parentNode.classList.add('noimg')">`:''}<div class="soonimg">${ic('building')}<b>${t('img_soon')}</b></div></div>`;
+function renderDevs() {
+  $('#devCards').innerHTML = DEVS.map(d => `
+    <button class="devcard" style="--dc:${d.color}" ${d.videoOnly ? `data-vid="${d.video}"` : `data-dev="${d.id}"`}>
+      ${imgBox(d.img, 'im' + (d.img ? '' : ' noimg'))}
+      <div class="tx">
+        ${d.chip ? `<span class="chip"><i></i>${esc(tx(d.chip))}</span>` : ''}
+        <h3>${esc(tx(d.name))}${d.at ? `<span>${esc(tx(d.at))}</span>` : ''}</h3>
+        <div class="gogo">
+          ${d.videoOnly ? `${t('watch')}${ic('play')}` : `${t('view')}${ic('arrow')}`}
+        </div>
+      </div>
+    </button>
+  `).join('');
+
+  $$('#devCards [data-dev]').forEach(b => b.onclick = () => openDev(b.dataset.dev)); $$('#devCards [data-vid]').forEach(b => b.onclick = () => playVideo(b.dataset.vid));
+}
+let devId=null, devFrom='devs';
+function openDev(id){ 
+  devFrom = current; // Stores 'sites' or 'devs'
+  devId = id;
+  renderDev();
+  go('devd', true);  // Use wipe transition
+}
+
+let devCarouselTimer = null;
+function renderDev() {
+  if (!devId) return; 
+  const d = DEVS.find(x => x.id === devId);
+  const targetBack = devFrom || 'devs';
+  const backKey = devFrom === 'sites' ? 'back_map' : 'back_dev';
+
+  const topNav = $('#devd .navbtns');
+  if (topNav) {
+    topNav.setAttribute('data-nav', `lang,back:${targetBack},home`);
+    if (typeof renderNav === 'function') renderNav(topNav);
+  }
+
+  if (devCarouselTimer) {
+    clearInterval(devCarouselTimer);
+    devCarouselTimer = null;
+  }
+
+  // Joint development section
+  const joint = d.joint ? `
+    <div class="dd-joint">
+      <span class="joint-lbl">${esc(tx(d.joint.label))}</span>
+      <div class="joint-logos">
+        ${d.joint.logos.map(src => `<div class="joint-logo-box"><img src="${src}" alt=""></div>`).join('')}
+      </div>
+    </div>` : '';
+
+  // Stats grid
+  const stats = (d.stats && d.stats.length && d.statsConfirmed !== false)
+    ? `<div class="stats">${d.stats.map(s => `<div class="stat ${s.wide ? 'wide' : ''}"><div class="v">${esc(tx(s.v))}</div><div class="l">${esc(tx(s.l))}</div></div>`).join('')}</div>`
+    : '';
+
+  // Phasing timeline
+  const phases = d.phases
+    ? `<div class="eyebrow" style="margin-top:34px;color:var(--yellow)">${t('phasing')}</div><div class="tline">${d.phases.map(p => `<div class="tl"><div class="when">${esc(tx(p.when))}</div><div class="what">${esc(tx(p.what))}</div></div>`).join('')}</div>`
+    : '';
+
+  // Video buttons
+  const isBukitChagar = d.id === 'bukitchagar' || d.id === 'bukit-chagar';
+
+  let actionButtons = '';
+  if (!d.noVideo) {
+    actionButtons = isBukitChagar ? `
+      <button class="btn primary" id="ddVidArt">${ic('play')} ${t('watch_art')}</button>
+      <button class="btn primary" id="ddVidDesgn">${ic('play')} ${t('watch_desgn')}</button>
+    ` : `
+      <button class="btn primary" id="ddVid">${ic('play')} ${t('watch')}</button>
+    `;
+  }
+
+  // Carousel vs single image
+  const currentImg = d.img || (d.imgs && d.imgs[0]);
+  const hasCarousel = Array.isArray(d.imgs) && d.imgs.length > 1;
+  let currentSlide = 0; // Hoisted so the zoom listener can read it
+
+  const imageHTML = hasCarousel 
+    ? `<div class="dd-carousel dd-img zoomable">
+         <div class="dd-carousel-track" id="ddCTrack">
+           ${d.imgs.map(src => `<div class="dd-carousel-slide"><img src="${src}" alt=""></div>`).join('')}
+         </div>
+         <button class="dd-carousel-btn dd-carousel-prev" id="ddCPrev">${ic('back')}</button>
+         <button class="dd-carousel-btn dd-carousel-next" id="ddCNext">${ic('back')}</button>
+         <div class="dd-carousel-dots" id="ddCDots">
+           ${d.imgs.map((_, i) => `<div class="dd-carousel-dot ${i === 0 ? 'active' : ''}" data-idx="${i}"></div>`).join('')}
+         </div>
+         <div class="zhint">${ic('map')}${t('sp_zoom2')}</div>
+       </div>`
+    : `<div class="dd-img ${currentImg ? 'zoomable' : 'noimg'}">
+         ${currentImg ? `<img src="${currentImg}" alt="" onerror="this.parentNode.classList.add('noimg')">` : ''}
+         <div class="soonimg">${ic('building')}<b>${t('img_soon')}</b></div>
+         ${currentImg ? `<div class="zhint">${ic('map')}${t('sp_zoom')}</div>` : ''}
+       </div>`;
+
+  $('#devArea').innerHTML = `<div style="--dc:${d.color}">
+    ${imageHTML}${d.disclaimer ? `<div class="dd-disclaimer">${tx(d.disclaimer)}</div>` : ''}
+    <div class="dd-txt">
+      <div class="eyebrow">${esc(tx(d.chip))}</div>
+      <h2>${esc(tx(d.name))}</h2>
+      <div class="sub">${esc(tx(d.at))}</div>
+      ${joint}
+      ${stats}
+      ${phases}
+      ${d.note ? `<div class="dd-note">${esc(tx(d.note))}</div>` : ''}
+      ${d.tbc ? `<div class="dd-tbc">${t('dev_tbc')}</div>` : ''}
+    </div>
+    <div class="dd-act">
+      ${actionButtons}
+      <button class="btn ghost" data-go="${targetBack}">${ic('back')} ${t(backKey)}</button>
+    </div>
+  </div>`;
+
+  // Video click bindings
+  if (isBukitChagar) {
+    const artBtn = $('#ddVidArt');
+    const desgnBtn = $('#ddVidDesgn');
+    if (artBtn) artBtn.onclick = () => playVideo(d.videoArt || 'bukit-chagar-progress');
+    if (desgnBtn) desgnBtn.onclick = () => playVideo(d.videoDesign || d.video);
+  } else {
+    const vidBtn = $('#ddVid');
+    if (vidBtn) vidBtn.onclick = () => playVideo(d.video);
+  }
+
+  // Attach carousel interactivity & auto-slide
+  if (hasCarousel) {
+    const maxSlide = d.imgs.length - 1;
+    const track = $('#ddCTrack'); const dots = $$('#ddCDots .dd-carousel-dot');
+    const carouselEl = $('.dd-carousel');
+    const slideInterval = 4000;
+
+    const updateCarousel = () => {
+      if (track) track.style.transform = `translateX(-${currentSlide * 100}%)`;
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === currentSlide));
+    };
+
+    const nextSlide = () => {
+      currentSlide = currentSlide < maxSlide ? currentSlide + 1 : 0;
+      updateCarousel();
+    };
+
+    const prevSlide = () => {
+      currentSlide = currentSlide > 0 ? currentSlide - 1 : maxSlide;
+      updateCarousel();
+    };
+
+    const startAutoSlide = () => {
+      stopAutoSlide();
+      devCarouselTimer = setInterval(nextSlide, slideInterval);
+    };
+
+    const stopAutoSlide = () => {
+      if (devCarouselTimer) {
+        clearInterval(devCarouselTimer);
+        devCarouselTimer = null;
+      }
+    };
+
+    const resetAutoSlide = () => {
+      stopAutoSlide();
+      startAutoSlide();
+    };
+
+    // Previous Arrow
+    const prevBtn = $('#ddCPrev');
+    if (prevBtn) {
+      prevBtn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation(); // Stops click from triggering parent zoom
+        prevSlide();
+        resetAutoSlide();
+      };
+    }
+
+    // Next Arrow
+    const nextBtn = $('#ddCNext');
+    if (nextBtn) {
+      nextBtn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation(); // Stops click from triggering parent zoom
+        nextSlide();
+        resetAutoSlide();
+      };
+    }
+
+    // Pagination Dots
+    dots.forEach(dot => {
+      dot.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        currentSlide = parseInt(e.currentTarget.dataset.idx, 10);
+        updateCarousel();
+        resetAutoSlide();
+      };
+    });
+
+    if (carouselEl) {
+      carouselEl.onpointerenter = stopAutoSlide;
+      carouselEl.onpointerleave = startAutoSlide;
+    }
+
+    startAutoSlide();
+  }
+
+  // Open zoom overlay on click
+  const zoomTarget = $('#devArea .dd-img.zoomable');
+  if (zoomTarget) {
+    zoomTarget.onclick = (e) => {
+      if (e.target.closest('.dd-carousel-btn') || e.target.closest('.dd-carousel-dot')) return;
+
+      let activeSrc = '';
+      if (hasCarousel) {
+        const slides = $$('#ddCTrack .dd-carousel-slide img');
+        if (slides[currentSlide]) activeSrc = slides[currentSlide].src;
+      } else {
+        const singleImg = zoomTarget.querySelector('img');
+        if (singleImg) activeSrc = singleImg.src;
+      }
+
+      if (activeSrc && !zoomTarget.classList.contains('noimg')) {
+        $('#zoom img').src = activeSrc;
+        $('#zoom').classList.remove('fill');
+        $('#zoom').classList.add('on');
+      }
+    };
+  }
+}
+
+/* ---------- design philosophy (journey) ---------- */
+let ji=0;
+function openPhil(){ ji=0; renderPhil(); go('phil', current==='hub'); }
+function renderRail(){ const n=PHILOSOPHY.length,r=$('#jRail'),col=PHILOSOPHY[ji].color;
+  r.innerHTML=`<div class="track"></div><div class="fill" style="width:calc((100% - 80px)*${ji/(n-1)});background:white"></div>`+
+   PHILOSOPHY.map((p,i)=>`<div class="stn ${i<ji?'done':''} ${i===ji?'cur':''}" data-st="${i}" style="left:calc(40px + (100% - 80px)*${i/(n-1)});--sc:${p.color}"><div class="dot">${i<ji?i+1:i+1}</div><div class="lbl">${esc(tx(p.st))}</div></div>`).join('');
+  r.querySelectorAll('.stn').forEach(s=>s.onclick=()=>{ji=+s.dataset.st;renderPhil();}); }
+function renderPhil(dir){ const p=PHILOSOPHY[ji],n=PHILOSOPHY.length; $('#phil').style.setProperty('--jc',p.color); renderRail();
+  $('#jArea').innerHTML=`<div class="sl ${dir||''}"><div class="ph"><div class="t">
+     <h2>${esc(tx(p.h))}</h2><div class="lead">${esc(tx(p.lead))}</div><div class="body">${esc(tx(p.body))}</div><div class="quote">${esc(tx(p.q))}</div></div>
+     <div class="pic">${p.img&&media.imgs[p.img]!==false?`<img src="${p.img}" alt="">`:`<div class="bigic">${ic(p.icon)}</div><div class="num">0${ji+1}</div>`}</div></div></div>`;
+  $('#jPrev').disabled=ji===0;
+  $('#jNext').innerHTML=ji<n-1?`${t('next')} ${ic('arrow')}`:`${t('back_menu')} ${ic('arrow')}`;
+  // $('#jNext').innerHTML=ji<n-1?`${esc(tx(PHILOSOPHY[ji+1].st))} ${ic('arrow')}`:`${t('back_menu')} ${ic('arrow')}`;
+  $('#jDots').textContent=`${ji+1} / ${n}`; }
+$('#jPrev').onclick=()=>{ if(ji>0){ji--;renderPhil('back');} };
+$('#jNext').onclick=()=>{ if(ji<PHILOSOPHY.length-1){ji++;renderPhil();} else go('hub'); };
+let sx=null; $('#jArea').addEventListener('pointerdown',e=>sx=e.clientX);
+$('#jArea').addEventListener('pointerup',e=>{ if(sx===null) return; const s=Math.min(innerWidth/1920,innerHeight/1080),dx=(e.clientX-sx)/s; sx=null;
+  if(dx<-140&&ji<PHILOSOPHY.length-1){ji++;renderPhil();} else if(dx>140&&ji>0){ji--;renderPhil('back');} });
+
+/* ---------- available sites map ---------- */
+const SITE_COUNT=Object.values(SITES).filter(x=>x.s).length;
+const NS='http://www.w3.org/2000/svg';
+const STN={};
+['kgl','pyl'].forEach(lk=>NET[lk].stations.forEach(([id,name],i)=>{ const s=STN[id]||(STN[id]={id,name,lines:[]}); s.lines.push(lk); s[lk==='kgl'?'ki':'pi']=i; }));
+/* map geometry: PYL outer U, KGL inner U, shared Kwasa Damansara on the left, single TRX interchange ring */
+const MAP={ pylTop:290, kglTop:430, kglBot:750, pylBot:860, kx:1520, px:1580, left:150, trxY:615, trxMerge:true };
+const setP=(s,x,y,side)=>{ s.x=x; s.y=y; s.side=side; };
+NET.kgl.stations.forEach(([id],i)=>{ const s=STN[id];
+  if(i===0) return setP(s,MAP.left,360,'left');
+  if(i<=10) return setP(s,260+(i-1)*((MAP.kx-70-260)/9),MAP.kglTop,'up');
+  if(i===14){ s.kx=MAP.kx; s.ky=MAP.trxY; return; }
+  if(i<=16) return setP(s,MAP.kx,[480,525,570,0,660,705][i-11],'left');
+  setP(s,(MAP.kx-70)-(i-17)*((MAP.kx-70-260)/11),MAP.kglBot,'down'); });
+NET.pyl.stations.forEach(([id],i)=>{ const s=STN[id];
+  if(i===0) return;
+  if(i<=14) return setP(s,250+(i-1)*(1250/13),MAP.pylTop,'up');
+  if(i<=20) return setP(s,MAP.px,345+(i-15)*45,'right');
+  if(i===21) return setP(s,MAP.px,MAP.trxY,'right');
+  if(i===22) return setP(s,MAP.px,700,'right');
+  setP(s,1500-(i-23)*(1350/12),MAP.pylBot,'down'); });
+const WRAP_FIX={ "Tun Razak Exchange (TRX)":["Tun Razak","Exchange (TRX)"], "Pusat Bandar Damansara":["Pusat Bandar","Damansara"] };
+function wrapName(n,max=11){ if(WRAP_FIX[n]) return WRAP_FIX[n];
+  const ws=n.split(' '); if(ws.length===2) return ws;
+  const out=[]; let cur=''; ws.forEach(w=>{ if(cur&&(cur+' '+w).length>max){ out.push(cur); cur=w; } else cur=cur?cur+' '+w:w; }); if(cur) out.push(cur); return out; }
+/* trains in line liveries (as on the Commercial map) */
+const LIVERY={
+  pyl:{ body:'#F4F4F2', roof:'#E4002B', nose:'#E4002B', mask:'#1B232B', door:'#FFBB01', doorLine:'#9a7a10', skirt:'#A6A8AA', win:'#1E2D36', stripes:[], light:'#FFFFFF' },
+  kgl:{ body:'#BFC4CA', roof:'#D4D8DE', nose:'#AEB3B9', mask:'#1E2226', door:'#30353B', doorLine:'#596068', skirt:'#8E949B', win:'#2E363D', stripes:[{y:3.2,h:1.1,c:'#1F8A8A'},{y:4.3,h:1.1,c:'#C8102E'}], light:'#F63E62' } };
+const CAR_PITCH=56;
+function roofY(ang){ const a=Math.abs(ang); if(a<=100) return 1; if(a>=170) return -1; const u=(a-100)/70; return Math.cos(Math.PI*(u*u*(3-2*u))); }
+function carSVG(v,lead,tail,W=52){ const x=-W/2; let h=''; const bx=tail?x+8:x, bw=W-(tail?8:0)-(lead?8:0);
+  h+=`<rect x="${bx}" y="-10" width="${bw}" height="19" fill="${v.body}"/><rect x="${bx}" y="-10" width="${bw}" height="3.5" fill="${v.roof}"/><rect x="${bx}" y="5.5" width="${bw}" height="3.5" fill="${v.skirt}"/>`;
+  v.stripes.forEach(st=>{ h+=`<rect x="${bx}" y="${st.y}" width="${bw}" height="${st.h}" fill="${st.c}"/>`; });
+  for(const dx of [.22,.62]){ const d=x+W*dx; h+=`<rect x="${d}" y="-6" width="6.5" height="12" rx="1" fill="${v.door}"/><line x1="${d+3.25}" y1="-6" x2="${d+3.25}" y2="6" stroke="${v.doorLine}" stroke-width=".5" opacity=".8"/>`; }
+  for(const wx of [.08,.4,.8]){ if((tail&&wx<.15)||(lead&&wx>.75)) continue; h+=`<rect x="${x+W*wx}" y="-5" width="${W*.1}" height="6" rx="1" fill="${v.win}"/>`; }
+  const cab=(sx,ox)=>{ const X=d=>ox+sx*d;
+    return `<path d="M${X(-8)} -10 H${X(-3)} Q${X(8)} -8 ${X(9)} 3 Q${X(9)} 9 ${X(3)} 9 H${X(-8)} Z" fill="${v.nose}"/><path d="M${X(-7)} -8.5 H${X(-3)} Q${X(6)} -6.5 ${X(7)} 2 H${X(-7)} Z" fill="${v.mask}"/>`+
+           `<rect x="${Math.min(X(4),X(6.5))}" y="3.6" width="2.5" height="1.6" rx=".6" fill="${v.light}"/><rect x="${Math.min(X(-8),X(-5))}" y="-6" width="3" height="12" fill="${v.body}"/>`; };
+  if(lead) h+=cab(1,x+W); if(tail) h+=cab(-1,x);
+  return `<g filter="drop-shadow(0 2px 2px rgba(0,0,0,.45))">${h}</g>`; }
+const ST_COL={aw:'#E42132', rfp:'#F6B700', fut:'#FFFFFF'};
+let trains=[]; const UG_DASH={};   // underground dash pattern, worked out once
+function buildMap(){
+  const svg=$('#smap'); svg.innerHTML='';
+  const el=(tg,a,p)=>{ const e=document.createElementNS(NS,tg); for(const k in a) e.setAttribute(k,a[k]); (p||svg).appendChild(e); return e; };
+  const M=MAP, K=NET.kgl, P=NET.pyl;
+  const pyl=el('path',{d:`M${M.left} 360 V${M.pylTop+40} A40 40 0 0 1 ${M.left+40} ${M.pylTop} H${M.px-40} A40 40 0 0 1 ${M.px} ${M.pylTop+40} V${M.pylBot-40} A40 40 0 0 1 ${M.px-40} ${M.pylBot} H${M.left}`,class:'ln',stroke:P.color});
+  const kgl=el('path',{d:`M${M.left} 360 V${M.kglTop-40} A40 40 0 0 0 ${M.left+40} ${M.kglTop} H${M.kx-40} A40 40 0 0 1 ${M.kx} ${M.kglTop+40} V${M.kglBot-40} A40 40 0 0 1 ${M.kx-40} ${M.kglBot} H260`,class:'ln',stroke:K.color});
+  if(!M.trxMerge) el('line',{x1:M.kx,y1:M.trxY,x2:M.px,y2:M.trxY,class:'xlink'});
+  // underground stretches as dashes
+  const UG={ kgl:[['semantan','muzium-negara'],['maluri','taman-pertama']], pyl:[['jalan-ipoh','sentul-barat'],['chan-sow-lin','kuchai']] };
+  const along=(p,x,y)=>{ let best=0,bd=1e9; const L=p.getTotalLength(); for(let d=0;d<=L;d+=2){ const q=p.getPointAtLength(d), dd=(q.x-x)**2+(q.y-y)**2; if(dd<bd){bd=dd;best=d;} } return best; };
+  [[kgl,'kgl'],[pyl,'pyl']].forEach(([p,lk])=>{ if(UG_DASH[lk]){ p.setAttribute('stroke-dasharray',UG_DASH[lk]); return; } const L=p.getTotalLength(), U=UG[lk];
+    const mid=(a,b)=>(along(p,STN[a].x,STN[a].y)+along(p,STN[b].x,STN[b].y))/2;
+    const a=mid(U[0][0],U[0][1]), b=mid(U[1][0],U[1][1]); const arr=[a]; let pos=a;
+    while(pos+12<=b){ arr.push(5,7); pos+=12; } arr.push(b-pos, L-b+1, 0);
+    UG_DASH[lk]=arr.map(n=>n.toFixed(1)).join(' '); p.setAttribute('stroke-dasharray',UG_DASH[lk]); });
+  // line titles with site counts
+  [['pyl',300,545],['kgl',300,640]].forEach(([lk,x,y])=>{ const l=NET[lk];
+    const n=Object.values(SITES).filter(z=>z.line===lk&&z.s).length;
+    el('text',{x,y,class:'lnlbl',fill:l.color}).textContent='MRT '+tx(l.name);
+    el('text',{x,y:y+32,class:'lnstat'}).textContent=t('ln_stat').replace('{s}',l.stations.length).replace('{n}',n); });
+  // trains
+  const tg=el('g',{}); trains=[];
+  [[kgl,'kgl',0],[kgl,'kgl',.5],[pyl,'pyl',.15],[pyl,'pyl',.65]].forEach(([p,lk,off])=>{
+    const cars=[0,1].map(i=>{ const g=el('g',{class:'train'},tg); g.innerHTML=carSVG(LIVERY[lk],i===1,i===0); return g; });
+    trains.push({cars,p,len:p.getTotalLength(),t:off}); });
+  const LH=19; let k=0;
+  Object.values(STN).forEach(s => {
+    const site = SITES[s.id], xc = s.lines.length > 1;
+    const devId = DEV_MAP[s.id];
+
+    // Cochrane has s:"aw", so we explicitly enable tap for DEV_MAP stations
+    const tap = Boolean(devId) || (site && site.s === 'fut' && site.spot);
+
+    const g = el('g', {
+      class: 'stn' + (xc ? ' xc' : '') + (site ? ' site' : '') + (tap ? ' tap' : ''),
+      ...(tap ? (devId ? { 'data-dev': devId } : { 'data-site': s.id }) : {})
+    });
+
+    if (site) {
+      // Cochrane uses ST_COL.aw (red); Taman Naga Emas uses ST_COL.fut
+      const col = site.s ? ST_COL[site.s] : '#FFFFFF';
+      const lc = NET[site.line].color;
+
+      if (tap) {
+        el('circle', { class: 'hit', cx: s.x, cy: s.y, r: 32 }, g);
+        el('circle', { class: 'pulse', cx: s.x, cy: s.y, r: 14, stroke: '#fff', style: `animation-delay:${(k % 6) * 0.4}s` }, g);
+        el('circle', { class: 'pulse', cx: s.x, cy: s.y, r: 14, stroke: '#fff', style: `animation-delay:${(k++ % 6) * 0.4 + 1.3}s` }, g);
+      }
+      el('circle', { class: 'm', cx: s.x, cy: s.y, r: 14, fill: col, stroke: col === '#FFFFFF' ? lc : '#fff' }, g);
+    } else if (xc) {                       // interchange ring (as on the Commercial map): green left / yellow right, navy centre
+      const merge=s.kx!=null&&M.trxMerge, x0=merge?Math.min(s.kx,s.x):0, x1=merge?Math.max(s.kx,s.x):0;
+      const cx=merge?(x0+x1)/2:s.x, y=s.y, SW=9, R=(M.px-M.kx)/2-6-SW/2;
+      el('circle',{cx,cy:y,r:R-SW/2,style:'fill:var(--navy);stroke:none'},g);
+      el('path',{d:`M${cx} ${y-R} A${R} ${R} 0 0 0 ${cx} ${y+R}`,fill:'none',stroke:K.color,'stroke-width':SW},g);
+      el('path',{d:`M${cx} ${y-R} A${R} ${R} 0 0 1 ${cx} ${y+R}`,fill:'none',stroke:P.color,'stroke-width':SW},g);
+    } else el('circle',{class:'d',cx:s.x,cy:s.y,r:8,stroke:NET[s.lines[0]].color},g);
+    if(s.kx!=null && !M.trxMerge) el('circle',{class:'d',cx:s.kx,cy:s.ky,r:11,stroke:'#fff'},g);
+    const side=s.side, lines=(side==='left'||side==='right')&&s.id!=='trx'&&s.id!=='kwasa-damansara'?[s.name]:wrapName(s.name), n=lines.length, gap=site?6:0;
+    let ax=s.x, ay, anc='middle';
+    if(side==='up') ay=s.y-20-gap-(n-1)*LH;
+    else if(side==='down') ay=s.y+32+gap;
+    else { anc=side==='left'?'end':'start'; ax=s.x+(side==='left'?-22-gap:24+gap); ay=s.y+6-(n-1)*LH/2; }
+    if(s.id==='kwasa-damansara') ax=s.x-26;
+    const te=el('text',{x:ax,y:ay,'text-anchor':anc},g);
+    lines.forEach((ln,i)=>{ const ts=el('tspan',{x:ax,dy:i?LH:0},te); ts.textContent=ln; });
+  });
+  $('#slegend').innerHTML=`<span><i style="--c:${ST_COL.aw}"></i>${t('lg_aw')}</span><span><i style="--c:${ST_COL.rfp}"></i>${t('lg_rfp')}</span><span><i class="fut"></i>${t('lg_fut')}</span><span><i class="ug"></i>${t('lg_ug')}</span>`;
+  $('#stH').textContent=t('st_h').replace('{n}',SITE_COUNT);
+}
+let lastT=0;
+function animTrains(ts){ const dt=Math.min(.05,(ts-lastT)/1000||0); lastT=ts;
+  if(current==='sites') trains.forEach(tr=>{ tr.t=(tr.t+dt*95/tr.len)%2;
+    const u=tr.t<=1?tr.t:2-tr.t, half=CAR_PITCH/2*tr.cars.length, d=half+u*(tr.len-2*half);
+    tr.cars.forEach((g,i)=>{ const dc=d+(i-(tr.cars.length-1)/2)*CAR_PITCH;
+      const a=tr.p.getPointAtLength(Math.max(0,dc-12)), b=tr.p.getPointAtLength(Math.min(tr.len,dc+12));
+      const ang=Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI, pt=tr.p.getPointAtLength(dc);
+      g.setAttribute('transform',`translate(${pt.x} ${pt.y}) rotate(${ang}) scale(1,${roofY(ang)})`); }); });
+  requestAnimationFrame(animTrains); }
+requestAnimationFrame(animTrains);
+$('#smap').addEventListener('click', e => {
+  // 1. Open development detail screen for Cochrane or Naga Emas
+  const devEl = e.target.closest('[data-dev]');
+  if (devEl) {
+    e.stopPropagation();
+    return openDev(devEl.dataset.dev);
+  }
+
+  // 2. Open standard RFP site detail
+  const siteEl = e.target.closest('[data-site]');
+  if (siteEl) {
+    e.stopPropagation();
+    openSpot(SITES[siteEl.dataset.site].spot, 'sites');
+  }
+});
+const OPEN_SITES=Object.entries(SITES).filter(([,x])=>x.s==='fut'&&x.spot);   // stations open for RFP (tappable)
+
+let siteSel=null;   // stations open the spotlight directly (no side panel)
+function closePanel(){ siteSel=null; $('#scrim').classList.remove('on'); $('#panel').classList.remove('on'); }
+$('#scrim').onclick=closePanel;
+
+/* ---------- spotlight ---------- */
+let spotId=null, spotTab='assets', spotFrom='sites';
+function openSpot(id,from){ if(!SPOTS[id]) return; spotId=id; spotTab='assets'; spotFrom=from||'sites'; renderSpot(); go('spot', true); }
+function renderSpot(){ if(!spotId) return; const s=SPOTS[spotId], I=SITE_INFO[spotId];
+  const list=(arr,num,icon)=>arr&&arr.length?`<ul class="assets">${arr.map((a,i)=>`<li><b>${num?i+1:ic(icon)}</b><span>${esc(tx(a))}</span></li>`).join('')}</ul>`:`<div class="sp-tbc">${t('sp_tbc')}</div>`;
+  const VIEWS=I?[['assets','sp_tab_assets','map'],['location','sp_tab_loc','pin'],['connect','sp_tab_conn','train'],['amenities','sp_tab_amen','leaf']]:[['assets','sp_tab_assets','map']];
+  if(!VIEWS.some(v=>v[0]===spotTab)) spotTab='assets';
+  const img = I ? `media/img/sites/${spotId}-${spotTab}.jpg` : s.views[0].img;
+  let body;
+  if(spotTab==='location') body=`<h5>${t('sp_loc_h')}</h5><p class="sp-note">${t('sp_loc_p')}</p><div class="sp-bnd"><i class="star">★</i><span>${t('sp_subject')}</span></div>`;
+  else if(spotTab==='connect') body=`<h5>${t('sp_conn_h')}</h5><div class="conn">${I.conn.map(c=>`<div class="cr"><div class="ct"><b>${esc(c.to)}</b><small>${esc(c.at)}</small></div><div class="cm"><b>${esc(c.min)}<i> min</i></b><small>${c.n===1?t('sp_stop1'):t('sp_stops').replace('{n}',c.n)}</small></div></div>`).join('')}</div>`;
+  else if(spotTab==='amenities') body=`<h5>${t('sp_amen_h')}</h5><ul class="amen">${I.amen.map(a=>`<li>${esc(a)}</li>`).join('')}</ul>`;
+  else body=`<h5>${t(I&&!s.assets.length?'sp_site':'sp_assets')}</h5>${I&&!s.assets.length?`<p class="sp-note">${t('sp_nolist')}</p>`:list(s.assets,true)}<div class="sp-bnd"><i></i><span>${t('sp_bnd')}</span></div>`;
+  $('#spotArea').innerHTML=`<div class="phead"><div class="eyebrow">${esc(tx(s.line))} · ${t('spots')}</div><h2>${esc(s.name)}</h2></div>
+    <button class="btn primary ctbtn" data-go="contact">${ic('qr')}<span>${t('ct_btn')}</span></button>
+    <div class="sp-img${I?' zoomable':''}"><img src="${img}" alt="" onerror="this.parentNode.classList.add('noimg')"><div class="soonimg">${ic('map')}<b>${t('sp_noplan')}</b></div>${I?`<div class="zhint">${ic('map')}${t('sp_zoom')}</div>`:''}</div>
+    <div class="sp-side"><div class="sp-body">${body}</div>
+      <div class="sp-tabs n${VIEWS.length}">${VIEWS.map(([k,l,icn])=>`<button class="tab ${k===spotTab?'sel':''}" data-t="${k}">${ic(icn)}${t(l)}</button>`).join('')}</div></div>`;
+  $$('#spotArea .sp-tabs .tab').forEach(b=>b.onclick=()=>{spotTab=b.dataset.t;renderSpot();});
+  const z=$('#spotArea .sp-img.zoomable'); if(z) z.onclick=()=>{ $('#zoom img').src=img; $('#zoom').classList.add('fill','on'); }; }
+$('#zoom').onclick=()=>$('#zoom').classList.remove('on');
+
+/* ---------- connect with us ---------- */
+const CONTACT = { email:"", phone:"", addr:"" };   // optional; rows show only when filled (Property to confirm)
+let ctFrom='hub';
+function renderContact(){
+  const rows=[['ct_email','mail',CONTACT.email],['ct_phone','phone',CONTACT.phone],['ct_addr','pin',CONTACT.addr]].filter(x=>x[2]);
+  $('#ctlist').innerHTML=rows.map(([k,i,v])=>`<div class="ctrow"><i>${ic(i)}</i><div><small>${t(k)}</small><b>${v}</b></div></div>`).join('');
+  const q=$('#ctQR'); q.innerHTML=`<div class="qrph">QR CODE<br>${esc(SETTINGS.qrContact)}<br>(Property to supply)</div>`;
+  const im=new Image(); im.onload=()=>{ q.innerHTML=`<img src="${SETTINGS.qrContact}" alt="QR code">`; }; im.src=SETTINGS.qrContact; }
+
+/* ---------- explore opportunities: stations open for RFP ---------- */
+function renderExplore(){ $('#exH').textContent=t('ex_h').replace('{n}',OPEN_SITES.length);
+  $('#exGrid').innerHTML=OPEN_SITES.map(([id,x],i)=>{ const sp=SPOTS[x.spot], L=NET[x.line];
+    return `<button class="excard" data-ex="${x.spot}" style="--lc:${L.color};animation-delay:${(i*0.04).toFixed(2)}s">
+      <div class="th"><img src="${sp.views[0].img}" alt="" onerror="this.remove()"><div class="v"></div></div>
+      <span class="lnch"><i></i>${esc(tx(L.name))}</span><b>${esc(STN[id].name)}</b><span class="go">${ic('arrow')}</span></button>`; }).join('');
+  $$('#exGrid [data-ex]').forEach(b=>b.onclick=()=>openSpot(b.dataset.ex,'explore')); }
+
+/* ---------- video player ---------- */
+const pv=$('#pv');
+function playVideo(id){ const P=$('#player'); P.classList.add('on');
+  if(media.videos[id]){ P.classList.remove('missing'); pv.src=`media/videos/${id}.mp4`; pv.muted=false; pv.play().catch(()=>{}); }
+  else { P.classList.add('missing'); pv.removeAttribute('src'); } }
+function closePlayer(){ pv.pause(); $('#player').classList.remove('on','missing'); }
+$('#pvClose').onclick=closePlayer; pv.onended=closePlayer;
+
+/* ---------- render everything in the current language ---------- */
+function renderAll(){ applyStatic(); renderNav(); renderLogo(); renderHub(); renderDevs(); if(current==='devd') renderDev();
+  if(current==='phil') renderPhil(); buildMap(); renderSpot(); renderExplore(); renderContact(); }
+renderAll(); show('attract');
+
+/* ---------- idle reset (paused while a video plays) ---------- */
+let lastAct=Date.now();
+['pointerdown','touchstart','keydown'].forEach(e=>document.addEventListener(e,()=>{lastAct=Date.now();$('#idle').classList.remove('on');},{passive:true,capture:true}));
+setInterval(()=>{ if(current==='attract'||(!pv.paused&&!pv.ended)){lastAct=Date.now();return;}
+  const left=Math.ceil(SETTINGS.idleSeconds-(Date.now()-lastAct)/1000);
+  if(left<=0){ $('#idle').classList.remove('on'); home(); if(lang!==SETTINGS.defaultLang) setTimeout(()=>setLang(SETTINGS.defaultLang),600); }
+  else if(left<=SETTINGS.idleWarnSeconds){ $('#idle').classList.add('on'); $('#idleNum').textContent=left; } },250);
+
+/* ---------- QA panel (5 taps top-left) ---------- */
+let taps=[]; $('#hot').addEventListener('click',e=>{e.stopPropagation();const n=Date.now();taps=taps.filter(x=>n-x<3000);taps.push(n);if(taps.length>=SETTINGS.adminTaps){taps=[];openAdmin();}});
+function openAdmin(){ const st=b=>b?'<span class="ok">OK</span>':'<span class="warn">MISSING</span>';
+  const flags=[]; DEVS.filter(d=>d.verify).forEach(d=>flags.push(`${tx(d.name)}: ${d.id==='bukitchagar'?"key figures shown, confirm with Property":"details to be confirmed by Property"}`));
+  const noTA=Object.values(SPOTS).filter(s=>!(s.transit&&s.transit.length)||!(s.amenities&&s.amenities.length)).length;
+  if(noTA) flags.push(`${noTA} spotlights still without Transit / Amenities`);
+  $('#admin').innerHTML=`<h3>Kiosk QA panel · Property</h3>
+   <p>Home videos (${esc(SETTINGS.homeVideos.folder)}): ${window.HomeVideo?HomeVideo.status().count+' file(s) via '+HomeVideo.status().source:'n/a'} · Logo: ${st(media.logo)} · Idle reset: ${SETTINGS.idleSeconds}s · Default language: ${SETTINGS.defaultLang.toUpperCase()}</p>
+   <p style="margin-top:10px">Videos: ${VIDEOS.map(v=>`${v.id} ${st(media.videos[v.id])}`).join(' · ')}</p>
+   <p style="margin-top:10px">Images: ${Object.entries(media.imgs).map(([k,v])=>`${k.split('/').pop()} ${st(v)}`).join(' · ')}</p>
+   <p style="margin-top:10px">To confirm: ${flags.length?'<span class="warn">'+flags.map(esc).join(' · ')+'</span>':'none'}</p>
+   <p style="margin-top:10px">BM text is draft: to be checked by Property / Corporate Comms.</p>
+   <p style="margin-top:18px"><button onclick="location.reload()">Reload</button><button onclick="document.getElementById('admin').classList.remove('on')">Close</button></p>`;
+  $('#admin').classList.add('on'); }
+})();
+</script>
+
+<!-- =====================================================================
+     HOME VIDEO PLAYLIST
+     Plays every video in SETTINGS.homeVideos.folder in alphabetical order,
+     in a loop, with Previous / Next / Mute / Full-screen buttons.
+     Add, remove or re-order videos by changing the files in that folder
+     (use 01_, 02_ ... prefixes to set the order). No code change needed.
+     How the folder is read (first one that works):
+       1. Live folder read — kiosk launched with START-KIOSK.bat
+          (Edge flag --allow-file-access-from-files). Picks up changes
+          each time the home screen is shown or the playlist loops.
+       2. <folder>/playlist.js — written by UPDATE-PLAYLIST.bat
+          (START-KIOSK.bat runs it automatically).
+       3. SETTINGS.homeVideos.fallback (single file), if set.
+     ===================================================================== -->
+<style>
+/* controls: hidden until the video is tapped, then shown for 5 s (each tap restarts the timer) */
+.video-frame .hv-ctrls{position:absolute;right:14px;bottom:14px;display:flex;align-items:center;gap:8px;z-index:100001;opacity:0;pointer-events:none;transition:opacity .4s ease}
+.video-frame.hv-awake .hv-ctrls{opacity:1;pointer-events:auto}
+.video-frame .hv-count{height:28px;padding:0 10px;border-radius:14px;display:flex;align-items:center;font-weight:600;font-size:14px;line-height:1;font-family:inherit;color:rgba(255,255,255,.9);background:rgba(0,0,0,.35);letter-spacing:.04em}
+.video-frame .hv-btn{width:42px;height:42px;border-radius:50%;padding:0;margin:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.35);border:none;color:#fff;cursor:pointer;outline:none;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:transform .15s ease,background .15s ease}
+.video-frame .hv-btn:active{transform:scale(.9);background:rgba(0,0,0,.6)}
+.video-frame .hv-btn svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.video-frame .hv-btn svg .f{fill:#fff;stroke:none}
+.video-frame .hv-btn .on-max,.video-frame .hv-btn .on-muted{display:none}
+.video-frame.hv-max .hv-btn .on-max,.video-frame.hv-muted .hv-btn .on-muted{display:block}
+.video-frame.hv-max .hv-btn .off-max,.video-frame.hv-muted .hv-btn .off-muted{display:none}
+.video-frame.hv-none .hv-ctrls{display:none}
+/* full-screen (fills the whole kiosk screen) */
+.video-frame.hv-max{position:fixed!important;inset:0!important;top:0!important;left:0!important;right:auto!important;bottom:auto!important;
+  width:100%!important;height:100%!important;border-radius:0!important;box-shadow:none!important;background:#000!important;z-index:99999!important;transition:none!important}
+.video-frame.hv-max video{object-fit:contain!important;background:#000}
+.video-frame.hv-max .hv-ctrls{right:28px;bottom:26px;gap:10px}
+.video-frame.hv-max .hv-btn{width:54px;height:54px}
+.video-frame.hv-max .hv-btn svg{width:24px;height:24px}
+.video-frame.hv-max .hv-count{height:34px;padding:0 14px;font-size:17px;border-radius:17px}
+</style>
+<script>
+(function(){
+  const S = (typeof SETTINGS !== 'undefined') ? SETTINGS : {};
+  const CFG = Object.assign({
+    folder: 'home-videos/',                       // folder next to index.html
+    muted: false,                                 // start muted?
+    extensions: ['mp4','webm','m4v','mov','ogv'], // file types picked up
+    fallback: ''                                  // optional single video if the folder is empty / unreadable
+  }, S.homeVideos || {});
+  if (!/\/$/.test(CFG.folder)) CFG.folder += '/';
+
+  const vid = document.getElementById('loopVideo');
+  const frame = vid && vid.closest('.video-frame');
+  const attract = document.getElementById('attract');
+  if (!vid || !frame || !attract) { console.warn('[home-video] video frame not found'); return; }
+
+  let list = [], idx = 0, source = 'none', bad = new Set();
+  let muted = !!CFG.muted, autoMuted = false, onHome = attract.classList.contains('active');
+  let weMadeFs = false, retryT = null, scanning = null;
+
+  vid.removeAttribute('loop'); vid.loop = false; vid.muted = muted;
+
+  /* ---------- controls ---------- */
+  const IC = {
+    prev: '<svg viewBox="0 0 24 24"><path class="f" d="M19 5.5v13L9.5 12z"/><path d="M6 5.5v13"/></svg>',
+    next: '<svg viewBox="0 0 24 24"><path class="f" d="M5 5.5v13L14.5 12z"/><path d="M18 5.5v13"/></svg>',
+    mute: '<svg viewBox="0 0 24 24"><g class="off-muted"><path class="f" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></g>'
+        + '<g class="on-muted"><path class="f" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></g></svg>',
+    fs:   '<svg viewBox="0 0 24 24"><path class="off-max" d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>'
+        + '<path class="on-max" d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>'
+  };
+  const bar = document.createElement('div');
+  bar.className = 'hv-ctrls';
+  bar.innerHTML = '<span class="hv-count" id="hvCount"></span>'
+    + '<button class="hv-btn" data-hv="prev" aria-label="Previous video">' + IC.prev + '</button>'
+    + '<button class="hv-btn" data-hv="next" aria-label="Next video">' + IC.next + '</button>'
+    + '<button class="hv-btn" data-hv="mute" aria-label="Mute / unmute">' + IC.mute + '</button>'
+    + '<button class="hv-btn" data-hv="fs" aria-label="Full screen">' + IC.fs + '</button>';
+  frame.appendChild(bar);
+  let awakeT = null;   // controls hidden; tapping the video shows them for 5 s
+  let wasAwake = false;   // a tap on hidden buttons only reveals them, it does not press them
+  frame.addEventListener('pointerdown', () => { wasAwake = frame.classList.contains('hv-awake'); frame.classList.add('hv-awake'); clearTimeout(awakeT); awakeT = setTimeout(() => frame.classList.remove('hv-awake'), 5000); }, true);
+  // taps on the video or its buttons never start the kiosk journey
+  ['click','pointerdown','touchstart','touchend'].forEach(ev => frame.addEventListener(ev, e => e.stopPropagation()));
+  bar.addEventListener('click', e => {
+    const b = e.target.closest('[data-hv]'); if (!b || !wasAwake) return;
+    e.preventDefault();
+    const a = b.dataset.hv;
+    if (a === 'prev') play(idx - 1);
+    else if (a === 'next') play(idx + 1);
+    else if (a === 'mute') setMuted(!muted, true);
+    else if (a === 'fs') setMax(!frame.classList.contains('hv-max'));
+  });
+
+  function renderState(){
+    frame.classList.toggle('hv-muted', vid.muted);
+    const c = document.getElementById('hvCount');
+    if (c) { c.textContent = list.length ? (idx + 1) + ' / ' + list.length : ''; c.style.display = list.length > 1 ? '' : 'none'; }
+  }
+  function setMuted(m, byUser){
+    muted = m; if (byUser) autoMuted = false;
+    vid.muted = m; if (!m && onHome && vid.paused) vid.play().catch(()=>{});
+    renderState();
+  }
+  function setMax(on){
+    frame.classList.toggle('hv-max', on);
+    const covers = window.innerHeight >= screen.height - 4 && window.innerWidth >= screen.width - 4;   // already full screen (Edge kiosk mode)
+    if (on && !document.fullscreenElement && !covers && document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen().then(() => { weMadeFs = true; }).catch(()=>{});
+    } else if (!on && weMadeFs && document.fullscreenElement) {
+      weMadeFs = false; document.exitFullscreen().catch(()=>{});
+    }
+  }
+  document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && weMadeFs) { weMadeFs = false; frame.classList.remove('hv-max'); } });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && frame.classList.contains('hv-max')) setMax(false); });
+
+  function unlock(e){
+    if (e.target.closest && e.target.closest('.hv-ctrls')) return;
+    if (autoMuted) { autoMuted = false; setMuted(false); }
+  }
+  document.addEventListener('pointerdown', unlock, true);
+
+  /* ---------- reading the folder ---------- */
+  const isVideo = n => new RegExp('\\.(' + CFG.extensions.join('|') + ')$', 'i').test(n);
+  const natural = (a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+
+  function readFolder(){            // null = folder could not be read; [] = folder is empty
+    return new Promise(res => {
+      let done = false; const fin = v => { if (!done) { done = true; res(v); } };
+      try {
+        const x = new XMLHttpRequest();
+        x.open('GET', CFG.folder + (location.protocol === 'file:' ? '' : '?t=' + Date.now()));
+        x.timeout = 4000;
+        x.onload = () => {
+          const t = x.responseText || '';
+          if (!t || (x.status && x.status >= 400)) return fin(null);
+          const names = []; let m;
+          const rowRe = /addRow\("((?:[^"\\]|\\.)*)","(?:[^"\\]|\\.)*",(\d)/g;        // Edge / Chrome folder page
+          while ((m = rowRe.exec(t))) if (m[2] === '0') { try { names.push(JSON.parse('"' + m[1] + '"')); } catch (e) { names.push(m[1]); } }
+          if (!/addRow\(/.test(t)) {                                                   // web-server folder page
+            const hrefRe = /href\s*=\s*["']([^"'?#]+)["']/gi;
+            while ((m = hrefRe.exec(t))) { try { const n = decodeURIComponent(m[1]).split('/').filter(Boolean).pop(); if (n) names.push(n); } catch (e) {} }
+          }
+          fin([...new Set(names)]);
+        };
+        x.onerror = x.ontimeout = () => fin(null);
+        x.send();
+      } catch (e) { fin(null); }
+      setTimeout(() => fin(null), 5000);
+    });
+  }
+  function readPlaylistJs(){
+    return new Promise(res => {
+      try { delete window.HOME_PLAYLIST; } catch (e) { window.HOME_PLAYLIST = undefined; }
+      const s = document.createElement('script');
+      s.src = CFG.folder + 'playlist.js?t=' + Date.now();
+      const fin = v => { s.remove(); res(v); };
+      s.onload = () => fin(Array.isArray(window.HOME_PLAYLIST) ? window.HOME_PLAYLIST.map(String) : null);
+      s.onerror = () => fin(null);
+      document.head.appendChild(s);
+    });
+  }
+  async function scan(){
+    let names = await readFolder(), src = 'live folder';
+    if (!names || !names.some(isVideo)) {                 // folder unreadable, or a web-server page with no recognisable video links (e.g. Android local server)
+      const pl = await readPlaylistJs();
+      if (pl && pl.some(isVideo)) { names = pl; src = 'playlist.js'; }
+    }
+    let urls = (names || []).filter(isVideo).sort(natural).map(n => CFG.folder + encodeURIComponent(n));
+    if (!urls.length && CFG.fallback) { urls = [CFG.fallback]; src = 'fallback'; }
+    if (!urls.length) src = names === null ? 'folder not readable' : 'folder empty';
+    return { urls, src };
+  }
+  function refresh(startAt){        // re-read the folder, keep playing the current video if it is still there
+    if (scanning) return scanning;
+    scanning = scan().then(r => {
+      scanning = null;
+      const cur = list[idx], changed = r.urls.join('|') !== list.join('|');
+      list = r.urls; source = r.src;
+      if (changed) { bad.clear(); console.log('[home-video] ' + list.length + ' video(s) from ' + source, list.map(decodeURIComponent)); }
+      if (Array.isArray(S.loopPlaylist)) S.loopPlaylist = list.slice();   // Commercial QA panel
+      const k = list.indexOf(cur);
+      if (!list.length) { noVideo(true); retryLater(); return; }
+      if (startAt !== undefined) play(startAt);
+      else if (k >= 0) { idx = k; vid.loop = list.length === 1; if (onHome && vid.paused) resume(); renderState(); }
+      else play(0);
+    });
+    return scanning;
+  }
+  function retryLater(){ clearTimeout(retryT); retryT = setTimeout(() => { if (onHome) refresh(); else retryLater(); }, 30000); }
+
+  /* ---------- playback ---------- */
+  function noVideo(on){
+    attract.classList.toggle('novideo', on);
+    frame.classList.toggle('hv-none', on);
+    vid.style.visibility = on ? 'hidden' : 'visible';
+    if (on) { frame.classList.remove('hv-max'); vid.removeAttribute('src'); vid.load(); }
+  }
+  function resume(){
+    if (!onHome) return;
+    vid.muted = muted;
+    const p = vid.play();
+    if (p && p.catch) p.catch(() => {                    // autoplay with sound blocked -> play muted
+      if (!vid.muted) { vid.muted = true; autoMuted = !muted; renderState(); vid.play().catch(()=>{}); }
+    });
+    renderState();
+  }
+  function play(i){
+    if (!list.length) return;
+    idx = ((i % list.length) + list.length) % list.length;
+    const src = list[idx];
+    vid.loop = list.length === 1;
+    if (vid.getAttribute('src') !== src) vid.src = src; else vid.currentTime = 0;
+    resume();
+  }
+  vid.addEventListener('loadeddata', () => { bad.delete(list[idx]); noVideo(false); renderState(); });
+  vid.addEventListener('ended', () => {
+    if (list.length <= 1) return;
+    if (idx + 1 >= list.length) refresh(0);              // end of the playlist: re-read the folder, start again from the first
+    else play(idx + 1);
+  });
+  vid.addEventListener('error', () => {
+    const src = vid.getAttribute('src'); if (!src) return;
+    console.warn('[home-video] cannot play', decodeURIComponent(src));
+    bad.add(src);
+    if (bad.size >= list.length) { noVideo(true); retryLater(); return; }
+    setTimeout(() => play(idx + 1), 300);
+  });
+
+  /* ---------- called by show() when the screen changes ---------- */
+  function onScreen(id){
+    onHome = (id === 'attract');
+    if (onHome) refresh();
+    else { vid.pause(); if (frame.classList.contains('hv-max')) setMax(false); }
+  }
+
+  window.HomeVideo = { onScreen, refresh, next: () => play(idx + 1), prev: () => play(idx - 1),
+    status: () => ({ folder: CFG.folder, source, count: list.length, playing: list[idx] ? decodeURIComponent(list[idx]) : '', files: list.map(decodeURIComponent), unplayable: [...bad].map(decodeURIComponent) }) };
+  renderState();
+  refresh();
+})();
+</script>
+
+</body>
+</html>

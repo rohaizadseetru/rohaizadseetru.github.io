@@ -1,0 +1,35 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Gradient effect" clip-path="url(#clip0_1490_4525)">
+<path id="Vector" d="M1710.36 1149.75L2434.64 958.062L2053.23 -387.693L1328.95 -196.009L1710.36 1149.75Z" fill="url(#paint0_linear_1490_4525)"/>
+<g id="Vector_2" opacity="0.8">
+<path d="M1351.02 1500.89C2253.02 1248.14 2909.96 778.168 2818.34 451.188C2726.71 124.208 1921.22 64.0366 1019.22 316.792C117.217 569.547 -539.723 1039.51 -448.098 1366.49C-356.474 1693.47 449.02 1753.65 1351.02 1500.89Z" fill="url(#paint1_radial_1490_4525)" style="mix-blend-mode:multiply"/>
+</g>
+<path id="Bottom" d="M1920 822H0V1080H1920V822Z" fill="url(#paint2_linear_1490_4525)"/>
+<path id="green gradient side" opacity="0.5" d="M1525.12 -22.9249L709.607 -838.442L-610 528.053L205.517 1343.57L1525.12 -22.9249Z" fill="url(#paint3_linear_1490_4525)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_1490_4525" x1="2176.13" y1="300.425" x2="1572.72" y2="478.556" gradientUnits="userSpaceOnUse">
+<stop stop-color="#06A990" stop-opacity="0.8"/>
+<stop offset="1" stop-color="#193C97" stop-opacity="0"/>
+</linearGradient>
+<radialGradient id="paint1_radial_1490_4525" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1210.65 907.225) rotate(-105.654) scale(613.925 1475.38)">
+<stop stop-color="#191F5B" stop-opacity="0.95"/>
+<stop offset="0.2" stop-color="#181D56" stop-opacity="0.9"/>
+<stop offset="0.42" stop-color="#171A4A" stop-opacity="0.75"/>
+<stop offset="0.66" stop-color="#161536" stop-opacity="0.5"/>
+<stop offset="0.91" stop-color="#130F1A" stop-opacity="0.15"/>
+<stop offset="1" stop-color="#130C0E" stop-opacity="0"/>
+</radialGradient>
+<linearGradient id="paint2_linear_1490_4525" x1="960" y1="1134.22" x2="960" y2="838.559" gradientUnits="userSpaceOnUse">
+<stop stop-color="#060B48"/>
+<stop offset="1" stop-color="#060B48" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="paint3_linear_1490_4525" x1="122.883" y1="-77.0922" x2="827.774" y2="587.013" gradientUnits="userSpaceOnUse">
+<stop stop-color="#06A990" stop-opacity="0.8"/>
+<stop offset="1" stop-color="#193C97" stop-opacity="0"/>
+</linearGradient>
+<clipPath id="clip0_1490_4525">
+<rect width="1920" height="1080" fill="white"/>
+</clipPath>
+</defs>
+</svg>

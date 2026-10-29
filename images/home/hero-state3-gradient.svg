@@ -1,0 +1,19 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Gradient effect" clip-path="url(#clip0_1490_4555)">
+<path id="Bottom" d="M1920 822H0V1080H1920V822Z" fill="url(#paint0_linear_1490_4555)"/>
+<path id="Side Green Gradient" d="M1319.71 1253.13L2434.64 958.062L2053.23 -387.693L938.303 -92.6231L1319.71 1253.13Z" fill="url(#paint1_linear_1490_4555)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_1490_4555" x1="960" y1="1134.22" x2="960" y2="838.559" gradientUnits="userSpaceOnUse">
+<stop stop-color="#060B48"/>
+<stop offset="1" stop-color="#060B48" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="paint1_linear_1490_4555" x1="2139.94" y1="310.002" x2="1212.87" y2="589.602" gradientUnits="userSpaceOnUse">
+<stop stop-color="#06A990" stop-opacity="0.8"/>
+<stop offset="1" stop-color="#193C97" stop-opacity="0"/>
+</linearGradient>
+<clipPath id="clip0_1490_4555">
+<rect width="1920" height="1080" fill="white"/>
+</clipPath>
+</defs>
+</svg>

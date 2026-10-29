@@ -1,0 +1,1 @@
+const e={title:"We will be back soon",summary:"The site is closed for scheduled maintenance. Nothing is wrong with your device, and no action is needed from you."},o={title:"No results found",summary:"Nothing matched your search. Try a shorter or more general term."};export{e as M,o as N};

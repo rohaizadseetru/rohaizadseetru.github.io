@@ -1,0 +1,15 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="2323" height="1256" viewBox="0 0 2323 1256" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Vector" opacity="0.5" style="mix-blend-mode:overlay">
+<path d="M43.7621 978.123C36.1025 606.532 1033.45 310.133 1033.45 310.133C1114.51 287.545 1214.4 257.124 1286.2 238.435C1391.87 210.899 1462.7 195.072 1549.86 176.436C1766.41 130.119 1943.94 104.913 2065.02 90.6463C2182.57 76.7757 2260.86 71.4924 2305.73 75.0095C2314.16 75.6566 2319.02 75.9535 2323 76.258V0H0V1256H428.108C46.3866 1204.12 43.77 978.115 43.77 978.115L43.7621 978.123Z" fill="url(#paint0_linear_1490_4616)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_1490_4616" x1="-0.00795385" y1="628" x2="2322.99" y2="628" gradientUnits="userSpaceOnUse">
+<stop stop-color="#43879F"/>
+<stop offset="0.05" stop-color="#80ADBE" stop-opacity="0.77"/>
+<stop offset="0.11" stop-color="#C5DAE1" stop-opacity="0.51"/>
+<stop offset="0.17" stop-color="#EFF5F7" stop-opacity="0.35"/>
+<stop offset="0.21" stop-color="white" stop-opacity="0.29"/>
+<stop offset="0.54" stop-color="#43879F"/>
+</linearGradient>
+</defs>
+</svg>

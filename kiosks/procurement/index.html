@@ -1,0 +1,1722 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>MRT Corp · Procurement · Bumiputera Opportunities · TXA 2026</title>
+<style>
+/* ===== Shared kiosk design system ===== */
+
+:root{
+  --navy:#07254F; --navy2:#0D4386; --deep:#041A3A;
+  --blue:#2771CC; --red:#E42132; --teal:#269C95; --yellow:#F6B700;
+  --ice:#EFF5FB; --ice2:#E4EEF8; --white:#fff;
+  --glass:rgba(255,255,255,.07); --glass2:rgba(255,255,255,.12); --line:rgba(255,255,255,.14);
+  --font:"Segoe UI Variable Display","Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:var(--font);color:#fff;
+  -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;overscroll-behavior:none}
+body.nocursor, body.nocursor *{cursor:none!important}
+button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer;touch-action:manipulation}
+img{-webkit-user-drag:none;user-drag:none}
+
+/* ---------- fixed 1920x1080 stage, scaled to any screen ---------- */
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center;overflow:hidden;
+  background:radial-gradient(1200px 800px at 80% -10%,#0D4386 0%,transparent 60%),radial-gradient(900px 700px at -10% 110%,#0b3470 0%,transparent 55%),var(--navy)}
+.screen{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s .45s}
+.screen.active{opacity:1;visibility:visible;transition:opacity .45s ease}
+
+/* animated line background (shared) */
+#bgLines{position:absolute;inset:0;opacity:.3;pointer-events:none}
+#bgLines path{fill:none;stroke-width:6;stroke-linecap:round;stroke-dasharray:14 26;animation:flow 6s linear infinite}
+#bgLines path:nth-child(2){animation-duration:8s}#bgLines path:nth-child(3){animation-duration:7s}#bgLines path:nth-child(4){animation-duration:9s}
+@keyframes flow{to{stroke-dashoffset:-400}}
+.grid{position:absolute;inset:0;pointer-events:none;opacity:.35;
+  background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:60px 60px}
+
+/* top bar */
+.topbar{position:absolute;left:0;right:0;top:0;height:110px;display:flex;align-items:center;justify-content:space-between;padding:0 64px;z-index:5}
+.brand{display:flex;align-items:center;gap:22px}
+.brand img{height:130px}
+.wordmark{font-weight:800;font-size:34px;letter-spacing:.06em}
+.wordmark b{color:var(--red)}
+.brand .tag{font-size:20px;letter-spacing:.18em;opacity:.75;border-left:2px solid var(--line);padding-left:22px;text-transform:uppercase}
+.navbtns{display:flex;gap:18px}
+.iconbtn{height:76px;min-width:76px;padding:0 26px;border-radius:40px;background:var(--glass2);border:1.5px solid var(--line);display:flex;align-items:center;gap:12px;font-size:24px;font-weight:600;transition:transform .15s,background .2s}
+.iconbtn:active{transform:scale(.94);background:rgba(255,255,255,.22)}
+.iconbtn svg{width:32px;height:32px}
+
+.footer{position:absolute;left:0;right:0;bottom:0;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 64px;font-size:19px;opacity:.7;letter-spacing:.04em;z-index:4}
+.linebar{position:absolute;left:0;right:0;bottom:64px;height:6px;display:flex;z-index:4}
+.linebar i{flex:1}
+
+svg.ic{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- ATTRACT ---------- */
+#attract{background:#000}
+#attract video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* Background gradient & SVG graphic layer (Always visible) */
+#attractFallback {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: radial-gradient(1400px 900px at 70% 30%, #0D4386, var(--deep));
+}
+#attractFallback svg path {
+  fill: none;
+  stroke-width: 14;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 3000;
+  stroke-dashoffset: 3000;
+  animation: draw 5s ease forwards, glow 4s ease-in-out 5s infinite alternate;
+}
+#attract.novideo #attractFallback{display:block}
+#attract.novideo video{display:none}
+
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes glow{from{opacity:.85}to{opacity:.45}}
+
+.ticker{position:absolute;left:80px;bottom:90px;display:flex;align-items:center;gap:22px;font-size:40px;font-weight:300}
+.ticker .roleword{font-weight:800;padding:10px 30px;border-radius:14px;background:var(--red);display:inline-block;min-width:200px;animation:pop .6s ease}
+@keyframes pop{0%{transform:translateY(30px);opacity:0}100%{transform:none;opacity:1}}
+.fab{position:absolute;right:90px;bottom:80px;display:flex;align-items:center;gap:26px;height:120px;padding:0 64px 0 44px;border-radius:80px;
+  background:linear-gradient(135deg,#e42132ba);box-shadow:0 20px 60px rgba(228,33,50,.55);font-size:36px;font-weight:800;letter-spacing:.02em;animation:bob 3s ease-in-out infinite}
+.fab svg{width:72px;height:72px;stroke-width:1.6}
+.fab::before,.fab::after{content:"";position:absolute;inset:0;border-radius:80px;border:4px solid rgba(228,33,50,.8);animation:ring 2.4s ease-out infinite}
+.fab::after{animation-delay:1.2s}
+@keyframes ring{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.35,1.6);opacity:0}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.fab small{display:block;font-size:22px;font-weight:500;opacity:.9;letter-spacing:.06em;margin-top:2px}
+
+/* ---------- HUB ---------- */
+.hero-title{position:absolute;left:0;right:0;top:170px;text-align:center}
+.eyebrow{font-size:24px;letter-spacing:.3em;text-transform:uppercase;color:var(--yellow);font-weight:700}
+.hero-title h2{font-size:84px;font-weight:800;letter-spacing:-.01em;margin-top:16px}
+.hero-title p{font-size:32px;opacity:.8;margin-top:0}
+.journeys{position:absolute;left:0;right:0;top:420px;display:flex;justify-content:center;gap:60px}
+.journey{width:760px;height:500px;border-radius:40px;padding:56px;text-align:left;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;
+  background:linear-gradient(160deg,rgba(255,255,255,.13),rgba(255,255,255,.04));border:1.5px solid var(--line);
+  box-shadow:0 30px 80px rgba(0,0,0,.35);transition:transform .2s;animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+.journey:nth-child(2){animation-delay:.12s}
+.journey:active{transform:scale(.97)}
+@keyframes rise{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
+.journey .jic{width:120px;height:120px;border-radius:32px;display:grid;place-items:center;background:var(--c)}
+.journey .jic svg{width:70px;height:70px;stroke-width:1.6}
+.journey h3{font-size:56px;font-weight:800;margin-top:34px;line-height:1.05}
+.journey p{font-size:28px;opacity:.8;margin-top:16px;margin-bottom: 26px;}
+.journey .go{margin-top:auto;height:96px;padding:0 44px;border-radius:50px;background:var(--c);display:flex;align-items:center;gap:14px;font-size:32px;font-weight:800}
+.journey .go svg{width:36px;height:36px;stroke-width:2.4}
+.journey .bigring{position:absolute;right:-120px;top:-120px;width:420px;height:420px;border-radius:50%;border:40px solid var(--c);opacity:.14}
+
+/* ---------- QUIZ ---------- */
+.rail{position:absolute;left:260px;right:260px;top:150px;height:120px}
+.rail .track{position:absolute;left:40px;right:40px;top:38px;height:10px;border-radius:6px;background:rgba(255,255,255,.14)}
+.rail .fill{position:absolute;left:40px;top:38px;height:10px;border-radius:6px;background:linear-gradient(90deg,var(--blue),var(--red),var(--yellow),var(--teal));transition:width .7s cubic-bezier(.4,0,.2,1)}
+.rail .stn{position:absolute;top:0;width:86px;margin-left:-43px;text-align:center}
+.rail .dot{width:86px;height:86px;border-radius:50%;border:6px solid rgba(255,255,255,.25);background:var(--navy);display:grid;place-items:center;font-size:32px;font-weight:800;transition:all .4s}
+.rail .lbl{font-size:22px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-top:12px;opacity:.55;white-space:nowrap;margin-left:-60px;margin-right:-60px}
+.rail .stn.done .dot{background:var(--sc);border-color:var(--sc)}
+.rail .stn.cur .dot{border-color:var(--sc);box-shadow:0 0 0 12px color-mix(in srgb,var(--sc) 30%,transparent);transform:scale(1.1)}
+.rail .stn.cur .lbl,.rail .stn.done .lbl{opacity:1}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+.btn{height:110px;border-radius:60px;font-size:34px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:16px;transition:transform .15s;letter-spacing:.03em}
+.btn:active{transform:scale(.96)}
+.btn svg{width:40px;height:40px;stroke-width:2.4}
+.btn.primary{background:var(--red);box-shadow:0 18px 44px rgba(228,33,50,.4)}
+.btn.ghost{background:transparent;border:2.5px solid rgba(255,255,255,.55)}
+
+.qrbox{flex:0 0 250px;height:250px;border-radius:24px;background:#fff;display:grid;place-items:center;overflow:hidden;padding:18px}
+.qrbox img{width:100%;height:100%;object-fit:contain}
+.qrph{color:var(--navy);text-align:center;font-size:22px;font-weight:700;line-height:1.3;border:4px dashed #9bb3d1;border-radius:14px;width:100%;height:100%;display:grid;place-items:center;padding:16px}
+
+/* ---------- EXPLORE MAP ---------- */
+.ex-head{position:absolute;left:120px;top:130px}
+.ex-head h2{font-size:64px;font-weight:800;margin-top:8px}
+.ex-head p{font-size:28px;opacity:.8;margin-top:6px}
+#map{position:absolute;left:80px;top:330px;width:1760px;height:600px}
+#map > svg{position:absolute;inset:0;overflow:visible}
+
+@keyframes show{to{opacity:1}}
+
+#panel{position:absolute;right:0;top:0;bottom:0;width:1240px;background:linear-gradient(180deg,#0a2e5e,#061d42);z-index:21;transform:translateX(105%);transition:transform .55s cubic-bezier(.2,.8,.2,1);box-shadow:-40px 0 100px rgba(0,0,0,.5);overflow:hidden}
+#panel.on{transform:none}
+
+@keyframes kb{from{transform:scale(1.02)}to{transform:scale(1.14) translate(-2%,-2%)}}
+
+.pclose{position:absolute;right:36px;top:36px;z-index:3;width:90px;height:90px;border-radius:50%;background:rgba(4,26,58,.6);border:2px solid rgba(255,255,255,.4);display:grid;place-items:center}
+.pclose svg{width:40px;height:40px;stroke-width:2.4}
+
+.roles{display:flex;flex-wrap:wrap;gap:14px}
+.roles span{font-size:22px;font-weight:600;padding:14px 24px;border-radius:40px;background:var(--glass2);border:1.5px solid var(--line)}
+
+.lead{margin-top:30px;font-size:22px;opacity:.75}
+.lead b{opacity:1;color:#fff}
+
+/* wipe transition */
+#wipe{position:absolute;inset:0;z-index:50;pointer-events:none;display:flex;flex-direction:column}
+#wipe i{flex:1;transform:translateX(-102%)}
+#wipe.run i{animation:wipe .95s cubic-bezier(.7,0,.3,1) forwards}
+#wipe.run i:nth-child(2){animation-delay:.05s}#wipe.run i:nth-child(3){animation-delay:.1s}#wipe.run i:nth-child(4){animation-delay:.15s}
+@keyframes wipe{0%{transform:translateX(-102%)}45%,55%{transform:translateX(0)}100%{transform:translateX(102%)}}
+
+/* idle overlay */
+#idle{position:absolute;inset:0;z-index:60;background:rgba(2,14,34,.8);display:grid;place-items:center;opacity:0;visibility:hidden;transition:opacity .3s}
+#idle.on{opacity:1;visibility:visible}
+#idle .box{text-align:center}
+#idle .num{font-size:180px;font-weight:800;color:var(--yellow);line-height:1}
+#idle h3{font-size:56px;font-weight:800;margin-top:10px}
+#idle p{font-size:30px;opacity:.8;margin-top:14px}
+
+/* admin */
+#hot{position:absolute;left:0;top:0;width:90px;height:90px;z-index:70}
+#admin{position:absolute;inset:80px;z-index:80;background:#fff;color:#0b1f3f;border-radius:24px;padding:40px 50px;display:none;font-size:22px;overflow:auto}
+#admin.on{display:block}
+#admin h3{font-size:34px;margin-bottom:16px}
+#admin table{border-collapse:collapse;margin:10px 0 24px}
+#admin td,#admin th{border:1px solid #cdd8e6;padding:8px 14px;text-align:left}
+#admin .warn{color:#b3141f;font-weight:700}
+#admin .ok{color:#1c7d52;font-weight:700}
+#admin button{background:#07254F;color:#fff;padding:14px 26px;border-radius:10px;font-size:22px;margin-right:12px}
+
+/* ===== Procurement-specific components ===== */
+.journeys.four{gap:36px;top:370px}
+.journeys.four .journey{width:410px;height:auto;padding:20px 38px}
+.journeys.four .journey h3{font-size:42px;margin-top:28px}
+.journeys.four .journey p{font-size:23px;line-height:1.35}
+.journeys.four .journey .jic{width:104px;height:80px;border-radius:28px}
+.journeys.four .journey .jic svg{width:60px;height:60px}
+.journeys.four .journey .go{height:64px;padding:0 36px;font-size:28px}
+.journeys.four .journey:nth-child(3){animation-delay:.24s}.journeys.four .journey:nth-child(4){animation-delay:.36s}
+.hubrow{position:absolute;left:0;right:0;bottom:104px;display:flex;justify-content:center;gap:36px}
+.hubrow .btn{width:520px;height:92px;font-size:30px}
+.btn.teal{background:var(--teal)}
+.btn.glassb{background:var(--glass2);border:1.5px solid var(--line)}
+
+/* attract photo slideshow fallback */
+.slideshow{position:absolute;inset:0;overflow:hidden}
+.slideshow img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.6s ease;transform:scale(1.05)}
+.slideshow img.on{opacity:1;animation:kb 9s ease-out forwards}
+#attract .shade2{position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,26,58,.92) 0%,rgba(4,26,58,.55) 45%,rgba(4,26,58,.1) 75%),linear-gradient(0deg,rgba(4,26,58,.9) 0%,rgba(4,26,58,0) 40%)}
+/* Video frame on the home page.
+   The photo slideshow and headline stay visible behind it. */
+
+.video-frame {
+  position: absolute;
+  top: 160px;
+  right: 80px;
+  width: 880px;
+  height: 495px;              /* v1.12: exact 16:9 so 1920x1080 videos fit edge to edge (was 560, which cropped the sides) */
+  border-radius: 20px;
+  overflow: hidden;
+  background: #041A3A;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  z-index: 2;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.video-frame video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;        /* never crops; a non-16:9 video gets thin navy bars instead */
+  display: block;
+}
+
+#attract.novideo .video-frame video {
+  display: none;
+}
+
+.fbHead2{position:absolute;left:120px;top:140px;max-width:1100px}
+.fbHead2 .k{font-size:28px;letter-spacing:.3em;text-transform:uppercase;color:var(--yellow);font-weight:700;margin-bottom:24px}
+.fbHead2 h1{font-size:120px;line-height:.98;font-weight:800;letter-spacing:-.02em}
+.fbHead2 h1 span{color:var(--red)}
+.fbHead2 p{font-size:40px;margin-top:28px;opacity:.9;line-height:1.3}
+.ticker .roleword{background:var(--teal);font-size:30px;max-width:760px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}
+#attract .ticker{display:none}
+
+/* journey viewer */
+/* ICP "At a glance" — layout from the Grow Together slide, original navy/yellow colours (v1.1) */
+.ix-top{display:flex;gap:34px;margin-top:22px;border-radius:30px;padding:22px 36px;align-items:center;
+  background:linear-gradient(150deg,rgba(255,255,255,.13),rgba(255,255,255,.04));border:1.5px solid var(--line);border-top:8px solid var(--jc);animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.ix-top .tot{flex:0 0 400px;border-right:1.5px solid var(--line)}
+.ix-top .tot .v{font-size:104px;font-weight:800;color:var(--yellow);line-height:1;letter-spacing:-.02em}
+.ix-top .tot .u{font-size:32px;font-weight:800;color:var(--yellow);text-transform:uppercase;margin-top:2px}
+.ix-top .tot .l{font-size:20px;opacity:.85;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-top:4px}
+.ix-top .lines{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:14px 40px}
+.ix-top .ln .k{font-size:15px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;opacity:.7}
+.ix-top .ln .v{font-size:38px;font-weight:800;line-height:1.1}
+.ix-top .ln .n{font-size:16px;opacity:.75}
+.ix-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 18px;margin-top:16px}
+.ix-kpis .kp{border-radius:18px;background:var(--glass);border:1.5px solid var(--line);border-left:7px solid var(--yellow);padding:10px 20px;animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+.ix-kpis .kp .v{font-size:34px;font-weight:800;color:var(--yellow);line-height:1.1}
+.ix-kpis .kp .l{font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;line-height:1.25;margin-top:2px;opacity:.88}
+
+#jRail{position:absolute;left:220px;right:220px;top:140px;height:120px}
+#jRail .stn{cursor:pointer}
+
+#jArea{position:absolute;left:120px;right:120px;top:300px;height:560px}
+.sl{position:absolute;inset:0;animation:fadeup .5s ease both}
+.sl.back{animation-name:fadedown}
+@keyframes fadedown{from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:none}}
+.sl .eb{font-size:22px;letter-spacing:.26em;text-transform:uppercase;font-weight:800;color:var(--jc)}
+.sl h2{font-size:50px;font-weight:800;line-height:1.08;margin-top:8px;letter-spacing:-.01em}
+.sl .lead{font-size:26px;opacity:.88;line-height:1.4;margin-top:14px;max-width:1500px}
+.cols{display:flex;gap:36px;margin-top:30px}
+.cols>*{flex:1}
+.card{border-radius:30px;padding:32px 36px;background:linear-gradient(150deg,rgba(255,255,255,.13),rgba(255,255,255,.04));border:1.5px solid var(--line);position:relative;overflow:hidden}
+.card.acc{border-top:8px solid var(--jc)}
+.card h4{font-size:32px;font-weight:800;line-height:1.15}
+.card .k{font-size:19px;letter-spacing:.2em;text-transform:uppercase;opacity:.7;font-weight:800}
+.card2 {
+  /* max-width: 700px; Required for margin auto to work */
+  margin: 0 auto;   /* Centers horizontally */
+  border-radius: 30px;
+  padding: 22px 36px;
+  background: linear-gradient(150deg, rgba(255,255,255,.13), rgba(255,255,255,.04));
+  border: 1.5px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+.card2.acc{border-top:8px solid var(--jc)}
+.card2 h4{font-size:32px;font-weight:800;line-height:1.15}
+.card2 .k{font-size:19px;letter-spacing:.2em;text-transform:uppercase;opacity:.7;font-weight:800}
+ul.bul{list-style:none;margin-top:16px}
+ul.bul li{font-size:25px;line-height:1.35;padding-left:40px;position:relative;margin-bottom:14px}
+ul.bul li::before{content:"";position:absolute;left:0;top:9px;width:18px;height:18px;border-radius:50%;border:4px solid var(--jc);background:#fff}
+ul.bul.sm li{font-size:22px;margin-bottom:10px}
+.photo{border-radius:30px;overflow:hidden;position:relative;background:#0a2e5e}
+.photo img{width:100%;height:100%;object-fit:cover;display:block;animation:kb 18s ease-in-out infinite alternate}
+.note{font-size:21px;opacity:.65;margin-top:18px;font-style:italic}
+.pill{display:inline-flex;align-items:center;gap:12px;padding:12px 24px;border-radius:40px;background:var(--glass2);border:1.5px solid var(--line);font-size:22px;font-weight:700}
+.pill i{width:14px;height:14px;border-radius:50%;background:var(--jc)}
+
+/* line results */
+.lines4{display:flex;gap:28px;margin-top:26px}
+.lc{flex:1;border-radius:30px;padding:26px 28px 22px;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border:1.5px solid var(--line);position:relative;overflow:hidden;animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+.lc:nth-child(2){animation-delay:.1s}.lc:nth-child(3){animation-delay:.2s}.lc:nth-child(4){animation-delay:.3s}
+.lc::before{content:"";position:absolute;left:0;right:0;top:0;height:12px;background:var(--lcc)}
+.lc .nm{font-size:22px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;margin-top:8px;color:color-mix(in srgb,var(--lcc) 55%,#fff)}
+.lc .big{font-size:64px;font-weight:800;margin-top:16px;line-height:1}
+.lc .sub{font-size:24px;opacity:.8;margin-top:8px}
+.lc .pk{font-size:26px;font-weight:700;margin-top:16px}
+.lc .pk b{font-size:44px;font-weight:800;margin-right:8px}
+.lc .bar{height:14px;border-radius:8px;background:rgba(255,255,255,.14);margin-top:20px;position:relative;overflow:visible}
+.lc .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:8px;background:var(--lcc);width:0;transition:width 1.4s cubic-bezier(.2,.8,.2,1) .5s}
+.lc .bar u{position:absolute;top:-8px;bottom:-8px;width:4px;background:#fff;border-radius:2px}
+.lc .ach{font-size:22px;font-weight:700;margin-top:12px;line-height:1.3}
+.lc .ach em{font-style:normal;color:var(--yellow)}
+.badge{position:absolute;right:22px;top:30px;background:var(--yellow);color:var(--navy);font-weight:800;font-size:17px;letter-spacing:.08em;padding:6px 12px;border-radius:8px;text-transform:uppercase}
+
+/* process + grade picker */
+.flow{display:flex;align-items:center;gap:0;margin-top:26px}
+.flow .f{padding:18px 34px;border-radius:18px;font-size:28px;font-weight:800;background:var(--glass2);border:1.5px solid var(--line)}
+.flow .f.on{background:var(--jc);border-color:var(--jc)}
+.flow .ar{width:60px;height:4px;background:rgba(255,255,255,.35);position:relative;margin:0 6px}
+.flow .ar::after{content:"";position:absolute;right:-2px;top:-7px;border:9px solid transparent;border-left:12px solid rgba(255,255,255,.35)}
+.gp{display:flex;gap:40px;margin-top:28px}
+.gp .left{flex:0 0 600px}
+.gp .left .k{font-size:22px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;opacity:.8}
+.grades{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:18px}
+.grade{height:104px;border-radius:24px;font-size:40px;font-weight:800;background:var(--glass2);border:2px solid var(--line);transition:all .2s}
+.grade:active{transform:scale(.94)}
+.grade.sel{background:var(--gc);border-color:#fff;transform:scale(1.05)}
+.grade small{display:block;font-size:15px;font-weight:700;letter-spacing:.14em;opacity:.8}
+.route{flex:1;min-height:400px;border-radius:30px;padding:28px 36px;background:linear-gradient(150deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border:1.5px solid var(--line);border-left:12px solid var(--gc,rgba(255,255,255,.3))}
+.route .ph{height:100%;display:grid;place-items:center;text-align:center;font-size:30px;opacity:.7;line-height:1.4}
+/* v1.15.2: placeholder icon was unconstrained (~390px tall) and pushed the panel into the nav buttons; panel capped above the nav */
+.route .ph .ic{width:110px;height:110px;margin-bottom:10px}
+.route{max-height:440px;padding-top:22px;padding-bottom:22px}
+.route h4{font-size:36px;font-weight:800}
+.route .k{font-size:19px;letter-spacing:.2em;text-transform:uppercase;font-weight:800;color:var(--gc)}
+.steps{display:flex;flex-direction:column;gap:14px;margin-top:18px}
+.step{display:flex;gap:20px;align-items:flex-start;font-size:22px;line-height:1.35;animation:fadeup .45s ease both}
+.step:nth-child(2){animation-delay:.1s}.step:nth-child(3){animation-delay:.2s}
+.step b.n{flex:0 0 48px;height:48px;border-radius:50%;background:var(--gc);display:grid;place-items:center;font-size:22px}
+.step strong{display:block;font-size:25px}
+.docs{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.docs span{font-size:19px;font-weight:700;padding:6px 14px;border-radius:10px;background:#fff;color:var(--navy)}
+
+/* monitoring tiles */
+.tiles5{display:grid;grid-template-columns:repeat(5,1fr);gap:24px;margin-top:36px}
+.tile{border-radius:28px;padding:30px 26px;background:linear-gradient(160deg,rgba(255,255,255,.13),rgba(255,255,255,.04));border:1.5px solid var(--line);min-height:330px;animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.tile:nth-child(2){animation-delay:.08s}.tile:nth-child(3){animation-delay:.16s}.tile:nth-child(4){animation-delay:.24s}.tile:nth-child(5){animation-delay:.32s}
+.tile .ti{width:84px;height:84px;border-radius:24px;background:var(--jc);display:grid;place-items:center}
+.tile .ti svg{width:48px;height:48px;stroke-width:1.7}
+.tile h5{font-size:26px;font-weight:800;margin-top:22px;line-height:1.15}
+.tile p{font-size:21px;opacity:.82;margin-top:10px;line-height:1.35}
+
+/* cohorts */
+.cohorts{display:flex;gap:30px;margin-top:28px}
+.coh{flex:1;border-radius:30px;overflow:hidden;background:linear-gradient(160deg,rgba(255,255,255,.13),rgba(255,255,255,.04));border:1.5px solid var(--line);animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+.coh:nth-child(2){animation-delay:.12s}.coh:nth-child(3){animation-delay:.24s}
+.coh .im{height:200px;position:relative;overflow:hidden}
+.coh .im img{width:100%;height:100%;object-fit:cover}
+.coh .im .tag{position:absolute;left:20px;bottom:16px;background:var(--jc);font-weight:800;font-size:22px;padding:8px 18px;border-radius:12px}
+.coh .im .yr{position:absolute;right:20px;top:16px;background:rgba(4,26,58,.8);font-weight:800;font-size:22px;padding:6px 14px;border-radius:10px}
+.coh .st{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;padding:22px 28px 26px}
+.coh .st div{font-size:19px;opacity:.85;letter-spacing:.04em}
+.coh .st b{display:block;font-size:40px;font-weight:800;opacity:1;line-height:1.05}
+
+/* tabs */
+.tabs{display:flex;gap:16px;margin-top:24px}
+.tab{height:80px;padding:0 34px;border-radius:40px;font-size:26px;font-weight:800;background:var(--glass2);border:1.5px solid var(--line)}
+.tab.sel{background:var(--jc);border-color:var(--jc)}
+.tab b{display:inline-grid;place-items:center;min-width:40px;height:40px;border-radius:20px;background:rgba(255,255,255,.25);margin-left:10px;font-size:20px}
+.courses{columns:2;column-gap:40px;margin-top:24px}
+.courses li{break-inside:avoid;font-size:24px;line-height:1.3;margin-bottom:14px;list-style:none;padding-left:52px;position:relative;animation:fadeup .4s ease both}
+.courses li b{position:absolute;left:0;top:-2px;width:38px;height:38px;border-radius:50%;background:var(--jc);display:grid;place-items:center;font-size:17px}
+.mosaic{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:14px;height:480px}
+.mosaic .photo:first-child{grid-row:1/3}
+
+/* logos */
+.logos{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:10px}
+.logo{height:150px;border-radius:24px;background:#fff;display:grid;place-items:center;padding:22px 30px;animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.logo img{max-width:100%;max-height:100%;object-fit:contain}
+.feat{display:flex;gap:18px;margin-top:26px;flex-wrap:wrap}
+.feat div{flex:1;min-width:250px;border-radius:24px;padding:24px 26px;background:var(--glass2);border:1.5px solid var(--line);border-top:6px solid var(--jc);font-size:26px;font-weight:800;line-height:1.2}
+
+/* ICP */
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:30px}
+.pillar{border-radius:28px;padding:30px;background:linear-gradient(160deg,rgba(255,255,255,.13),rgba(255,255,255,.04));border:1.5px solid var(--line);animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.pillar .no{font-size:64px;font-weight:800;color:var(--jc);line-height:1}
+.pillar h5{font-size:30px;font-weight:800;margin-top:14px}
+.pillar p{font-size:22px;opacity:.82;margin-top:8px;line-height:1.35}
+.chain{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:34px;font-size:28px;font-weight:800}
+.chain span{padding:18px 30px;border-radius:20px;background:var(--glass2);border:1.5px solid var(--line)}
+.chain span:last-child{background:var(--jc);color:var(--navy);border-color:var(--jc)}
+.chain svg{width:44px;height:44px;stroke-width:2.4;color:var(--jc)}
+.glance{display:flex;gap:30px;margin-top:22px}
+.glance .tot{flex:0 0 440px;border-radius:30px;padding:34px;background:var(--jc);color:var(--navy)}
+.glance .tot .v{font-size:84px;font-weight:800;line-height:1}
+.glance .tot .u{font-size:30px;font-weight:800}
+.glance .tot .l{font-size:22px;font-weight:700;margin-top:8px;letter-spacing:.08em;text-transform:uppercase}
+.glance .tot .proj{margin-top:24px;border-top:2px solid rgba(7,37,79,.25);padding-top:14px}
+.glance .tot .proj div{display:flex;justify-content:space-between;font-size:18px;white-space:nowrap;font-weight:700;padding:6px 0;gap:10px}
+.kpis{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.kpi{border-radius:24px;padding:22px 24px;background:linear-gradient(160deg,rgba(255,255,255,.13),rgba(255,255,255,.04));border:1.5px solid var(--line);animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.kpi .v{font-size:44px;font-weight:800;line-height:1.05}
+.kpi .l{font-size:18px;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-top:8px;font-weight:700;line-height:1.3}
+.foryou{display:flex;gap:30px;margin-top:24px}
+.foryou .card{padding:26px 30px}
+.foryou .grid4{display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;margin-top:14px}
+.foryou .grid4 div{font-size:20px;opacity:.85;line-height:1.3}
+.foryou .grid4 b{display:block;font-size:24px;opacity:1}
+
+/* journey nav */
+.jnav{position:absolute;left:120px;right:120px;bottom:100px;display:flex;justify-content:space-between;align-items:center}
+.jnav .btn{width:380px;height:100px;font-size:30px}
+.jnav .btn[disabled]{opacity:.25;pointer-events:none}
+.jnav .dots{font-size:22px;letter-spacing:.2em;opacity:.7;font-weight:700;text-align:center;}
+.swipehint{font-size:20px;opacity:.55;letter-spacing:.1em;margin-top:6px;text-align:center}
+
+/* stories — seedling (v0.9). Three layouts: A seedling right + rising vine, B seedling centre + arc,
+   C navy, seedling centre + row of stories. Pick with STORY_LAYOUT (or ?layout=A|B|C to preview). */
+@font-face{font-family:"LoraKiosk";src:url("media/fonts/lora-italic.ttf") format("truetype");font-style:italic;font-weight:400 700}
+.st-sky{position:absolute;left:56px;right:56px;top:112px;height:678px;border-radius:30px 30px 0 0;z-index:0;
+  background:linear-gradient(180deg,#FFFFFF 0%,#FFFFFF 60%,#F3F7F1 100%);box-shadow:0 -6px 40px rgba(0,0,0,.25)}
+#stories[data-layout="C"] .st-sky{display:none}
+/* layout D — growth journey (v1.3): cream panel, arch story cards, Planted → Nurtured → Flourishing */
+#stories[data-layout="D"] .st-sky{background:linear-gradient(180deg,#F7F4EC 0%,#F3EFE4 100%)}
+#stories[data-layout="D"] #sapImg{display:none}
+#stories[data-layout="D"] .st-head .tap{display:none}
+#stories[data-layout="D"] .st-head{width:680px}#stories[data-layout="D"] .st-head h2{font-size:38px;line-height:1.16}
+#stories[data-layout="D"] .st-pan{display:none}
+.st-plat{position:absolute;left:100px;top:132px;width:720px;height:auto;z-index:3;display:none;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%)}
+#stories[data-layout="D"] .st-plat{display:block}
+#stories.active .st-plat{animation:fadeIn 1s ease .1s both}
+/* v1.8: growth-journey video (background keyed out and baked onto the panel cream; soil sits on the ground line) */
+/* v1.10: frameless, edges feathered into the panel. 605x340 (16:9) inside the 605x462 area Farrid marked (left 103 / top 238). */
+/* v1.15: enlarged to 1076x605 (exact 16:9, no cropping), flush with the panel's left edge; bottom edge sits on the ground line (y 790) so the video's soil meets the soil band */
+.st-pvid{position:absolute;left:56px;top:185px;width:1076px;height:605px;z-index:3;display:none;overflow:hidden;
+  background:radial-gradient(ellipse at center,rgba(199,217,232,.55),rgba(220,232,212,.25) 55%,rgba(246,243,235,0) 75%);
+  -webkit-mask-image:linear-gradient(90deg,rgba(0,0,0,.5) 0,#000 2%,#000 94%,rgba(0,0,0,.4) 98%,transparent 100%),linear-gradient(180deg,transparent 0,#000 6%,#000 100%),linear-gradient(to top left,transparent 0,transparent 3%,#000 20%);
+  -webkit-mask-composite:source-in,source-in;
+  mask-image:linear-gradient(90deg,rgba(0,0,0,.5) 0,#000 2%,#000 94%,rgba(0,0,0,.4) 98%,transparent 100%),linear-gradient(180deg,transparent 0,#000 6%,#000 100%),linear-gradient(to top left,transparent 0,transparent 3%,#000 20%);mask-composite:intersect}
+#stories[data-layout="D"] .st-pvid.on{display:block}
+#stories.active .st-pvid{animation:fadeIn 1.2s ease .1s both}
+.st-pvid video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .6s;pointer-events:none}
+.st-pvid.ready video{opacity:1}
+.st-pvid .pph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#0B2E5E;text-align:center;transition:opacity .4s}
+.st-pvid.ready .pph{opacity:0}
+.st-pvid .pph i{width:64px;height:64px;border-radius:50%;background:#0B2E5E;display:grid;place-items:center;box-shadow:0 6px 16px rgba(4,26,58,.25)}
+.st-pvid .pph i::before{content:"";margin-left:5px;border-left:18px solid #fff;border-top:11px solid transparent;border-bottom:11px solid transparent}
+.st-pvid .pph b{font:700 20px/1.2 Poppins,sans-serif}
+.st-pvid .pph span{font:400 14px/1.2 Inter,Poppins,sans-serif;color:#4A5B73;letter-spacing:.04em}
+/* v1.7: open platforms graphic (no card) + live stage legend */
+.st-plat.boxed{left:96px;top:136px;width:740px;-webkit-mask-image:none;mask-image:none;border-radius:20px;box-shadow:0 8px 24px rgba(40,60,90,.18)}
+.st-steps{position:absolute;left:100px;top:548px;width:720px;height:150px;z-index:3;display:none}
+#stories[data-layout="D"] .st-steps{display:block}
+#stories.active .st-steps{animation:fadeIn 1s ease .35s both}
+.st-steps .sp{position:absolute;top:0;width:250px;transform:translateX(-50%);text-align:center}
+.st-steps .sp i{display:block;width:2px;height:16px;margin:0 auto 8px;background:linear-gradient(#C9A24A,rgba(201,162,74,0))}
+.st-steps .sp em{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#E3B33C;color:#0B2E5E;font:700 15px/1 Poppins,sans-serif;font-style:normal;margin-bottom:8px}
+.st-steps .sp b{display:block;font:700 21px/1.1 Poppins,sans-serif;letter-spacing:.12em;color:#0B2E5E}
+.st-steps .sp span{display:block;margin-top:6px;font:400 15px/1.3 Inter,Poppins,sans-serif;color:#4A5B73}
+.st-steps .sp.on b{color:#B8862B}
+.st-intro{position:absolute;right:110px;top:250px;width:660px;text-align:right;z-index:3;color:var(--navy);display:none}
+#stories[data-layout="D"] .st-intro{display:block}
+.st-intro h3{font-size:26px;font-weight:700;line-height:1.2}
+.st-intro p{font-size:18.5px;line-height:1.3;margin-top:8px;color:#26385A}
+#stories.active .st-intro{animation:fadeIn 1s ease .3s both}
+#growth{position:absolute;inset:0;pointer-events:none;z-index:2;display:none}
+#stories[data-layout="D"] #growth{display:block}
+#growth .crop{position:absolute;overflow:hidden}
+#growth .treeOne{-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 14%,#000 86%,transparent 100%),linear-gradient(180deg,#000 0%,#000 63%,transparent 78%);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent 0%,#000 14%,#000 86%,transparent 100%),linear-gradient(180deg,#000 0%,#000 63%,transparent 78%);mask-composite:intersect}
+#stories.active #growth .treeOne{animation:fadeIn 1s ease .4s both}
+#growth .crop img{position:absolute;left:0;top:0}
+#growth .g3{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 8%,#000 92%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 8%,#000 92%,transparent 100%)}
+#growth .roots img{-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 16%,#000 84%,transparent 100%),linear-gradient(180deg,#000 0%,#000 55%,transparent 82%);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent 0%,#000 16%,#000 84%,transparent 100%),linear-gradient(180deg,#000 0%,#000 55%,transparent 82%);mask-composite:intersect}
+#growth .lbl{position:absolute;color:var(--navy);line-height:1.25}
+#growth .lbl b{display:block;font-size:25px;font-weight:700}
+#growth .lbl span{display:block;font-size:19.5px;color:#26385A}
+#stories.active #growth .g1,#stories.active #growth .l1{animation:fadeIn .8s ease .5s both}
+#stories.active #growth .g2,#stories.active #growth .l2{animation:fadeIn .8s ease .9s both}
+#stories.active #growth .g3,#stories.active #growth .l3{animation:fadeIn .9s ease 1.3s both}
+#stories.active #scene .dots{stroke-dasharray:2 7;animation:fadeIn 1.2s ease 1.2s both}
+.story.arch{width:210px;transform:translateX(-50%)}
+.story.arch .card{position:relative;height:320px;border-radius:105px 105px 20px 20px;background:#FBF8F1;border:1.5px solid rgba(201,163,90,.55);box-shadow:0 8px 22px rgba(80,60,20,.12);padding:6px 6px 0;display:flex;flex-direction:column;transition:transform .15s}
+.story.arch:nth-child(4) .card,.story.arch:nth-child(5) .card{border-color:rgba(110,160,110,.55)}
+.story.arch:active .card{transform:scale(.95)}
+.story.arch .ph2{position:relative;height:222px;border-radius:99px 99px 14px 14px;overflow:hidden;background:#0a2e5e}
+.story.arch .ph2 img{width:100%;height:100%;object-fit:cover}
+.story.arch .pb2{position:absolute;right:8px;bottom:8px;width:42px;height:42px;border-radius:50%;background:rgba(244,232,206,.88);display:grid;place-items:center}
+.story.arch .pb2 svg{width:18px;height:18px;fill:#B89458;stroke:none;margin-left:3px}
+.story.arch .ph2.ph0{display:grid;place-items:center;background:linear-gradient(160deg,#DCE8D4,#C7D9E8)}
+.story.arch .ph2.ph0 .ico{width:86px;height:86px;border-radius:50%;background:rgba(255,255,255,.75);display:grid;place-items:center}
+.story.arch .ph2.ph0 .ico svg{width:36px;height:36px;fill:#B89458;stroke:none;margin-left:6px}
+.story.arch .nm small{display:block;font-size:14px;font-weight:600;color:#6B7A90;margin-top:3px}
+.story.arch .nm{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:20px;font-weight:700;line-height:1.2;color:var(--navy);padding:0 4px}
+
+#scene{position:absolute;inset:0;width:1920px;height:1080px;pointer-events:none;z-index:1}
+#sapImg{position:absolute;z-index:1;pointer-events:none}
+#sapImg.rooted{-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 14%,#000 86%,transparent 100%),linear-gradient(180deg,#000 0%,#000 63%,transparent 78%);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent 0%,#000 14%,#000 86%,transparent 100%),linear-gradient(180deg,#000 0%,#000 63%,transparent 78%);mask-composite:intersect}
+#sapImg.sink{-webkit-mask-image:linear-gradient(180deg,#000 0%,#000 74%,rgba(0,0,0,.55) 86%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 74%,rgba(0,0,0,.55) 86%,transparent 100%)}
+#stories.active #sapImg{animation:sapIn 1.1s cubic-bezier(.2,.8,.2,1) .2s both}
+@keyframes sapIn{from{opacity:0;transform:translateY(30px) scale(.94)}to{opacity:1;transform:none}}
+#stories.active #scene .vine{stroke-dasharray:6 12;animation:fadeIn 1s ease 1s both}
+#stories.active #scene .lyr-roots{animation:fadeIn .9s ease .3s both}
+.st-head,.st-pan{position:absolute;z-index:3}
+.st-head h2{font-size:42px;font-weight:800;line-height:1.12;color:var(--navy)}
+.st-head .tap{margin-top:6px;font-size:21px;color:#3B5578}
+.st-pan .eyebrow{font-size:15px;letter-spacing:.24em;color:#B07A06}
+.pantun2{margin-top:8px;font-family:"LoraKiosk",Georgia,"Times New Roman",serif;font-style:italic;font-weight:400;font-size:24px;line-height:1.38;color:#5B6B5E}
+.st-pan.l .pantun2{padding-left:18px;border-left:2px solid rgba(184,134,11,.5)}
+.st-pan.r{text-align:right}.st-pan.r .pantun2{padding-right:18px;border-right:2px solid rgba(184,134,11,.5)}
+.st-head.r{text-align:right}.st-head.c{text-align:center;left:0;right:0}
+.st-head.c h2 br{display:none}.st-head.c h2{font-size:36px}
+#stories[data-layout="C"] .st-head h2{color:#fff}#stories[data-layout="C"] .st-head .tap{color:rgba(255,255,255,.8)}
+#stories[data-layout="C"] .st-pan .eyebrow{color:var(--yellow)}#stories[data-layout="C"] .pantun2{color:rgba(243,228,186,.85)}
+#stories.active .st-head,#stories.active .st-pan{animation:fadeIn 1s ease .2s both}
+.st-vg{position:absolute;top:322px;width:280px;z-index:4}
+.st-vg .k{font:800 16px/1.3 Poppins,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--gcol);margin:0 0 12px 4px;white-space:pre-line;height:62px;display:flex;align-items:flex-end}
+.vcard2{position:relative;display:block;width:280px;height:370px;border-radius:26px;overflow:hidden;text-align:left;border:1.5px solid rgba(255,255,255,.14);background:#0a2e5e;color:#fff;padding:0;cursor:pointer;box-shadow:0 14px 34px rgba(4,26,58,.28);transition:transform .15s}
+.vcard2:active{transform:scale(.97)}
+.vcard2 img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
+.vcard2 .v{position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,26,58,.96) 22%,rgba(4,26,58,.15) 72%)}
+.vcard2 .play{position:absolute;left:22px;top:22px;width:76px;height:76px;border-radius:50%;background:var(--gcol);display:grid;place-items:center;box-shadow:0 10px 26px rgba(0,0,0,.4)}
+.vcard2 .play svg{width:34px;height:34px;fill:#fff;stroke:none;margin-left:5px}
+.vcard2 .t{position:absolute;left:22px;right:22px;bottom:20px}
+.vcard2 .t b{display:block;font:800 22px/1.15 Poppins,sans-serif}
+.vcard2 .t span{display:block;font-size:15px;opacity:.85;margin-top:8px;line-height:1.3}
+.vcard2 .t em{display:inline-block;font-style:normal;font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;background:var(--gcol);padding:5px 10px;border-radius:7px;margin-top:12px}
+#stories.active .st-vg{animation:rise .6s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(.6s + var(--d,0s))}
+.story{position:absolute;width:210px;transform:translateX(-50%);text-align:center;z-index:3}
+.story .ph{position:relative;width:170px;height:170px;margin:0 auto;border-radius:22px;border:5px solid #fff;background:#0a2e5e;box-shadow:0 10px 28px rgba(4,26,58,.3);transition:transform .15s}
+.story:active .ph{transform:scale(.93)}
+.story .ph img{width:100%;height:100%;object-fit:cover;border-radius:17px}
+.story .ph.ph0{background:linear-gradient(160deg,#DCE8D4,#C7D9E8)}
+.story .ph::after{content:"";position:absolute;inset:-12px;border-radius:30px;border:2px solid #7DBF7A;opacity:0;animation:halo 3.2s ease-out infinite;animation-delay:var(--hd,0s)}
+@keyframes halo{0%{transform:scale(.9);opacity:.8}70%,100%{transform:scale(1.25);opacity:0}}
+.story .pb{position:absolute;right:-10px;bottom:-10px;width:52px;height:52px;border-radius:50%;background:var(--navy);display:grid;place-items:center;border:3px solid #fff}
+.story .pb svg{width:21px;height:21px;fill:#fff;stroke:none;margin-left:3px}
+.story .lb{display:flex;flex-direction:column;justify-content:center;width:205px;height:104px;margin:8px auto 0;padding:6px 12px 7px;border-radius:14px;background:rgba(255,255,255,.96);box-shadow:0 4px 14px rgba(4,26,58,.18);color:var(--navy);max-width:205px}
+.story .lb b{display:block;font-size:17px;font-weight:800;line-height:1.2}
+.story .lb span{display:block;font-size:13px;color:#4A5F7D;line-height:1.25;margin-top:1px}
+#stories.active .story{animation:popS .6s cubic-bezier(.2,1.4,.4,1) both;animation-delay:calc(1.1s + var(--d,0s))}
+@keyframes popS{from{opacity:0;transform:translateX(-50%) scale(.6)}to{opacity:1;transform:translateX(-50%) scale(1)}}
+.tpillars{position:absolute;left:100px;right:100px;top:842px;display:flex;gap:30px;z-index:2}
+.tpillar{flex:1;min-width:0;display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:20px;background:rgba(34,24,13,.85);border:1.5px solid rgba(201,154,107,.55)}
+.tpillar i{flex:0 0 58px;height:58px;border-radius:50%;display:grid;place-items:center;background:rgba(217,160,102,.16);color:var(--lc)}
+.tpillar i svg{width:31px;height:31px;stroke-width:2}
+.tpillar b{display:block;font-size:22px;font-weight:800;line-height:1.15}
+.tpillar span{display:block;font-size:16px;opacity:.78;line-height:1.25;margin-top:4px}
+#stories.active .tpillar{animation:rise .6s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(.2s + var(--d,0s))}
+/* podcast — on the Home page (v0.6) */
+.hpod{position:absolute;left:120px;top:668px;width:810px;z-index:3;padding:22px 28px 24px;border-radius:26px;background:rgba(4,26,58,.72);border:1.5px solid var(--line)}
+.hpod h5{display:flex;align-items:center;gap:14px;font-size:21px;letter-spacing:.14em;text-transform:uppercase;color:var(--yellow);font-weight:800;margin-bottom:16px}
+.hpod h5 i{flex:0 0 48px;height:48px;border-radius:50%;background:var(--yellow);color:var(--navy);display:grid;place-items:center}
+.hpod h5 svg{width:28px;height:28px;stroke-width:2.2}
+.hpod .slots{display:flex;gap:28px}
+.hpod .slot{flex:1;font-size:18px;opacity:.92;line-height:1.35;border-left:4px solid var(--yellow);padding-left:16px}
+.hpod .slot b{display:block;font-size:22px;opacity:1;line-height:1.25;margin-bottom:8px}
+.hpod .slot .when{display:block;color:var(--yellow);font-weight:700;margin-bottom:2px}
+#player{position:absolute;inset:0;z-index:40;background:#000;display:none}
+#player.on{display:block}
+#player video{width:100%;height:100%;object-fit:contain;background:#000}
+#player .pclose{position:absolute;right:40px;top:40px;z-index:2}
+#player .soon{position:absolute;inset:0;display:none;place-items:center;text-align:center;background:var(--navy)}
+#player.missing .soon{display:grid}
+#player .soon h3{font-size:64px;font-weight:800}
+#player .soon p{font-size:30px;opacity:.8;margin-top:14px}
+
+/* register */
+.reg{position:absolute;left:120px;right:120px;top:190px;display:flex;gap:70px;align-items:center}
+.reg .txt{flex:1}
+.reg h2{font-size:96px;font-weight:800;line-height:1;letter-spacing:-.01em}
+.reg .tag{font-size:38px;font-weight:800;color:var(--yellow);margin-top:26px;letter-spacing:.06em}
+.reg p{font-size:30px;opacity:.85;margin-top:24px;line-height:1.4}
+.reg .qrs{display:flex;gap:30px}
+.qrc{width:390px;border-radius:34px;padding:30px;background:#fff;color:var(--navy);text-align:center;animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.qrc:nth-child(2){animation-delay:.12s}
+.qrc .qrbox{width:300px;height:300px;margin:0 auto;padding:0}
+.qrc h4{font-size:30px;font-weight:800;margin-top:18px}
+.qrc p{font-size:21px;margin-top:8px;line-height:1.35;opacity:.85}
+.regact{position:absolute;left:0;right:0;bottom:110px;display:flex;justify-content:center;gap:36px}
+.regact .btn{width:480px}
+
+/* ===== BM | EN language switch ===== */
+.lang{height:76px;padding:6px;border-radius:40px;background:var(--glass2);border:1.5px solid var(--line);display:flex;gap:4px;align-items:stretch;transition:transform .15s}
+.lang b{min-width:84px;padding:0 18px;border-radius:34px;display:grid;place-items:center;font-size:24px;font-weight:800;letter-spacing:.06em;opacity:.65;transition:background .2s,color .2s}
+.lang b.on{background:var(--yellow);color:var(--navy);opacity:1}
+.lang:active{transform:scale(.96)}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="grid"></div>
+  <svg id="bgLines" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+    <path d="M-50 980 C 400 980 520 760 900 760 S 1500 900 1980 700" stroke="#E42132"/>
+    <path d="M-50 120 C 300 120 600 300 980 260 S 1600 80 1980 180" stroke="#2771CC"/>
+    <path d="M1600 -40 C 1600 300 1780 500 1780 1120" stroke="#F6B700"/>
+    <path d="M-50 600 C 250 560 300 900 700 1120" stroke="#269C95"/>
+  </svg>
+
+  <!-- ===== ATTRACT ===== -->
+  <section class="screen active" id="attract">
+    <div id="attractFallback">
+    <svg viewBox="0 0 1920 1080" width="1920" height="1080" style="position:absolute;inset:0">
+      <path d="M-40 860 H 700 L 900 660 H 1960" stroke="#E42132"/>
+      <path d="M1240 -40 V 400 L 1060 580 V 1120" stroke="#2771CC" style="animation-delay:.4s,5.4s"/>
+      <path d="M-40 980 H 1100 L 1400 680 H 1960" stroke="#F6B700" style="animation-delay:.8s,5.8s"/>
+      <path d="M1560 -40 V 300 L 1760 500 V 1120" stroke="#269C95" style="animation-delay:1.2s,6.2s"/>
+    </svg>
+  </div>
+    <div class="video-frame" id="videoFrame">
+      <video id="loopVideo" muted loop playsinline autoplay preload="auto"></video>
+    </div>
+    <div class="slideshow" id="slideshow"></div>
+    <div class="shade2"></div>
+    <div class="fbHead2">
+
+      <h1 data-i18n="att_h">Creating<br>Opportunities<br><span>Together.</span></h1>
+      <p data-i18n="att_p">Empowering communities.<br>Connecting possibilities.</p>
+    </div>
+    <div class="topbar"><div class="brand" data-logo></div><div class="navbtns"><button class="lang" data-lang aria-label="Bahasa / Language"><b data-l="ms">BM</b><b data-l="en">EN</b></button></div></div>
+    <div class="hpod" id="homePodcast"></div>
+    <div class="ticker"><span style="opacity:.85" data-i18n="att_dyk">Did you know?</span> <span class="roleword" id="factword"></span></div>
+
+    <button class="fab" id="fab" aria-label="Find out more">
+      <svg class="ic" viewBox="0 0 24 24"><path d="M9 11V5a2 2 0 0 1 4 0v5M13 10V8.5a2 2 0 0 1 4 0V12M17 11a2 2 0 0 1 4 0v3a7 7 0 0 1-7 7h-1.5a6 6 0 0 1-4.6-2.2L4 14.5a1.8 1.8 0 0 1 2.7-2.4L9 14"/></svg>
+      <span data-i18n="att_fab">Find out more<small>Opportunities for Bumiputera Businesses<br>and ICP Participation</small></span>
+    </button>
+  </section>
+
+  <!-- ===== HUB ===== -->
+  <section class="screen" id="hub">
+    <div class="topbar"><div class="brand" data-logo></div><div class="navbtns"><button class="lang" data-lang aria-label="Bahasa / Language"><b data-l="ms">BM</b><b data-l="en">EN</b></button><button class="iconbtn" data-home><svg class="ic" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7M5 10v10h14V10"/></svg><span data-i18n="home">Home</span></button></div></div>
+    <div class="hero-title" style="top:150px">
+      <div class="eyebrow" data-i18n="hub_k">Procurement · Bumiputera Empowerment · Industry Development</div>
+      <h2 data-i18n="hub_h">Come grow with us.</h2>
+      <p data-i18n="hub_p">Opportunities for bumiputera businesses and industry collaboration across MRT projects.</p>
+    </div>
+    <div class="journeys four" id="hubCards"></div>
+    <div class="hubrow">
+      <button class="btn teal" data-go="stories"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></svg><span data-i18n="hub_stories">Watch their stories</span></button>
+      <button class="btn glassb" data-go="register"><svg class="ic" viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 18h2v2h-2zM14 18h2M18 14h2"/></svg><span data-i18n="hub_register">Scan to register</span></button>
+    </div>
+    <div class="linebar"><i style="background:var(--red)"></i><i style="background:var(--blue)"></i><i style="background:var(--yellow)"></i><i style="background:var(--teal)"></i></div>
+    <div class="footer"><span data-i18n="foot_l">Procurement · TXA 2026</span><span data-i18n="foot_r">Enhancing Mobility, Enriching Communities</span></div>
+  </section>
+
+  <!-- ===== JOURNEY VIEWER ===== -->
+  <section class="screen" id="journey">
+    <div class="topbar"><div class="brand" data-logo></div><div class="navbtns"><button class="lang" data-lang aria-label="Bahasa / Language"><b data-l="ms">BM</b><b data-l="en">EN</b></button><button class="iconbtn" data-go="hub"><svg class="ic" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span data-i18n="menu">Menu</span></button><button class="iconbtn" data-home><svg class="ic" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7M5 10v10h14V10"/></svg></button></div></div>
+    <div class="rail" id="jRail"></div>
+    <div id="jArea"></div>
+    <div class="jnav">
+      <button class="btn ghost" id="jPrev"><svg class="ic" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span data-i18n="prev">Previous</span></button>
+      <div><div class="dots" id="jDots"></div><div class="swipehint" data-i18n="swipe">Swipe or tap a station</div></div>
+      <button class="btn primary" id="jNext">Next <svg class="ic" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </div>
+    <div class="linebar"><i style="background:var(--red)"></i><i style="background:var(--blue)"></i><i style="background:var(--yellow)"></i><i style="background:var(--teal)"></i></div>
+    <div class="footer"><span data-i18n="foot_l">Procurement · TXA 2026</span><span data-i18n="foot_r">Enhancing Mobility, Enriching Communities</span></div>
+  </section>
+
+  <!-- ===== STORIES ===== -->
+  <section class="screen" id="stories">
+    <div class="topbar"><div class="brand" data-logo></div><div class="navbtns"><button class="lang" data-lang aria-label="Bahasa / Language"><b data-l="ms">BM</b><b data-l="en">EN</b></button><button class="iconbtn" data-go="hub"><svg class="ic" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span data-i18n="menu">Menu</span></button><button class="iconbtn" data-home><svg class="ic" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7M5 10v10h14V10"/></svg></button></div></div>
+    <div class="st-sky"></div>
+    <svg id="scene" viewBox="0 0 1920 1080"></svg>
+    <img id="sapImg" src="media/sapling.png" alt="">
+    <div class="st-head" id="stHead"><h2 data-i18n="st_h">Rooted in MRT Corp. <br>Growing Malaysian capability.</h2><p class="tap" data-i18n="st_p">Tap a story to watch.</p></div>
+    <img class="st-plat" id="stPlat" src="media/platforms-cut.png" alt="Gemilang, Pemacu, Lonjakan">
+    <div class="st-steps" id="stSteps"></div>
+    <div class="st-pvid" id="stPlatVid"><video id="stPlatV" muted loop playsinline preload="auto" disablepictureinpicture><source src="media/videos/growth-journey.mp4" type="video/mp4"></video>
+      <div class="pph"><i></i><b data-i18n="pv_t">Growth journey video</b><span data-i18n="pv_s">Coming soon</span></div></div>
+    <div class="st-pan" id="stPan"><div class="eyebrow" data-i18n="st_h2">Together Building Opportunities</div>
+      <p class="pantun2" lang="ms">Mekar Bunga dihujung Desa,<br>Harum Semerbak menyentuh Jiwa,<br>Bumiputra Melangkah Bersama,<br>Membina Malaysia untuk Semua.</p></div>
+    <div id="growth"></div>
+    <div class="st-intro" id="stIntro"><h3 data-i18n="st_in_h">Enabling Everyone on the Journey</h3><p data-i18n="st_in_p">Based on the corporate belief that anyone can be part of the project development journey.</p></div>
+    <div id="stories5"></div>
+    <div class="tpillars" id="pillars"></div>
+    <div class="linebar"><i style="background:var(--red)"></i><i style="background:var(--blue)"></i><i style="background:var(--yellow)"></i><i style="background:var(--teal)"></i></div>
+    <div class="footer"><span data-i18n="foot_l">Procurement · TXA 2026</span><span data-i18n="foot_r">Enhancing Mobility, Enriching Communities</span></div>
+    <div id="player"><video id="pv" playsinline></video><div class="soon"><div><h3 id="soonT" data-i18n="soon_h">Video coming soon</h3><p data-i18n="soon_p">This story will be available at the booth.</p></div></div>
+      <button class="pclose" id="pvClose"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  </section>
+
+  <!-- ===== REGISTER ===== -->
+  <section class="screen" id="register">
+    <div class="topbar"><div class="brand" data-logo></div><div class="navbtns"><button class="lang" data-lang aria-label="Bahasa / Language"><b data-l="ms">BM</b><b data-l="en">EN</b></button><button class="iconbtn" data-go="hub"><svg class="ic" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span data-i18n="menu">Menu</span></button><button class="iconbtn" data-home><svg class="ic" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7M5 10v10h14V10"/></svg></button></div></div>
+    <div class="reg">
+      <div class="txt">
+        <div class="eyebrow" data-i18n="rg_k">Get involved</div>
+        <h2 data-i18n="rg_h">There's a place<br>for you here.</h2>
+        <div class="tag" data-i18n="rg_tag">LEARN. WORK. GROW. BUILD TOGETHER.</div>
+
+      </div>
+      <div class="qrs" id="regQrs"></div>
+    </div>
+    <div class="regact">
+      <button class="btn primary" data-go="hub"><svg class="ic" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span data-i18n="rg_more">Explore more</span></button>
+      <button class="btn ghost" data-home><svg class="ic" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg><span data-i18n="finish">Finish</span></button>
+    </div>
+    <div class="linebar"><i style="background:var(--red)"></i><i style="background:var(--blue)"></i><i style="background:var(--yellow)"></i><i style="background:var(--teal)"></i></div>
+    <div class="footer"><span data-i18n="foot_l">Procurement · TXA 2026</span><span data-i18n="foot_r">Enhancing Mobility, Enriching Communities</span></div>
+  </section>
+
+  <div id="wipe"><i style="background:var(--red)"></i><i style="background:var(--blue)"></i><i style="background:var(--yellow)"></i><i style="background:var(--teal)"></i></div>
+  <div id="idle"><div class="box"><div class="num" id="idleNum">10</div><h3 data-i18n="idle_h">Still exploring?</h3><p data-i18n="idle_p">Tap anywhere to continue</p></div></div>
+  <div id="hot"></div>
+  <div id="admin"></div>
+</div>
+
+<!-- =====================================================================
+     CONTENT & SETTINGS — all text, data and settings for this kiosk.
+     Items marked  verify:true  still need owner confirmation.
+     ===================================================================== -->
+<script>
+const SETTINGS = {
+  homeVideos: { folder: "TXA_interviews/", muted: false, fallback: "" },   // home page videos: every video in this folder plays A-Z in a loop (01_, 02_ ... sets the order)
+  logo: "media/logo.png",             // optional; falls back to text wordmark
+  idleSeconds: 90,                    // visitors watch videos and read
+  idleWarnSeconds: 10,
+  hideCursor: false,                  // set true on the kiosk
+  adminTaps: 5
+};
+
+const ATTRACT_PHOTOS = ["media/photos/myeprts.jpg","media/photos/grad1.jpg","media/photos/myep2.jpg","media/photos/train5.jpg","media/photos/grad2.jpg","media/photos/myep1.jpg"];
+const FACTS = ["RM10.5 billion · 336 packages · Kajang Line","RM14.5 billion · 384 packages · Putrajaya Line","RTS Link surpassed its RM800 million target","MYEP: 3 cohorts since 2013","Financing support with TERAJU, CGC, MBSB Bank & Bank Rakyat"];
+
+const QR = {
+  register: { img:"media/qr-register.png", title:"Register your interest", text:"Bumiputera contractors, vendors and young entrepreneurs.", verify:true },
+  tenders:  { img:"media/qr-tenders.png",  title:"Explore tender opportunities", text:"mymrt.com.my/tenders" }
+};
+
+/* Hub tiles */
+const HUB = [
+  { j:"participation", color:"#E42132", icon:"handshake", title:"Bumiputera<br>Participation", text:"How work packages are awarded, and results across MRT lines" },
+  { j:"myep",          color:"#269C95", icon:"grad",      title:"MRT Young<br>Entrepreneur (MYEP)", text:"Developing Bumiputera youths into contractors" },
+  { j:"financing",     color:"#2771CC", icon:"bank",      title:"Financing<br>Support", text:"Financing with strategic partners for awarded contractors" },
+  { j:"icp",           color:"#F6B700", icon:"cog",       title:"Industrial<br>Collaboration (ICP)", text:"Turning major procurement into local capability" }
+];
+
+/* Journeys: each slide = one station on the rail */
+const JOURNEYS = {
+ participation:{ name:"Bumiputera Participation", color:"#E42132", slides:[
+  { station:"Why", type:"why",
+    eb:"Background", h:"Enriching communities. Growing opportunities together.",
+    lead:"Bumiputera empowerment is a national agenda driven by the MADANI Government's Bumiputera Economic Transformation Plan 2035 (PuTERA35). At MRT Corp it is delivered through two strategies:",
+    pillars:[
+      { t:"Bumiputera Participation", pts:["Bumiputera contractors and sub-contractors take part in MRT projects through the award of work packages","Procurement of Bumiputera contractors, vendors, suppliers and consultants for non-project packages, tenders and contracts"] },
+      { t:"Bumiputera Development", pts:["Capacity building through training with industry players","Financing assistance through collaboration with strategic partners"] } ],
+    note:"A dedicated Bumiputera Relations unit was established to deliver both." },
+  { station:"Results", type:"lines",
+    eb:"Carved-out strategy", h:"Bumiputera participation across MRT projects",
+    lead:"A percentage of total project value is allocated for Bumiputera participation through sub-contract awards. Status as at August 2026.",
+    lines:[
+      { n:"Kajang Line",    c:"#E42132", val:10.5, unit:"billion", pk:336, pct:50, ach:"<em>50%</em> achieved" },
+      { n:"Putrajaya Line", c:"#269C95", val:14.5, unit:"billion", pk:384, pct:47, ach:"<em>47%</em> achieved" },
+      { n:"RTS Link",       c:"#2771CC", val:927,  unit:"million", pk:173, pct:100, ach:"Surpassed its <em>RM800 million</em> target", badge:"Target met" },
+      { n:"Mutiara Line",   c:"#F6B700", val:1.16, unit:"billion", pk:37, pct:15, target:40, ach:"<em>15%</em> vs 40% target · in progress", badge:"Ongoing" } ],
+    note:"Status as at August 2026." },
+  { station:"How it works", type:"grades" },
+  { station:"Monitoring", type:"tiles",
+    eb:"Monitoring", h:"We walk alongside you through delivery",
+    lead:"Bumiputera contractor performance is monitored on site and at company level.",
+    tiles:[
+      { i:"site", t:"Site progress", p:"Work on site is monitored by the MRT Corp Project Team and the Main Contractor." },
+      { i:"search", t:"Premise inspection", p:"With PKK, to confirm each company's capability and working status." },
+      { i:"chat", t:"Engagement sessions", p:"Regular meetings to get feedback and resolve issues during delivery." },
+      { i:"star", t:"CIDB star ratings", p:"Working with CIDB on SCORE and MCORE ratings after successful completion." },
+      { i:"check", t:"Quarterly assessment", p:"Compliance, financial and other checks every quarter." } ] },
+  { station:"Get involved", type:"cta" } ]},
+
+ myep:{ name:"MYEP", color:"#269C95", slides:[
+  { station:"What", type:"what",
+    eb:"Bumiputera Development", h:"MRT Young Entrepreneur Programme",
+    lead:"MYEP builds the capacity of Bumiputera companies. Bumiputera youths are developed into contractors through theoretical and practical training, and awarded their first contract.",
+    obj:["A strategic plan for Bumiputera involvement in government-related projects","Job opportunities for graduates in technical business ventures","Business experience and project implementation exposure"],
+    str:["Training and work experience in a structured setting, including TVET","Sub-contract packages to take part in the project"], photo:"media/photos/myep2.jpg" },
+  { station:"Who does what", type:"roles",
+    eb:"Smart collaboration", h:"Industry players, each with a clear role",
+    mrt:["On-site training and attachment","Manages selection of participants","Secures the work contract","Guidance, advice and monitoring","Induction and best-practice construction training","Monthly project audit and work progress reports"],
+    partner:["Entrepreneurship, motivation and business management training","Intensive professional construction modules","A monthly allowance throughout the programme","Hands-on skills training","Help setting up the CIDB contractor's licence"] },
+  { station:"Track record", type:"cohorts",
+    eb:"Proven over three projects", h:"MYEP has been rolled out in 3 MRT projects",
+    cohorts:[
+      { t:"MYEP 1", line:"Kajang Line", yr:2013, months:6, co:14, pk:36, val:21.7, photo:"media/photos/myep1.jpg" },
+      { t:"MYEP 2", line:"Putrajaya Line", yr:2016, months:12, co:24, pk:24, val:8.3, photo:"media/photos/myep2.jpg" },
+      { t:"MYEP-RTS", line:"RTS Link", yr:2023, months:6, co:11, pk:7, val:1.2, photo:"media/photos/myeprts.jpg" } ] },
+  { station:"Training", type:"training",
+    eb:"MYEP-RTS curriculum", h:"What participants learn",
+    tabs:[
+      { t:"Classroom", items:["Construction Professional Certificate (Project Supervision)","Financial Management","CIMS CIDB System Introduction","Integrity","Contractor Business Management","Safety Induction for Construction Worker","Motivation and Identity","Urban Rail Transit System and Technology","Re-strategising Through a Successful Business Plan"] },
+      { t:"TVET", items:["Building Decorative Painting Level 1","Building Decorative Painting Level 2","Bricklaying Level 1","Bricklaying Level 2","Plastering","Formwork","Tiling","Bar-bending","Concrete","Scaffolding Level 1","Drywall Partition"] },
+      { t:"On-the-job", items:["Classes and on-site training with APSB","Site supervision with Khairi Consult"] } ],
+    photos:["media/photos/train5.jpg","media/photos/train3.jpg","media/photos/train4.jpg"] },
+  { station:"Impact", type:"impact",
+    eb:"Socio-economic multiplier", h:"Building human capital",
+    items:[
+      { i:"star", t:"Creating jobs", p:"On completion, companies were formed with CIDB G1–G4 licences." },
+      { i:"chart", t:"Building competencies", p:"Classroom and on-the-job training equipped graduates to venture into business." },
+      { i:"hardhat", t:"Upskilling", p:"TVET and practical training built the specific skills needed on the project and in industry." } ],
+    photos:["media/photos/grad1.jpg","media/photos/grad2.jpg"] } ]},
+
+ financing:{ name:"Financing Support", color:"#2771CC", slides:[
+  { station:"Financing", type:"financing",
+    eb:"Bumiputera Development", h:"Financing to help you deliver",
+    lead:"MRT Corp facilitates financing assistance through strategic partners. Contractors awarded MRT work packages can apply for financing with special features:",
+    feats:["Flexible fund size","Competitive profit rate","Adequate financing tenure"],
+    logos:[{f:"media/logos/teraju.png",n:"TERAJU"},{f:"media/logos/cgc.png",n:"Credit Guarantee Corporation (CGC)"},{f:"media/logos/mbsb.png",n:"MBSB Bank"},{f:"media/logos/bankrakyat.png",n:"Bank Rakyat"}] } ]},
+
+ icp:{ name:"ICP", color:"#F6B700", slides:[
+  { station:"Challenge", type:"two",
+    eb:"ICP · More than procurement", h:"Rail capability is still largely externally driven",
+    lead:"Malaysia has delivered major rail projects, but technical expertise and system capability remain largely external.",
+    a:{ t:"Reliance on external expertise", pts:["Core systems such as rolling stock, signalling and communications are mainly delivered by foreign OEMs","Local participation is often limited to civil works","Technology transfer is constrained by cost, complexity and IP","Knowledge transfer is often partial"] },
+    b:{ t:"Gaps in local capability", pts:["Limited local participation in key rail systems and technologies","Capability not retained beyond project completion","Limited coordination to build long-term industry capability"] } },
+  { station:"What ICP does", type:"list",
+    eb:"Industrial Collaboration Programme", h:"ICP turns major procurement into strategic investment in Malaysia's future",
+    pts:["Gives OEMs incentives to collaborate and share knowledge","Structured technology transfer from OEMs to local recipients","Localisation of the supply chain","Builds capability in design, engineering and system integration","Keeps knowledge and capability in Malaysia"] },
+  { station:"How it grows", type:"pillars",
+    eb:"How ICP grows capability", h:"Four levers",
+    pillars:[{t:"Technology Transfer",p:"Technical know-how from international OEMs"},{t:"Localisation",p:"Local participation and supply-chain development"},{t:"Human Capital",p:"Training, industry exposure and competency development"},{t:"Market Access",p:"Pathways to wider and international markets"}],
+    chain:["MRT investment","Local capability","A stronger Malaysian rail ecosystem"] },
+  { station:"At a glance", type:"icpglance",
+    eb:"ICP at a glance", h:"Results so far",
+    total:"RM11.4", totalU:"billion", totalL:"Total ICP value",
+    proj:[["Kajang Line","RM2.98b · 6"],["Putrajaya Line","RM8.19b · 18"],["Kajang Line Feeder Bus","RM0.25b · 2"],["Upcoming projects","RM10b · 2"]],
+    kpis:[["191","Total projects"],["827","Beneficiary companies"],["RM3,357m","Localisation / sub-contract"],["RM330m","Market access"],["RM728m","Technology & knowledge transfer (ICV)"],["14,734","Training attendees"],["RM216.85m","Investment (FDI/DDI/plant/JV)"],["26","ICP providers"]] },
+  { station:"For you", type:"foryou",
+    eb:"What ICP means for you", h:"Be part of it",
+    ind:[["Gain expertise","Global technology and specialised know-how"],["Grow local participation","Supply chains, work packages and partnerships"],["Build your workforce","Technical and professional capability"],["Expand your reach","Future projects and wider markets"]],
+    mys:[["Learn new skills","Technical and industry exposure"],["Find opportunities","Jobs and career pathways in the ecosystem"],["Build your future","Future-ready professional capabilities"],["Connect to industry","A stronger network of employers and institutions"]],
+    site:"www.tda.my" } ]}
+};
+
+/* Stories (video files go in media/videos/) */
+/* Stories: 2 videos (placeholders until the final videos and titles are supplied).
+   Video files: media/videos/story-1.mp4 and story-2.mp4. Add photo:"media/photos/xxx.jpg" for a still. */
+/* v1.11: 2 interview videos, played from the TXA_interviews folder (src). 1st = Bumiputera, 2nd = MYEP. */
+const STORIES = [
+ { group:"Bumiputera\nContractors", color:"#E42132", items:[
+   { id:"bumi", name:"Memperkasa Usahawan Bumiputera", co:"Bumiputera contractors share their journey with MRT Corp", tag:"Contractors", photo:"media/photos/bumi-video.jpg", src:"TXA_interviews/Bumiputera_wip4.mp4" } ]},
+ { group:"MYEP", color:"#269C95", items:[
+   { id:"myep", name:"MRT Young Entrepreneur Programme", co:"MYEP participants on building their businesses", tag:"MYEP", photo:"media/photos/myep-video.jpg", src:"TXA_interviews/MYEP_wip3.mp4" } ]}
+];
+/* previous 5-story list, kept for reference:
+const STORIES = [
+ { group:"MYEP", color:"#269C95", items:[
+   { id:"myep-1", name:"Mazri Mohd Hafiz Mazlan", co:"Bahtera Jawi", tag:"MYEP I", photo:"media/photos/myep1.jpg", stage:"reach", growth:"CIDB G1 → G4" },
+   { id:"myep-2", name:"Norashidah Mohd Najib", co:"Global Hana Construction", tag:"MYEP II", photo:"media/photos/myep2.jpg", stage:"branch", growth:"Founded by three women" },
+   { id:"myep-3", name:"Mohd Mahdhir Mohd Yusof", co:"Teraju Teliti Construction & Engineering", tag:"MYEP RTS Link", photo:"media/photos/myeprts.jpg", stage:"root", growth:"CIDB G1 → G2" } ]},
+ { group:"Bumiputera\nContractors", color:"#E42132", items:[
+   { id:"bumi-1", name:"Mohd Nor Ponimin", co:"CPS Engineering & Services", tag:"Contractor", photo:"media/photos/train5.jpg", stage:"branch", growth:"RM1.5m job beyond MRT" },
+   { id:"bumi-2", name:"Mohd Ilham Muslim", co:"Impian Ekuiti Sdn Bhd", tag:"Contractor", photo:"media/photos/grad2.jpg", stage:"crown", growth:"CIDB G4 → G5" } ]}
+];
+*/
+
+/* Stories screen: stage = how far each story has grown (shown as a 4-step growth bar;
+   cards are ordered and sized by stage). layers = the four commitments in the footer. */
+const GROW = {
+  en:[["3. Flourishing","For Malaysia's Future"],["2. Nurtured:","Building capabilities"],["1. Planted:","Anyone can join"]],
+  ms:[["3. Mekar","Untuk Masa Depan Malaysia"],["2. Dipupuk:","Membina keupayaan"],["1. Ditanam:","Semua boleh menyertai"]]
+};
+const TREE = {
+  stages:{ root:"Taking root", branch:"Branching out", reach:"Reaching higher", crown:"At the crown" },
+  rank:{ root:1, branch:2, reach:3, crown:4 },
+  layers:[
+    { k:"roots",    c:"#D9A066", i:"handshake", t:"We pioneer Bumiputera procurement", p:"Policy, fair awards, financing, monitoring" },
+    { k:"trunk",    c:"#C99A6B", i:"grad",      t:"We champion the capability",        p:"MYEP and ICP develop people and firms" },
+    { k:"branches", c:"#B5D37A", i:"chart",     t:"We create the opportunity",         p:"Work packages across four MRT lines" },
+    { k:"canopy",   c:"#7DBF7A", i:"star",      t:"We build Malaysia's future",        p:"Companies that grew with MRT projects" } ]
+};
+const PODCAST = { where:"Live at the MRT Corp Pavilion", slots:[
+  { t:"A Woman Bumiputera Contractor: Stories from the Field", host:"Norazian Mat Ujalan", who:"Norashidah Mohd Najib", time:"20 October 2026 · 03:45 pm - 04:15 pm" },  
+  { t:"Building Up: The Bumiputera Contractors' Experience", host:"Mohd Najid Mohd Dom", who:"Mohd Nor Ponimin · Mazri Mohd Hafiz Mazlan", time:"22 October 2026 · 02:45 pm - 03:15 pm" }]};
+
+</script>
+
+<!-- =====================================================================
+     BAHASA MALAYSIA (BM) TEXT
+     Used when the BM | EN switch is on BM. Items not listed here (numbers,
+     names, file paths) are taken from the English content.
+     ===================================================================== -->
+<script>
+const LANG = {
+  defaultLang: "en",        // "ms" = start in BM, "en" = start in English
+  resetOnIdle: true         // return to defaultLang when the kiosk resets after idle
+};
+
+const BM = {
+  /* fixed text on the screens (matched by data-i18n="...") */
+  static: {
+    att_h: "Mencipta<br>Peluang<br><span>Bersama.</span>",
+    att_k: "Perolehan · TXA 2026",
+    att_p: "Memperkasakan komuniti.<br>Mencipta nilai bersama.",
+    att_dyk: "Tahukah anda?",
+    att_hint: "Sentuh di mana-mana untuk mula",
+    att_fab: "Ketahui lebih lanjut<small>Peluang untuk Perniagaan Bumiputera dan ICP</small>",
+    home: "Utama",
+    menu: "Menu",
+    hub_k: "Perolehan · Pemerkasaan Bumiputera · Pembangunan Industri",
+    hub_h: "Mari berkembang bersama kami.",
+    hub_p: "Peluang penyertaan perniagaan Bumiputera dan kolaborasi industri merentasi projek MRT.",
+    hub_stories: "Tonton kisah mereka",
+    hub_register: "Imbas untuk mendaftar",
+    foot_l: "Perolehan · TXA 2026",
+    foot_r: "Meningkatkan Mobiliti, Memperkaya Komuniti",
+    prev: "Sebelumnya",
+    swipe: "Leret atau sentuh stesen",
+    st_h2: "Bersama Membina Peluang",
+    pv_t: "Video perjalanan pertumbuhan",
+    pv_s: "Akan datang",
+    st_h: "Berakar di MRT Corp. <br>Menyuburkan keupayaan Malaysia.",
+    st_p: "Sentuh satu kisah untuk menonton.",
+    st_in_h: "Memperkasa Semua dalam Perjalanan",
+    st_in_p: "Berasaskan kepercayaan korporat bahawa sesiapa sahaja boleh menjadi sebahagian daripada perjalanan pembangunan projek.",
+    soon_h: "Video akan datang",
+    soon_p: "Kisah ini akan tersedia di reruai.",
+    rg_k: "Sertai kami",
+    rg_h: "Ada tempat<br>untuk anda.",
+    rg_tag: "BELAJAR. BEKERJA. BERKEMBANG. MEMBINA BERSAMA.",
+    rg_p: "Imbas dengan telefon anda sendiri — tiada data dikumpul di skrin ini.",
+    rg_more: "Teroka lagi",
+    finish: "Selesai",
+    idle_h: "Masih meneroka?",
+    idle_p: "Sentuh di mana-mana untuk teruskan"
+  },
+
+  /* text built by the app */
+  ui: {
+    logo_tag: "Perolehan", logo_tag2: "Perolehan · TXA 2026",
+    explore: "Teroka", next_to: "{s}", back_menu: "Kembali ke menu",
+    awarded: "dianugerahkan", packages: "pakej", strategy_n: "Strategi {n}",
+    gr_eb: "Strategi peruntukan khas", gr_h: "Cara pakej kerja dianugerahkan",
+    fl1: "Perolehan", fl2: "Anugerah", fl3: "Pemantauan",
+    tapgrade: "Sentuh gred CIDB anda", ballot: "UNDIAN", direct: "TERUS / BERSAMA",
+    selectgrade: "Pilih gred untuk melihat<br>cara pakej dianugerahkan",
+    g14_h: "Undian tertutup",
+    g14_s1: "Pernyataan Minat (EOI)", g14_s1p: "Kemukakan maklumat syarikat anda. Anda dinilai berdasarkan keupayaan teknikal dan kewangan.",
+    g14_s2: "Layak untuk pakej", g14_s2p: "Padankan spesifikasi kerja dan gred, dengan sijil yang aktif:",
+    g14_s3: "Sesi undian", g14_s3p: "Dianjurkan oleh MRT Corp, diundi oleh agensi seperti PKK dan CIDB, disaksikan oleh Kontraktor Utama.",
+    g57_h: "Anugerah terus atau tender bersama",
+    g57_s1: "Anugerah terus", g57_s1p: "Pakej kerja dianugerahkan terus oleh Kontraktor Utama, dengan bukti dan kelulusan daripada MRT Corp.",
+    g57_s2: "Tender bersama", g57_s2p: "MRT Corp dan Kontraktor Utama menilai dan memilih bersama.",
+    cta_eb: "Sertai kami", cta_h: "Ada tempat<br>untuk anda.", cta_tag: "BELAJAR. BEKERJA. BERKEMBANG. MEMBINA BERSAMA.",
+    cta_p: "Imbas dengan telefon anda untuk mendaftar atau melihat tender semasa.",
+    qr_missing: "KOD QR<br>{f}<br>(akan dibekalkan)",
+    objectives: "Objektif", strategy: "Strategi", partners: "Rakan strategik",
+    launched: "Dilancar {y}", co_formed: "syarikat ditubuhkan", pk_awarded: "pakej dianugerahkan",
+    val_awarded: "jumlah nilai dianugerahkan", months: "bulan latihan",
+    fin_pill: "Terbuka kepada kontraktor yang dianugerahkan pakej kerja MRT",
+    glance_note: "nilai · bil. perolehan",
+    for_ind: "Untuk industri", for_mys: "Untuk rakyat Malaysia",
+    tenders_h: "Terokai tender MRT Corp", icp_more: "Untuk maklumat lanjut mengenai ICP, layari ",
+    podcast: "Podcast", slot: "Slot {n}: ", host: "Hos: ", with: "Bersama", procs: "perolehan"
+  },
+
+  facts: ["RM11.4 bilion · Jumlah Nilai ICP","RM2.98 bilion · 6 perolehan · Laluan Kajang","RM8.19 bilion · 18 perolehan · Laluan Putrajaya","RTS Link melepasi sasaran RM800 juta","MYEP: 3 kohort sejak 2013","Sokongan pembiayaan bersama TERAJU, CGC, MBSB Bank & Bank Rakyat"],
+
+  qr: {
+    register: { title:"Daftar minat anda", text:"Kontraktor, vendor dan usahawan muda Bumiputera." },
+    tenders:  { title:"Terokai peluang tender" }
+  },
+
+  hub: [
+    { title:"Penyertaan<br>Bumiputera", text:"Cara pakej kerja dianugerahkan, dan keputusan merentasi laluan MRT" },
+    { title:"Usahawan Muda<br>MRT (MYEP)", text:"Membangunkan belia Bumiputera menjadi kontraktor" },
+    { title:"Sokongan<br>Pembiayaan", text:"Pembiayaan bersama rakan strategik untuk kontraktor yang dianugerahkan" },
+    { title:"Kolaborasi<br>Industri (ICP)", text:"Menjadikan perolehan besar sebagai keupayaan tempatan" }
+  ],
+
+  journeys: {
+   participation:{ name:"Penyertaan Bumiputera", slides:[
+    { station:"Mengapa", eb:"Latar belakang", h:"Memperkaya komuniti. Menyuburkan peluang bersama.",
+      lead:"Pemerkasaan Bumiputera ialah agenda nasional yang dipacu oleh Pelan Transformasi Ekonomi Bumiputera 2035 (PuTERA35) Kerajaan MADANI. Di MRT Corp, ia dilaksanakan melalui dua strategi:",
+      pillars:[
+        { t:"Penyertaan Bumiputera", pts:["Kontraktor dan subkontraktor Bumiputera menyertai projek MRT melalui penganugerahan pakej kerja","Perolehan kontraktor, vendor, pembekal dan perunding Bumiputera bagi pakej, tender dan kontrak bukan projek"] },
+        { t:"Pembangunan Bumiputera", pts:["Pembinaan kapasiti melalui latihan bersama pemain industri","Bantuan pembiayaan melalui kerjasama dengan rakan strategik"] } ],
+      note:"Unit Hubungan Bumiputera khusus telah ditubuhkan untuk melaksanakan kedua-duanya." },
+    { station:"Keputusan", eb:"Strategi peruntukan khas", h:"Penyertaan Bumiputera merentasi projek MRT",
+      lead:"Sebahagian daripada jumlah nilai projek diperuntukkan untuk penyertaan Bumiputera melalui penganugerahan subkontrak. Status setakat Ogos 2026.",
+      lines:[
+        { n:"Laluan Kajang", unit:"bilion", ach:"<em>50%</em> dicapai" },
+        { n:"Laluan Putrajaya", unit:"bilion", ach:"<em>47%</em> dicapai" },
+        { n:"RTS Link", unit:"juta", ach:"Melepasi sasaran <em>RM800 juta</em>", badge:"Sasaran dicapai" },
+        { n:"Laluan Mutiara", unit:"bilion", ach:"<em>15%</em> daripada sasaran 40%", badge:"Aktif" } ],
+      note:"Status setakat Ogos 2026." },
+    { station:"Cara ia berfungsi" },
+    { station:"Pemantauan", eb:"Pemantauan", h:"Kami bersama anda sepanjang pelaksanaan",
+      lead:"Prestasi kontraktor Bumiputera dipantau di tapak dan di peringkat syarikat.",
+      tiles:[
+        { t:"Kemajuan tapak", p:"Kerja di tapak dipantau oleh Pasukan Projek MRT Corp dan Kontraktor Utama." },
+        { t:"Pemeriksaan premis", p:"Bersama PKK, untuk mengesahkan keupayaan dan status operasi setiap syarikat." },
+        { t:"Sesi libat urus", p:"Mesyuarat berkala untuk mendapatkan maklum balas dan menyelesaikan isu semasa pelaksanaan." },
+        { t:"Penarafan bintang CIDB", p:"Bekerjasama dengan CIDB bagi penarafan SCORE dan MCORE selepas kerja siap dengan jayanya." },
+        { t:"Penilaian suku tahunan", p:"Semakan pematuhan, kewangan dan lain-lain setiap suku tahun." } ] },
+    { station:"Sertai kami" } ]},
+
+   myep:{ name:"MYEP", slides:[
+    { station:"Apa", eb:"Pembangunan Bumiputera", h:"Program Usahawan Muda MRT",
+      lead:"MYEP membina kapasiti syarikat Bumiputera. Belia Bumiputera dibangunkan menjadi kontraktor melalui latihan teori dan amali, dan dianugerahkan kontrak pertama mereka.",
+      obj:["Pelan strategik bagi penglibatan Bumiputera dalam projek berkaitan kerajaan","Peluang pekerjaan untuk graduan dalam usaha niaga teknikal","Pengalaman perniagaan dan pendedahan pelaksanaan projek"],
+      str:["Latihan dan pengalaman kerja dalam persekitaran berstruktur, termasuk TVET","Pakej subkontrak untuk mengambil bahagian dalam projek"] },
+    { station:"Siapa buat apa", eb:"Kolaborasi pintar", h:"Pemain industri, setiap satu dengan peranan yang jelas",
+      mrt:["Latihan dan penempatan di tapak","Mengurus pemilihan peserta","Mendapatkan kontrak kerja","Bimbingan, nasihat dan pemantauan","Induksi dan latihan amalan terbaik pembinaan","Audit projek bulanan dan laporan kemajuan kerja"],
+      partner:["Latihan keusahawanan, motivasi dan pengurusan perniagaan","Modul pembinaan profesional intensif","Elaun bulanan sepanjang program","Latihan kemahiran secara praktikal","Bantuan mendaftar lesen kontraktor CIDB"] },
+    { station:"Rekod prestasi", eb:"Terbukti dalam tiga projek", h:"MYEP telah dilaksanakan dalam 3 projek MRT",
+      cohorts:[ { line:"Laluan Kajang" }, { line:"Laluan Putrajaya" }, { line:"RTS Link" } ] },
+    { station:"Latihan", eb:"Kurikulum MYEP-RTS", h:"Apa yang dipelajari peserta",
+      tabs:[
+        { t:"Bilik darjah", items:["Sijil Profesional Pembinaan (Penyeliaan Projek)","Pengurusan Kewangan","Pengenalan Sistem CIMS CIDB","Integriti","Pengurusan Perniagaan Kontraktor","Induksi Keselamatan untuk Pekerja Binaan","Motivasi dan Jati Diri","Sistem dan Teknologi Transit Rel Bandar","Strategi Semula Melalui Pelan Perniagaan yang Berjaya"] },
+        { t:"TVET", items:["Mengecat Hiasan Bangunan Tahap 1","Mengecat Hiasan Bangunan Tahap 2","Menyusun Bata Tahap 1","Menyusun Bata Tahap 2","Melepa","Kerja Acuan","Memasang Jubin","Membengkok Besi","Kerja Konkrit","Perancah Tahap 1","Dinding Sekatan Kering"] },
+        { t:"Latihan di tapak", items:["Kelas dan latihan di tapak bersama APSB","Penyeliaan tapak bersama Khairi Consult"] } ] },
+    { station:"Impak", eb:"Pengganda sosioekonomi", h:"Membangunkan modal insan",
+      items:[
+        { t:"Mewujudkan pekerjaan", p:"Setelah tamat, syarikat ditubuhkan dengan lesen CIDB G1–G4." },
+        { t:"Membina kecekapan", p:"Latihan bilik darjah dan sambil bekerja melengkapkan graduan untuk menceburi perniagaan." },
+        { t:"Peningkatan kemahiran", p:"TVET dan latihan amali membina kemahiran khusus yang diperlukan di projek dan dalam industri." } ] } ]},
+
+   financing:{ name:"Sokongan Pembiayaan", slides:[
+    { station:"Pembiayaan", eb:"Pembangunan Bumiputera", h:"Pembiayaan untuk membantu anda melaksanakan",
+      lead:"MRT Corp memudahkan bantuan pembiayaan melalui rakan strategik. Kontraktor yang dianugerahkan pakej kerja MRT boleh memohon pembiayaan dengan ciri istimewa:",
+      feats:["Saiz dana yang fleksibel","Kadar keuntungan yang kompetitif","Tempoh pembiayaan yang mencukupi"] } ]},
+
+   icp:{ name:"ICP", slides:[
+    { station:"Cabaran", eb:"ICP · Lebih daripada perolehan", h:"Keupayaan rel masih banyak bergantung kepada pihak luar",
+      lead:"Malaysia telah melaksanakan projek rel utama, tetapi kepakaran teknikal dan keupayaan sistem masih banyak datang dari luar.",
+      a:{ t:"Kebergantungan kepada kepakaran luar", pts:["Sistem teras seperti stok bergerak, isyarat dan komunikasi kebanyakannya dibekalkan oleh OEM asing","Penyertaan tempatan sering terhad kepada kerja sivil","Pemindahan teknologi dikekang oleh kos, kerumitan dan IP","Pemindahan pengetahuan selalunya separa"] },
+      b:{ t:"Jurang keupayaan tempatan", pts:["Penyertaan tempatan yang terhad dalam sistem dan teknologi rel utama","Keupayaan tidak dikekalkan selepas projek siap","Penyelarasan yang terhad untuk membina keupayaan industri jangka panjang"] } },
+    { station:"Peranan ICP", eb:"Program Kolaborasi Industri", h:"ICP menjadikan perolehan besar sebagai pelaburan strategik untuk masa depan Malaysia",
+      pts:["Memberi insentif kepada OEM untuk bekerjasama dan berkongsi pengetahuan","Pemindahan teknologi berstruktur daripada OEM kepada penerima tempatan","Penyetempatan rantaian bekalan","Membina keupayaan dalam reka bentuk, kejuruteraan dan integrasi sistem","Mengekalkan pengetahuan dan keupayaan di Malaysia"] },
+    { station:"Cara ia berkembang", eb:"Cara ICP membina keupayaan", h:"Empat pengungkit",
+      pillars:[{t:"Pemindahan Teknologi",p:"Pengetahuan teknikal daripada OEM antarabangsa"},{t:"Penyetempatan",p:"Penyertaan tempatan dan pembangunan rantaian bekalan"},{t:"Modal Insan",p:"Latihan, pendedahan industri dan pembangunan kecekapan"},{t:"Akses Pasaran",p:"Laluan ke pasaran yang lebih luas dan antarabangsa"}],
+      chain:["Pelaburan MRT","Keupayaan tempatan","Ekosistem rel Malaysia yang lebih kukuh"] },
+    { station:"Sepintas lalu", eb:"ICP sepintas lalu", h:"Keputusan setakat ini",
+      totalU:"bilion", totalL:"Jumlah nilai ICP",
+      proj:[["Laluan Kajang"],["Laluan Putrajaya"],["Bas Perantara Laluan Kajang"],["Projek akan datang"]],
+      kpis:[[null,"Jumlah projek"],[null,"Syarikat penerima manfaat"],[null,"Penyetempatan / subkontrak"],[null,"Akses pasaran"],[null,"Pemindahan teknologi & pengetahuan (ICV)"],[null,"Peserta latihan"],[null,"Pelaburan (FDI/DDI/loji/JV)"],[null,"Penyedia ICP"]] },
+    { station:"Untuk anda", eb:"Maksud ICP untuk anda", h:"Jadilah sebahagian daripadanya",
+      ind:[["Dapatkan kepakaran","Teknologi global dan pengetahuan khusus"],["Tingkatkan penyertaan tempatan","Rantaian bekalan, pakej kerja dan perkongsian"],["Bina tenaga kerja anda","Keupayaan teknikal dan profesional"],["Luaskan jangkauan anda","Projek masa depan dan pasaran lebih luas"]],
+      mys:[["Pelajari kemahiran baharu","Pendedahan teknikal dan industri"],["Cari peluang","Pekerjaan dan laluan kerjaya dalam ekosistem"],["Bina masa depan anda","Keupayaan profesional yang bersedia untuk masa depan"],["Berhubung dengan industri","Rangkaian majikan dan institusi yang lebih kukuh"]] } ]}
+  },
+
+  stories: [
+    { group:"Kontraktor\nBumiputera", items:[ { name:"Memperkasa Usahawan Bumiputera", co:"Kontraktor Bumiputera berkongsi perjalanan mereka bersama MRT Corp", tag:"Kontraktor" } ] },
+    { group:"MYEP", items:[ { name:"Program Usahawan Muda MRT", co:"Peserta MYEP tentang membina perniagaan mereka", tag:"MYEP" } ] }
+  ],
+
+  tree: {
+    stages:{ root:"Mula berakar", branch:"Mula bercabang", reach:"Terus meninggi", crown:"Di puncak" },
+    layers:[
+      { t:"Kami mempelopori perolehan Bumiputera", p:"Dasar, anugerah adil, pembiayaan, pemantauan" },
+      { t:"Kami memperkasa keupayaan",             p:"MYEP dan ICP membangunkan insan dan syarikat" },
+      { t:"Kami mencipta peluang",                 p:"Pakej kerja merentasi empat laluan MRT" },
+      { t:"Kami membina masa depan Malaysia",      p:"Syarikat yang berkembang bersama projek MRT" } ]
+  },
+
+  podcast: { where:"Langsung di Pavilion MRT Corp", slots:[
+    { t:"Kontraktor Wanita Bumiputera: Kisah dari Lapangan", time:"20 October 2026 · 03:45 pm - 04:15 pm" },
+    { t:"Membina: Pengalaman Kontraktor Bumiputera", time:"22 October 2026 · 02:45 pm - 03:15 pm" } ]}
+};
+</script>
+
+<!-- ============================ APP LOGIC ============================ -->
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+let pv=null;
+const stage=$('#stage');
+const ICONS={
+  handshake:'<path d="M11 17l2 2a1.4 1.4 0 0 0 2-2M13 15l2.5 2.5a1.4 1.4 0 0 0 2-2L14 12M9 13l3 3M2 11l5-5 4 2 2-1 5 5M22 11l-4-4M2 11l6 6"/>',
+  grad:'<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2.5 9 2.5 12 0v-5M22 9v6"/>',
+  bank:'<path d="M3 21h18M4 10h16M12 3l9 5H3zM6 10v8M10 10v8M14 10v8M18 10v8"/>',
+  cog:'<circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>',
+  site:'<path d="M3 21h18M6 21V10l6-6 6 6v11"/><path d="M10 21v-5h4v5"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/>',
+  chat:'<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/>',
+  star:'<path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2-5.5-2.9-5.5 2.9 1-6.2L3 9.6l6.2-.9z"/>',
+  check:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 12l3 3 5-6"/>',
+  chart:'<path d="M3 21h18M6 17v-4M11 17V9M16 17v-6M4 9l5-4 4 3 7-5"/>',
+  hardhat:'<path d="M3 18h18M5 18v-3a7 7 0 0 1 14 0v3M10 8V5.5h4V8"/>',
+  arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>', close:'<path d="M6 6l12 12M18 6L6 18"/>', down:'<path d="M12 5v14M6 13l6 6 6-6"/>'
+};
+const ic=(n)=>`<svg class="ic" viewBox="0 0 24 24">${ICONS[n]||''}</svg>`;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- BM | EN language layer ---------- */
+let lang = LANG.defaultLang==='en' ? 'en' : 'ms';
+const isMS = () => lang==='ms';
+const EN_UI = { logo_tag:"Procurement", logo_tag2:"Procurement · TXA 2026",
+  explore:"Explore", next_to:"Next: {s}", back_menu:"Back to menu",
+  awarded:"awarded", packages:"packages", strategy_n:"Strategy {n}",
+  gr_eb:"Carved-out strategy", gr_h:"How work packages are awarded", fl1:"Procurement", fl2:"Awards", fl3:"Monitoring",
+  tapgrade:"Tap your CIDB grade", ballot:"BALLOT", direct:"DIRECT / JOINT", selectgrade:"Select a grade to see<br>how packages are awarded",
+  g14_h:"Blind ballot",
+  g14_s1:"Expression of Interest (EOI)", g14_s1p:"Submit your company information. You're evaluated on technical and financial capability.",
+  g14_s2:"Qualify for a package", g14_s2p:"Match the job specification and grade, with active certificates:",
+  g14_s3:"Ballot session", g14_s3p:"Organised by MRT Corp, balloted by agencies such as PKK and CIDB, witnessed by the Main Contractor.",
+  g57_h:"Direct award or joint tender",
+  g57_s1:"Direct award", g57_s1p:"Work packages are awarded directly by the Main Contractor, with proof and approval from MRT Corp.",
+  g57_s2:"Joint tender", g57_s2p:"MRT Corp and the Main Contractor evaluate and select together.",
+  cta_eb:"Get involved", cta_h:"There's a place<br>for you here.", cta_tag:"LEARN. WORK. GROW. BUILD TOGETHER.",
+  cta_p:"Scan with your own phone to register or view current tenders.",
+  qr_missing:"QR CODE<br>{f}<br>(to be supplied)",
+  objectives:"Objectives", strategy:"Strategy", partners:"Strategic partners",
+  launched:"Launched {y}", co_formed:"companies formed", pk_awarded:"packages awarded", val_awarded:"total value awarded", months:"months training",
+  fin_pill:"Available to contractors awarded MRT work packages", glance_note:"value · no. of procurements",
+  for_ind:"For industry", for_mys:"For Malaysians", tenders_h:"Explore MRT Corp tenders", icp_more:"For more information about ICP, go to ",
+  podcast:"Podcast", slot:"Slot {n}: ", host:"Host: ", with:"With", procs:"procurements" };
+const tr = k => (isMS() && BM.ui[k]!=null) ? BM.ui[k] : EN_UI[k];
+function merge(a,b){ if(b===undefined||b===null) return a;
+  if(Array.isArray(a)&&Array.isArray(b)) return a.map((x,i)=>merge(x,b[i]));
+  if(a&&typeof a==='object'&&!Array.isArray(a)&&typeof b==='object'&&!Array.isArray(b)){ const o=Object.assign({},a); for(const k in b) o[k]=merge(a[k],b[k]); return o; }
+  return b; }
+const L = (en,bm) => isMS() ? merge(en,bm) : en;
+const JX = k => L(JOURNEYS[k], BM.journeys[k]);
+const HX = () => L(HUB, BM.hub);
+const FX = () => isMS() ? BM.facts : FACTS;
+const QX = () => L(QR, BM.qr);
+const SX = () => L(STORIES, BM.stories);
+const PX = () => L(PODCAST, BM.podcast);
+const enHTML = new Map();
+function applyStatic(){
+  $$('[data-i18n]').forEach(el=>{
+    if(!enHTML.has(el)) enHTML.set(el, el.innerHTML);
+    const k=el.dataset.i18n, bm=BM.static[k];
+    el.innerHTML = (isMS() && bm!=null) ? bm : enHTML.get(el);
+  });
+  $$('[data-lang] b').forEach(b=>b.classList.toggle('on', b.dataset.l===lang));
+  document.documentElement.lang = isMS() ? 'ms' : 'en';
+}
+
+/* stage + hardening */
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform=`translate(-50%,-50%) scale(${s})`;}
+addEventListener('resize',fit);fit();
+if(SETTINGS.hideCursor)document.body.classList.add('nocursor');
+['contextmenu','gesturestart','dragstart','selectstart'].forEach(e=>document.addEventListener(e,ev=>ev.preventDefault(),{passive:false}));
+document.addEventListener('wheel',e=>{if(e.ctrlKey)e.preventDefault();},{passive:false});
+document.addEventListener('touchmove',e=>{if(e.touches.length>1)e.preventDefault();},{passive:false});
+
+/* media */
+const media={video:false,logo:false,qr:{},videos:{},photos:{}};
+function probe(src,cb){const i=new Image();i.onload=()=>cb(true);i.onerror=()=>cb(false);i.src=src;}
+const vid = $('#loopVideo');
+function renderLogo(){$$('[data-logo]').forEach(b=>b.innerHTML=media.logo?`<img src="${SETTINGS.logo}" alt="MRT Corp"><span class="tag">${tr('logo_tag')}</span>`:`<span class="wordmark">MRT <b>CORP</b></span><span class="tag">${tr('logo_tag2')}</span>`);}
+probe(SETTINGS.logo,ok=>{media.logo=ok;renderLogo();});
+Object.entries(QR).forEach(([k,q])=>probe(q.img,ok=>{media.qr[k]=ok;renderRegister();}));
+ATTRACT_PHOTOS.forEach(p=>probe(p,ok=>media.photos[p]=ok));
+
+/* attract slideshow + facts */
+$('#slideshow').innerHTML=ATTRACT_PHOTOS.map((p,i)=>`<img src="/blank/${p}" alt="" class="${i===0?'on':''}">`).join('');
+let si=0;setInterval(()=>{if(current!=='attract')return;const im=$$('#slideshow img');im[si].classList.remove('on');si=(si+1)%im.length;im[si].classList.add('on');},7000);
+let fi=0;const fw=$('#factword');fw.textContent=FX()[0];
+setInterval(()=>{if(current!=='attract')return;fi=(fi+1)%FX().length;fw.textContent=FX()[fi];fw.style.animation='none';void fw.offsetWidth;fw.style.animation='';},3800);
+
+/* navigation */
+let current='attract',busy=false;
+function show(id){$$('.screen').forEach(s=>s.classList.toggle('active',s.id===id));current=id;
+  $('#bgLines').style.display=id==='attract'?'none':'block';
+  if(window.HomeVideo)HomeVideo.onScreen(id);else if(id!=='attract')vid.pause();
+  if(id!=='stories')closePlayer();
+  growthVideo(id==='stories'?'restart':'stop');}
+/* v1.15: the growth video always starts from the beginning when the Stories screen opens,
+   is stopped (and rewound) when leaving, and pauses while an interview video is playing. */
+function growthVideo(cmd){const v=document.getElementById('stPlatV');let on=false;try{on=PLAT_VIDEO;}catch(e){}if(!v||!on)return;
+  if(cmd==='stop'){v.pause();try{v.currentTime=0;}catch(e){}return;}
+  if(cmd==='pause'){v.pause();return;}
+  if(cmd==='restart'){try{v.currentTime=0;}catch(e){}}
+  v.muted=true;const p=v.play();if(p&&p.catch)p.catch(()=>{});}
+function go(id,wipe){if(busy||id===current)return;if(!wipe){show(id);return;}
+  busy=true;const w=$('#wipe');w.classList.remove('run');void w.offsetWidth;w.classList.add('run');
+  setTimeout(()=>show(id),470);setTimeout(()=>{w.classList.remove('run');busy=false;},1150);}
+function home(){go('attract',true);}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)go(g.dataset.go);if(e.target.closest('[data-home]'))home();
+  const j=e.target.closest('[data-j]');if(j)openJourney(j.dataset.j);});
+$('#attract').addEventListener('click',()=>go('hub',true));
+show('attract');
+
+/* hub */
+function renderHub(){$('#hubCards').innerHTML=HX().map(h=>`<button class="journey" style="--c:${h.color}" data-j="${h.j}"><div class="bigring"></div>
+  <div class="jic">${ic(h.icon)}</div><h3>${h.title}</h3><p>${esc(h.text)}</p><div class="go">${tr('explore')} ${ic('arrow')}</div></button>`).join('');}
+renderHub();
+
+/* journeys */
+let J=null,ji=0,jkey='';
+function openJourney(k){jkey=k;J=JX(k);ji=0;$('#journey').style.setProperty('--jc',J.color);renderSlide(0);go('journey',current==='hub');}
+function renderRail(){const n=J.slides.length,r=$('#jRail');
+  if(n<2){r.style.display='none';return;}r.style.display='block';
+  r.innerHTML=`<div class="track"></div><div class="fill" style="width:calc((100% - 80px)*${ji/(n-1)});background:${J.color}"></div>`+
+   J.slides.map((s,i)=>`<div class="stn ${i<ji?'done':''} ${i===ji?'cur':''}" data-st="${i}" style="left:calc(40px + (100% - 80px)*${i/(n-1)});--sc:${J.color}">
+    <div class="dot" ${i===ji&&J.color==='#F6B700'?'':''}>${i<ji?'✓':i+1}</div><div class="lbl">${esc(s.station)}</div></div>`).join('');
+  r.querySelectorAll('.stn').forEach(s=>s.addEventListener('click',()=>renderSlide(+s.dataset.st)));}
+function renderSlide(i){const dir=i<ji?'back':'';ji=i;const s=J.slides[i];renderRail();
+  const a=$('#jArea');a.innerHTML=`<div class="sl ${dir}">${(R[s.type]||(()=>''))(s)}</div>`;
+  (A[s.type]||(()=>{}))(s,a);countUp(a);
+  const n=J.slides.length;$('#jPrev').disabled=i===0;
+  $('#jNext').innerHTML=i<n-1?`${esc(tr('next_to').replace('{s}',J.slides[i+1].station))} ${ic('arrow')}`:`${tr('back_menu')} ${ic('arrow')}`;
+  $('#jDots').textContent=n>1?`${i+1} / ${n}`:'';$('#jArea').style.top=n>1?'300px':'170px';}
+$('#jPrev').onclick=()=>{if(ji>0)renderSlide(ji-1);};
+$('#jNext').onclick=()=>{if(ji<J.slides.length-1)renderSlide(ji+1);else go('hub');};
+/* swipe */
+let sx=null;$('#jArea').addEventListener('pointerdown',e=>{sx=e.clientX;});
+$('#jArea').addEventListener('pointerup',e=>{if(sx===null)return;const s=Math.min(innerWidth/1920,innerHeight/1080),dx=(e.clientX-sx)/s;sx=null;
+  if(dx<-140&&ji<J.slides.length-1)renderSlide(ji+1);else if(dx>140&&ji>0)renderSlide(ji-1);});
+
+/* number count-up: <b data-n="10.5" data-d="1">0</b> */
+function countUp(root){root.querySelectorAll('[data-n]').forEach(el=>{const t=+el.dataset.n,d=+(el.dataset.d||0),t0=performance.now(),dur=1300;
+  const f=now=>{const p=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-p,3);el.textContent=(t*e).toLocaleString('en-MY',{minimumFractionDigits:d,maximumFractionDigits:d});if(p<1)requestAnimationFrame(f);};requestAnimationFrame(f);});}
+const hd=s=>`<div class="eb">${esc(s.eb)}</div><h2>${esc(s.h)}</h2>${s.lead?`<div class="lead">${esc(s.lead)}</div>`:''}`;
+const bul=(pts,cls='')=>`<ul class="bul ${cls}">${pts.map(p=>`<li>${esc(p)}</li>`).join('')}</ul>`;
+function qrCard(k){const q=QX()[k];return `<div class="qrc"><div class="qrbox">${media.qr[k]?`<img src="${q.img}" alt="QR">`:`<div class="qrph">${tr('qr_missing').replace('{f}',esc(q.img))}</div>`}</div><h4>${esc(q.title)}</h4><p>${esc(q.text)}</p></div>`;}
+
+/* slide renderers */
+const R={
+ why:s=>`${hd(s)}<div class="cols" style="margin-top:22px">${s.pillars.map((p,i)=>`<div class="card acc" style="animation:rise .6s ${.1+i*.12}s both;padding:26px 32px"><div class="k">${tr('strategy_n').replace('{n}',i+1)}</div><h4 style="margin-top:6px">${esc(p.t)}</h4>${bul(p.pts,'sm')}</div>`).join('')}</div><div class="pill" style="margin-top:18px"><i></i>${esc(s.note)}</div>`,
+ lines:s=>`${hd(s)}<div class="lines4">${s.lines.map(l=>`<div class="lc" style="--lcc:${l.c}">${l.badge?`<span class="badge">${esc(l.badge)}</span>`:''}
+   <div class="nm">${esc(l.n)}</div><div class="big">RM<b data-n="${l.val}" data-d="${l.val%1?(l.val<10&&String(l.val).split('.')[1].length>1?2:1):0}">0</b></div><div class="sub">${esc(l.unit)} ${tr('awarded')}</div>
+   <div class="pk"><b data-n="${l.pk}">0</b>${tr('packages')}</div>
+   <div class="bar"><i data-w="${l.pct}"></i>${l.target?`<u style="left:${l.target}%"></u>`:''}</div><div class="ach">${l.ach}</div></div>`).join('')}</div>`,
+ grades:()=>`<div class="eb">${tr('gr_eb')}</div><h2>${tr('gr_h')}</h2>
+   <div class="flow" style="position:absolute;right:0;top:30px;margin:0"><span class="f on">${tr('fl1')}</span><span class="ar"></span><span class="f on">${tr('fl2')}</span><span class="ar"></span><span class="f">${tr('fl3')}</span></div>
+   <div class="gp"><div class="left"><div class="k">${tr('tapgrade')}</div><div class="grades">${[1,2,3,4,5,6,7].map(g=>`<button class="grade" data-g="${g}" style="--gc:${g<5?'#E42132':'#2771CC'}">G${g}<small>${g<5?tr('ballot'):tr('direct')}</small></button>`).join('')}</div></div>
+   <div class="route" id="route"><div class="ph"><div>${ic('arrow')}<br>${tr('selectgrade')}</div></div></div></div>`,
+ tiles:s=>`${hd(s)}<div class="tiles5">${s.tiles.map(t=>`<div class="tile"><div class="ti">${ic(t.i)}</div><h5>${esc(t.t)}</h5><p>${esc(t.p)}</p></div>`).join('')}</div>`,
+ cta:()=>`<div class="reg" style="position:static;gap:60px"><div class="txt"><div class="eb">${tr('cta_eb')}</div><h2 style="font-size:84px">${tr('cta_h')}</h2><div class="tag">${tr('cta_tag')}</div><p>${tr('cta_p')}</p></div><div class="qrs">${qrCard('register')}</div></div>`,
+ what:s=>`<div style="display:flex;gap:40px;height:100%"><div style="flex:1">${hd(s)}<div class="cols" style="margin-top:22px"><div class="card acc"><div class="k">${tr('objectives')}</div>${bul(s.obj,'sm')}</div><div class="card acc"><div class="k">${tr('strategy')}</div>${bul(s.str,'sm')}</div></div></div>
+   <div class="photo" style="flex:0 0 480px;height:560px"><img src="${s.photo}" alt=""></div></div>`,
+ roles:s=>`${hd(s)}<div class="cols"><div class="card acc" style="animation:rise .6s .1s both"><div class="k">MRT Corp</div>${bul(s.mrt,'sm')}</div><div class="card acc" style="animation:rise .6s .22s both;border-top-color:var(--yellow)"><div class="k">${tr('partners')}</div>${bul(s.partner,'sm')}</div></div>`,
+ cohorts:s=>`${hd(s)}<div class="cohorts">${s.cohorts.map(c=>`<div class="coh"><div class="im"><img src="${c.photo}" alt=""><span class="tag">${esc(c.t)} · ${esc(c.line)}</span><span class="yr">${tr('launched').replace('{y}',c.yr)}</span></div>
+   <div class="st"><div><b data-n="${c.co}">0</b>${tr('co_formed')}</div><div><b data-n="${c.pk}">0</b>${tr('pk_awarded')}</div><div><b>RM<span data-n="${c.val}" data-d="1">0</span>m</b>${tr('val_awarded')}</div><div><b data-n="${c.months}">0</b>${tr('months')}</div></div></div>`).join('')}</div>`,
+ training:s=>`<div style="display:flex;gap:40px;height:100%"><div style="flex:1"><div class="eb">${esc(s.eb)}</div><h2>${esc(s.h)}</h2>
+   <div class="tabs">${s.tabs.map((t,i)=>`<button class="tab ${i===0?'sel':''}" data-tab="${i}">${esc(t.t)}<b>${t.items.length}</b></button>`).join('')}</div><ul class="courses" id="courses"></ul></div>
+   <div class="mosaic" style="flex:0 0 560px;margin-top:40px">${s.photos.map(p=>`<div class="photo"><img src="${p}" alt=""></div>`).join('')}</div></div>`,
+ impact:s=>`${hd(s)}<div style="display:flex;gap:30px;margin-top:26px"><div style="flex:1;display:flex;flex-direction:column;gap:18px">${s.items.map((t,i)=>`<div class="card" style="display:flex;gap:24px;align-items:center;padding:24px 30px;animation:rise .6s ${.1+i*.1}s both"><div class="tile" style="all:unset"><div class="ti" style="width:84px;height:84px;border-radius:24px;background:var(--jc);display:grid;place-items:center">${ic(t.i)}</div></div><div><h4 style="font-size:28px">${esc(t.t)}</h4><div style="font-size:22px;opacity:.85;margin-top:4px;line-height:1.35">${esc(t.p)}</div></div></div>`).join('')}</div>
+   <div style="flex:0 0 720px;display:flex;flex-direction:column;gap:18px">${s.photos.map(p=>`<div class="photo" style="height:206px"><img src="${p}" alt=""></div>`).join('')}</div></div>`,
+ financing:s=>`<div style="display:flex;gap:50px;align-items:flex-start;margin-top:20px"><div style="flex:1">${hd(s)}<div class="feat">${s.feats.map(f=>`<div>${esc(f)}</div>`).join('')}</div>
+   <div class="pill" style="margin-top:30px"><i></i>${tr('fin_pill')}</div></div>
+   <div style="flex:0 0 760px"><div class="eb" style="margin-bottom:16px">${tr('partners')}</div><div class="logos">${s.logos.map((l,i)=>`<div class="logo" style="animation-delay:${.1+i*.1}s"><img src="${l.f}" alt="${esc(l.n)}"></div>`).join('')}</div></div></div>`,
+ two:s=>`${hd(s)}<div class="cols">${[s.a,s.b].map((c,i)=>`<div class="card acc" style="animation:rise .6s ${.1+i*.12}s both"><h4>${esc(c.t)}</h4>${bul(c.pts,'sm')}</div>`).join('')}</div>`,
+ list:s=>`<div class="eb">${esc(s.eb)}</div><h2 style="max-width:1400px">${esc(s.h)}</h2><div class="tiles5">${s.pts.map((p,i)=>`<div class="tile" style="min-height:260px"><div class="pillar" style="all:unset"><div class="no" style="font-size:56px;font-weight:800;color:var(--jc)">0${i+1}</div></div><p style="font-size:24px;opacity:.95;margin-top:16px">${esc(p)}</p></div>`).join('')}</div>`,
+ pillars:s=>`${hd(s)}<div class="pillars">${s.pillars.map((p,i)=>`<div class="pillar" style="animation-delay:${i*.1}s"><div class="no">0${i+1}</div><h5>${esc(p.t)}</h5><p>${esc(p.p)}</p></div>`).join('')}</div>
+   <div class="chain">${s.chain.map((c,i)=>`${i?ic('arrow'):''}<span>${esc(c)}</span>`).join('')}</div>`,
+ icpglance:s=>`<div class="eb">${esc(s.eb)}</div><h2>${esc(s.h)}</h2>
+   <div class="ix-top"><div class="tot"><div class="v">${esc(s.total)}</div><div class="u">${esc(s.totalU)}</div><div class="l">${esc(s.totalL)}</div></div>
+   <div class="lines">${s.proj.map(p=>{const [v,n]=String(p[1]).split(' · ');return `<div class="ln"><div class="k">${esc(p[0])}</div><div class="v">${esc(v)}</div><div class="n">${esc(n)} ${tr('procs')}</div></div>`;}).join('')}</div></div>
+   <div class="ix-kpis">${s.kpis.map((k,i)=>`<div class="kp" style="animation-delay:${.1+i*.05}s"><div class="v">${esc(k[0])}</div><div class="l">${esc(k[1])}</div></div>`).join('')}</div>`,
+ glance:s=>`<div class="eb">${esc(s.eb)}</div><h2>${esc(s.h)}</h2><div class="glance"><div class="tot"><div class="v">${esc(s.total)}</div><div class="u">${esc(s.totalU)}</div><div class="l">${esc(s.totalL)}</div>
+   <div class="proj">${s.proj.map(p=>`<div><span>${esc(p[0])}</span><span>${esc(p[1])}</span></div>`).join('')}<div style="opacity:.7;font-size:16px">${tr('glance_note')}</div></div></div>
+   <div class="kpis">${s.kpis.map((k,i)=>`<div class="kpi" style="animation-delay:${i*.06}s"><div class="v">${esc(k[0])}</div><div class="l">${esc(k[1])}</div></div>`).join('')}</div></div>`,
+ foryou:s=>`<div class="eb">${esc(s.eb)}</div><h2>${esc(s.h)}</h2><div class="foryou"><div class="card acc" style="flex:1"><div class="k">${tr('for_ind')}</div><div class="grid4">${s.ind.map(x=>`<div><b>${esc(x[0])}</b>${esc(x[1])}</div>`).join('')}</div></div>
+   <div class="card acc" style="flex:1;border-top-color:var(--teal)"><div class="k">${tr('for_mys')}</div><div class="grid4">${s.mys.map(x=>`<div><b>${esc(x[0])}</b>${esc(x[1])}</div>`).join('')}</div></div>
+   </div>
+   <div class="foryou"><div class="card2" style="text-align:center;"><p style="font-size:18px">${tr('icp_more')}<b>${esc(s.site)}</b></p></div>
+   </div>`
+
+};
+/* after-render hooks */
+const A={
+ lines:(s,a)=>setTimeout(()=>a.querySelectorAll('.bar i').forEach(b=>b.style.width=b.dataset.w+'%'),60),
+ grades:(s,a)=>a.querySelectorAll('.grade').forEach(b=>b.addEventListener('click',()=>{
+   a.querySelectorAll('.grade').forEach(x=>x.classList.toggle('sel',x===b));const g=+b.dataset.g,r=$('#route');r.style.setProperty('--gc',g<5?'#E42132':'#2771CC');
+   r.innerHTML=g<5?`<div class="k">CIDB G1 – G4</div><h4>${tr('g14_h')}</h4><div class="steps">
+     <div class="step"><b class="n">1</b><div><strong>${tr('g14_s1')}</strong>${tr('g14_s1p')}</div></div>
+     <div class="step"><b class="n">2</b><div><strong>${tr('g14_s2')}</strong>${tr('g14_s2p')}<div class="docs"><span>STB</span><span>SPKK</span><span>PKK</span></div></div></div>
+     <div class="step"><b class="n">3</b><div><strong>${tr('g14_s3')}</strong>${tr('g14_s3p')}</div></div></div>`
+   :`<div class="k">CIDB G5 – G7</div><h4>${tr('g57_h')}</h4><div class="steps">
+     <div class="step"><b class="n">A</b><div><strong>${tr('g57_s1')}</strong>${tr('g57_s1p')}</div></div>
+     <div class="step"><b class="n">B</b><div><strong>${tr('g57_s2')}</strong>${tr('g57_s2p')}</div></div></div>`;})),
+ training:(s,a)=>{const draw=i=>{a.querySelectorAll('.tab').forEach((t,k)=>t.classList.toggle('sel',k===i));let base=s.tabs.slice(0,i).reduce((n,t)=>n+t.items.length,0);
+   $('#courses').innerHTML=s.tabs[i].items.map((c,k)=>`<li style="animation-delay:${k*.04}s"><b>${base+k+1}</b>${esc(c)}</li>`).join('');};
+   a.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>draw(+t.dataset.tab)));draw(0);}
+};
+
+/* stories — single tree.
+   Drawn rain tree by default. To use a real tree picture instead, save a cut-out PNG
+   (transparent background, trunk at the bottom) as media/tree.png — it replaces the drawn
+   trunk and canopy automatically; the roots and pillars stay. */
+const TX = () => L(TREE, BM.tree);
+/* Stories layout: "A" seedling right with a rising vine of stories, "B" seedling centre with
+   stories in an arc, "C" navy background, seedling centre with stories in a row above.
+   A ?layout=A|B|C in the address overrides this for previewing. */
+const STORY_LAYOUT = "D";
+const LAY = (()=>{const q=(location.search.match(/layout=([ABCD])/)||[])[1];return q||STORY_LAYOUT;})();
+const T_GROUND=790, P_X=[303,740,1177,1613];
+/* sapling.png is 737x472; stem base at (475,265), soil bottom at y≈440, leaves centre ≈ (462,95) */
+const LAYOUTS={
+  D:{img:{s:.9,cx:1580},head:{cls:'r',css:'right:110px;top:140px'},pan:{cls:'l',css:'left:120px;top:140px'},
+     pos:[[960,470],[1200,470]],link:'none'},
+  A:{img:{src:'media/tree-roots.png',W:572,H:963,sx:270,gy:464,s:.9,cx:1560,roots:true},head:{cls:'r',css:'right:110px;top:140px'},pan:{cls:'l',css:'left:120px;top:140px'},
+     pos:[[230,470],[455,470],[680,470],[905,470],[1130,470]],link:'none'},
+  B:{img:{s:.85,cx:960},head:{cls:'l',css:'left:120px;top:140px'},pan:{cls:'r',css:'right:110px;top:140px'},
+     pos:[[380,566],[565,382],[960,212],[1355,382],[1540,566]],link:'rays'},
+  C:{img:{s:.7,cx:960},head:{cls:'c',css:'top:128px'},pan:{cls:'l',css:'left:120px;top:500px'},
+     pos:[[360,292],[660,292],[960,292],[1260,292],[1560,292]],link:'drops'}
+};
+function storyItems(){const T=TX();return SX().flatMap(g=>g.items).sort((a,b)=>(T.rank[a.stage]||0)-(T.rank[b.stage]||0));}
+const GROW_STAGES=false;
+const STORY_ARCH=false;
+const STORY_VCARD=true;   /* v1.11: earlier navy video cards with coloured group captions (Bumiputera red, MYEP teal) */   /* true = arch cards; false = rounded-square thumbnails with name label */   /* true = Planted/Nurtured/Flourishing journey; false = single tree with roots */
+function growthScene(){
+  if(!GROW_STAGES) return treeScene();
+  const st=$('#stories'); st.dataset.layout='D'; const Lc=LAYOUTS.D;
+  $('#stHead').className='st-head '+Lc.head.cls; $('#stHead').style.cssText=Lc.head.css;
+  $('#stPan').className='st-pan '+Lc.pan.cls; $('#stPan').style.cssText=Lc.pan.css;
+  const f=n=>n.toFixed(1), G=T_GROUND, TX=1580;
+  /* stage 3: canopy of tree-roots.png (572x963, trunk x270, grass y464), trunk base on the path at y=448 */
+  const s3=.74, c3w=572*s3, c3h=455*s3, c3x=TX-270*s3, c3y=448-c3h;
+  /* stage 2: plant from sapling.png (737x472, stem base 475,265) */
+  const s2=.52, c2x=TX-475*s2+10, c2y=598-262*s2;
+  /* below ground: roots from tree-roots.png, grass line on the ground */
+  const sr=.9, rx=TX-270*sr, ry=G-464*sr;
+  $('#growth').innerHTML=
+    `<div class="crop g3" style="left:${f(c3x)}px;top:${f(c3y)}px;width:${f(c3w)}px;height:${f(c3h)}px"><img src="media/tree-roots.png" style="width:${f(572*s3)}px;height:${f(963*s3)}px" alt=""></div>`+
+    `<div class="crop g2" style="left:${f(c2x+300*s2)}px;top:${f(c2y)}px;width:${f(320*s2)}px;height:${f(262*s2)}px"><img src="media/sapling.png" style="left:${f(-300*s2)}px;width:${f(737*s2)}px;height:${f(472*s2)}px" alt=""></div>`+
+    `<div class="crop roots" style="left:${f(rx)}px;top:${f(G-14)}px;width:${f(572*sr)}px;height:${f(1010-G+14)}px"><img src="media/tree-roots.png" style="top:${f(ry-(G-14))}px;width:${f(572*sr)}px;height:${f(963*sr)}px" alt=""></div>`+
+    GROW[isMS()?'ms':'en'].map((t,i)=>{const pos=[[1150,214,'r'],[1640,512,''],[1640,654,'']][i];
+      return `<div class="lbl l${3-i}" style="left:${pos[0]}px;top:${pos[1]}px"><b>${esc(t[0])}</b><span>${esc(t[1])}</span></div>`;}).join('');
+  /* SVG: path ribbon, nodes, sprout glow, dotted links, roots to the pillars */
+  const node=(x,y)=>`<circle cx="${x}" cy="${y}" r="8" fill="#FBF8F1" stroke="#E0B55E" stroke-width="3"/>`;
+  const P=Lc.pos, top=P.map(([x,y],i)=>[1420+i*8,300+i*30]), bot=[1360,697];
+  let dots=P.map(([x,y],i)=>`<path d="M${x} ${y+2}C${x} ${y-70} ${f(x+120)} ${top[i][1]} ${top[i][0]} ${top[i][1]}"/>`).join('')
+         +P.map(([x,y],i)=>`<path d="M${x} ${y+322}C${x} ${700+i*6} ${f(x+80)} ${bot[1]} ${bot[0]} ${bot[1]}"/>`).join('')
+         +`<path d="M1335 646C1380 690 1430 650 1520 590"/>`;
+  const limb=(P0,w0,w1)=>{const N=26,L=[],R=[];const bz=(t)=>{const u=1-t;return[0,1].map(k=>u*u*u*P0[0][k]+3*u*u*t*P0[1][k]+3*u*t*t*P0[2][k]+t*t*t*P0[3][k]);};
+    for(let i=0;i<=N;i++){const t=i/N,p=bz(t),q=bz(Math.min(1,t+.01)),o=bz(Math.max(0,t-.01));let dx=q[0]-o[0],dy=q[1]-o[1];const m=Math.hypot(dx,dy)||1;dx/=m;dy/=m;const w=(w0+(w1-w0)*Math.pow(t,.8))/2;L.push([p[0]-dy*w,p[1]+dx*w]);R.push([p[0]+dy*w,p[1]-dx*w]);}
+    return 'M'+L.map(p=>f(p[0])+' '+f(p[1])).join('L')+'L'+R.reverse().map(p=>f(p[0])+' '+f(p[1])).join('L')+'Z';};
+  const roots=P_X.map(x=>{const d=x-TX,y0=G+46;return `<path d="${limb([[TX+Math.sign(d)*10,y0-8],[TX+d*.35,y0+6],[x+(d<0?60:-60),G+30],[x,818]],Math.abs(d)>500?13:16,3)}"/>`;}).join('');
+  $('#scene').innerHTML=`<defs>
+      <linearGradient id="gSoil4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E1E10" stop-opacity=".85"/><stop offset=".7" stop-color="#1A140C" stop-opacity=".4"/><stop offset="1" stop-color="#041A3A" stop-opacity="0"/></linearGradient>
+      <linearGradient id="gRib" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#9DB98A"/><stop offset=".5" stop-color="#C9B98E"/><stop offset="1" stop-color="#D8C79E" stop-opacity=".2"/></linearGradient>
+      <radialGradient id="gGlow"><stop offset="0" stop-color="#FFE9A0" stop-opacity=".95"/><stop offset=".45" stop-color="#FFE9A0" stop-opacity=".35"/><stop offset="1" stop-color="#FFE9A0" stop-opacity="0"/></radialGradient></defs>
+    <rect x="0" y="${G}" width="1920" height="${1010-G}" fill="url(#gSoil4)"/>
+    <line x1="56" y1="${G}" x2="1864" y2="${G}" stroke="#5C3E24" stroke-width="3"/>
+    <g fill="#7A6249">${roots}</g>
+    <g fill="none" stroke="url(#gRib)" stroke-linecap="round" opacity=".75">
+      <path d="M1360 697C1450 700 1500 660 ${TX} 630C1650 610 1720 590 1760 560" stroke-width="20"/>
+      <path d="M1460 548C1470 500 1520 470 ${TX} 458C1660 440 1720 390 1770 330" stroke-width="20"/></g>
+    <g class="dots" fill="none" stroke="#D2AE68" stroke-width="2.2" stroke-linecap="round">${dots}</g>
+    ${top.map(([x,y])=>node(x,y)).join('')}${node(bot[0],bot[1])}${node(1460,548)}${node(1508,588)}${node(TX,630)}${node(TX,458)}
+    <circle cx="${TX-10}" cy="690" r="70" fill="url(#gGlow)" class="g1"/>
+    <g class="g1" transform="translate(${TX-12} 728)"><path d="M0 0C-1 -18 1 -34 0 -48" stroke="#5E8E3E" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M0 -40C-16 -52 -34 -48 -40 -38C-26 -30 -10 -32 0 -40Z" fill="#5FA046"/><path d="M0 -46C12 -62 30 -64 38 -56C28 -44 12 -42 0 -46Z" fill="#7BBA55"/></g>`;
+}
+/* Platforms legend under the open graphic. Pillar centres in platforms-cut.png (720px wide, shown 1:1): 88, 307, 570.
+   PLAT_OPEN=false brings back the navy card version (media/platforms.png). */
+const PLAT_OPEN=true;
+/* v1.10: PLAT_VIDEO=true shows the frameless growth-journey video (605x340). Drop the file in as media/videos/growth-journey.mp4
+   (silent, loops); until then the box shows a "coming soon" placeholder. false = v1.7 still image with legend. */
+const PLAT_VIDEO=true;
+const PLAT={en:[['GEMILANG','Where did we start?'],['PEMACU','What can we achieve today?'],['LONJAKAN','Where are we heading?']],
+            ms:[['GEMILANG','Dari mana kita bermula?'],['PEMACU','Apa yang mampu dicapai hari ini?'],['LONJAKAN','Ke mana kita menuju?']]};
+function platScene(){
+  const im=$('#stPlat'), box=$('#stSteps'); if(!im||!box) return;
+  const vid=$('#stPlatVid');
+  if(vid){ vid.classList.toggle('on',PLAT_VIDEO); im.style.visibility=PLAT_VIDEO?'hidden':''; box.style.visibility=PLAT_VIDEO?'hidden':'';
+    const v=$('#stPlatV');
+    if(PLAT_VIDEO){ if(!v._w){v._w=1; v.addEventListener('loadeddata',()=>vid.classList.add('ready'));}
+      if(v.readyState>=2) vid.classList.add('ready'); v.muted=true; if(typeof current!=='undefined'&&current==='stories'){const pr=v.play(); if(pr&&pr.catch) pr.catch(()=>{});} return; } else v.pause(); }
+  if(!PLAT_OPEN){im.src='media/platforms.png'; im.classList.add('boxed'); box.innerHTML=''; box.style.display='none'; return;}
+  const k=1;
+  box.innerHTML=PLAT[isMS()?'ms':'en'].map((t,i)=>`<div class="sp${i===2?' on':''}" style="left:${([88,307,570][i]*k).toFixed(0)}px"><i></i><em>${i+1}</em><b>${esc(t[0])}</b><span>${esc(t[1])}</span></div>`).join('');
+}
+function treeScene(){
+  platScene();
+  const st=$('#stories'); st.dataset.layout='D'; const Lc=LAYOUTS.D;
+  $('#stHead').className='st-head '+Lc.head.cls; $('#stHead').style.cssText=Lc.head.css;
+  $('#stPan').className='st-pan '+Lc.pan.cls; $('#stPan').style.cssText=Lc.pan.css;
+  const f=n=>n.toFixed(1), G=T_GROUND, TX=1560, s=.8, w=572*s, h=963*s, left=TX-270*s, top=G-464*s;
+  // $('#growth').innerHTML=`<img class="treeOne" src="media/tree-roots.png" style="position:absolute;left:${f(left)}px;top:${f(top)}px;width:${f(w)}px;height:${f(h)}px" alt="">`;
+  const limb=(P0,w0,w1)=>{const N=30,L=[],R=[];const bz=(t)=>{const u=1-t;return[0,1].map(k=>u*u*u*P0[0][k]+3*u*u*t*P0[1][k]+3*u*t*t*P0[2][k]+t*t*t*P0[3][k]);};
+    for(let i=0;i<=N;i++){const t=i/N,p=bz(t),q=bz(Math.min(1,t+.01)),o=bz(Math.max(0,t-.01));let dx=q[0]-o[0],dy=q[1]-o[1];const m=Math.hypot(dx,dy)||1;dx/=m;dy/=m;const ww=(w0+(w1-w0)*Math.pow(t,.8))/2;L.push([p[0]-dy*ww,p[1]+dx*ww]);R.push([p[0]+dy*ww,p[1]-dx*ww]);}
+    return 'M'+L.map(p=>f(p[0])+' '+f(p[1])).join('L')+'L'+R.reverse().map(p=>f(p[0])+' '+f(p[1])).join('L')+'Z';};
+  const roots=P_X.map(x=>{const d=x-TX,y0=G+46;return `<path d="${limb([[TX+Math.sign(d)*10,y0-8],[TX+d*.35,y0+6],[x+(d<0?60:-60),G+30],[x,818]],Math.abs(d)>500?13:16,3)}"/>`;}).join('');
+  $('#scene').innerHTML=`<defs><linearGradient id="gSoil4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E1E10" stop-opacity=".85"/><stop offset=".7" stop-color="#1A140C" stop-opacity=".4"/><stop offset="1" stop-color="#041A3A" stop-opacity="0"/></linearGradient></defs>
+    <rect x="0" y="${G}" width="1920" height="${1010-G}" fill="url(#gSoil4)"/>
+    <line x1="56" y1="${G}" x2="1864" y2="${G}" stroke="#5C3E24" stroke-width="3"/>`;
+    //<g fill="#7A6249">${roots}</g>`;
+}
+function layoutScene(){
+  if(LAY==='D') return growthScene();
+  const Lc=LAYOUTS[LAY], st=$('#stories'); st.dataset.layout=LAY;
+  const I=Lc.img, s=I.s, IW=I.W||737, IH=I.H||472, SX=I.sx!=null?I.sx:475, GY=I.gy!=null?I.gy:440;
+  const w=IW*s, h=IH*s, left=I.x!=null?I.x:I.cx-SX*s, base=I.base||T_GROUND, top=base-GY*s;
+  const im=$('#sapImg'); if(I.src&&im.getAttribute('src')!==I.src) im.src=I.src; else if(!I.src&&im.getAttribute('src')!=='media/sapling.png') im.src='media/sapling.png';
+  im.classList.toggle('sink',base>T_GROUND&&!I.roots); im.classList.toggle('rooted',!!I.roots);
+  im.style.cssText=`left:${left}px;top:${top}px;width:${w}px;height:${h}px`;
+  $('#stHead').className='st-head '+Lc.head.cls; $('#stHead').style.cssText=Lc.head.css;
+  $('#stPan').className='st-pan '+Lc.pan.cls; $('#stPan').style.cssText=Lc.pan.css;
+  const stem=[left+SX*s, top+(I.roots?GY:265)*s], leaf=[left+(I.roots?SX:462)*s, top+110*s];
+  const f=n=>n.toFixed(1);
+  const bez=(P,t)=>{const u=1-t;return[u*u*u*P[0][0]+3*u*u*t*P[1][0]+3*u*t*t*P[2][0]+t*t*t*P[3][0],u*u*u*P[0][1]+3*u*u*t*P[1][1]+3*u*t*t*P[2][1]+t*t*t*P[3][1]];};
+  const limb=(P,w0,w1,steps=24)=>{const L=[],R=[];for(let i=0;i<=steps;i++){const t=i/steps,p=bez(P,t),q=bez(P,Math.min(1,t+.01)),o=bez(P,Math.max(0,t-.01));
+      let dx=q[0]-o[0],dy=q[1]-o[1];const m=Math.hypot(dx,dy)||1;dx/=m;dy/=m;const ww=(w0+(w1-w0)*Math.pow(t,.8))/2;
+      L.push([p[0]-dy*ww,p[1]+dx*ww]);R.push([p[0]+dy*ww,p[1]-dx*ww]);}
+    return 'M'+L.map(p=>f(p[0])+' '+f(p[1])).join('L')+'L'+R.reverse().map(p=>f(p[0])+' '+f(p[1])).join('L')+'Z';};
+  /* roots from the soil mound down to the 4 pillars */
+  const X=stem[0];
+  const RY0=Math.min(base-30,790);
+  const roots=I.roots
+    ? P_X.map((x,i)=>{const d=x-X, y0=T_GROUND+46;   /* branch out of the photo's root crown, sweep across, drop into each box */
+        return `<path d="${limb([[X+Math.sign(d)*10,y0-8],[X+d*.35,y0+6],[x+(d<0?60:-60),T_GROUND+30],[x,818]],Math.abs(d)>500?13:16,3,30)}"/>`;}).join('')
+    : P_X.map((x,i)=>`<path d="${limb([[X+(i-1.5)*22,RY0],[X+(x-X)*.3,T_GROUND+40],[x,T_GROUND+22],[x,816]],14,3,26)}"/>`).join('');
+  /* links between the seedling and the stories */
+  const P=Lc.pos; let links='';
+  if(Lc.link==='vine'){ const pts=[[leaf[0]-10,leaf[1]+20],...P.slice().reverse().map(([x,y])=>[x,y+10])];
+    let d=`M${f(pts[0][0])} ${f(pts[0][1])}`; for(let i=1;i<pts.length;i++){const [x0,y0]=pts[i-1],[x1,y1]=pts[i],mx=(x0+x1)/2;d+=` C${f(mx)} ${f(y0-60)} ${f(mx)} ${f(y1+60)} ${f(x1)} ${f(y1)}`;}
+    links=`<path class="vine" d="${d}" fill="none" stroke="#5FA85A" stroke-width="4" stroke-linecap="round"/>`; }
+  if(Lc.link==='rays') links=P.map(([x,y])=>`<path class="vine" d="M${f(leaf[0])} ${f(leaf[1])}Q${f((leaf[0]+x)/2)} ${f(Math.min(leaf[1],y)-40)} ${x} ${y}" fill="none" stroke="#7DBF7A" stroke-width="3" stroke-linecap="round"/>`).join('');
+  if(Lc.link==='drops') links=P.map(([x,y])=>`<path class="vine" d="M${x} ${y+168}Q${x} ${f(leaf[1]-40)} ${f(leaf[0])} ${f(leaf[1]-30)}" fill="none" stroke="#7DBF7A" stroke-opacity=".75" stroke-width="3" stroke-linecap="round"/>`).join('');
+  $('#scene').innerHTML=`<defs><linearGradient id="gSoil4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E1E10" stop-opacity=".85"/><stop offset=".7" stop-color="#1A140C" stop-opacity=".4"/><stop offset="1" stop-color="#041A3A" stop-opacity="0"/></linearGradient></defs>
+    <rect x="0" y="${T_GROUND}" width="1920" height="${1010-T_GROUND}" fill="url(#gSoil4)"/>
+    <line x1="56" y1="${T_GROUND}" x2="1864" y2="${T_GROUND}" stroke="#5C3E24" stroke-width="3"/>
+    <g class="lyr-roots" fill="${I.roots?'#7A6249':'#6B4A2C'}">${roots}</g>${links}`;}
+function renderStories(){
+  const T=TX(), items=storyItems();
+  const S_POS=LAYOUTS[LAY].pos;
+  if(LAY==='D'&&STORY_VCARD){
+    const VX=[1220,1530];
+    $('#stories5').innerHTML=SX().map((g,gi)=>g.items.map(v=>`<div class="st-vg" style="left:${VX[gi]||770}px;--gcol:${g.color};--d:${gi*.15}s"><div class="k">${esc(g.group)}</div>
+      <button class="vcard2" data-v="${v.id}">${v.photo?`<img src="${v.photo}" alt="">`:''}<div class="v"></div><div class="play"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></div>
+      <div class="t"><b>${esc(v.name)}</b><span>${esc(v.co)}</span><em>${esc(v.tag)}</em></div></button></div>`).join('')).join('');
+  } else
+  $('#stories5').innerHTML=items.map((v,k)=>{const [x,y]=S_POS[k]||[960,400];
+    if(LAY==='D'&&STORY_ARCH) return `<button class="story arch" data-v="${v.id}" style="left:${x}px;top:${y}px;--d:${k*.12}s"><div class="card">${v.photo?`<div class="ph2"><img src="${v.photo}" alt=""><div class="pb2"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></div></div>`:`<div class="ph2 ph0"><div class="ico"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></div></div>`}<div class="nm">${esc(v.name)}${v.co?`<small>${esc(v.co)}</small>`:''}</div></div></button>`;
+    return `<button class="story" data-v="${v.id}" style="left:${x}px;top:${y-85}px;--d:${k*.12}s;--hd:${k*.6}s"><div class="ph${v.photo?'':' ph0'}">${v.photo?`<img src="${v.photo}" alt="">`:''}<div class="pb"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></div></div>
+      <div class="lb"><b>${esc(v.name)}</b><span>${esc(v.co)}</span></div></button>`;}).join('');
+  $('#pillars').innerHTML=T.layers.map((l,i)=>`<div class="tpillar" style="--lc:${l.c};--d:${i*.1}s"><i>${ic(l.i)}</i><div><b>${esc(l.t)}</b><span>${esc(l.p)}</span></div></div>`).join('');
+  renderPodcast();
+  bindStories();}
+layoutScene();
+function renderPodcast(){
+  $('#homePodcast').innerHTML=`<h5><i><svg class="ic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></i>${tr('podcast')} · ${esc(PX().where)}</h5><div class="slots">`+
+    PX().slots.map((s,i)=>`<div class="slot"><b>${esc(s.t)}</b><span class="when">${s.time.split(' · ').map(esc).join('<br>')}</span>${tr('with')} ${esc(s.who)}</div>`).join('')+`</div>`;}
+renderStories();
+pv=$('#pv');
+const vsrc=id=>{let r=`media/videos/${id}.mp4`;STORIES.forEach(g=>g.items.forEach(v=>{if(v.id===id&&v.src)r=v.src;}));return r;};
+STORIES.forEach(g=>g.items.forEach(v=>{const t=document.createElement('video');t.preload='metadata';t.onloadedmetadata=()=>media.videos[v.id]=true;t.onerror=()=>media.videos[v.id]=false;t.src=vsrc(v.id);}));
+function bindStories(){$$('.story,.vcard2').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.v;$('#player').classList.add('on');growthVideo('pause');
+  if(media.videos[id]){$('#player').classList.remove('missing');pv.src=vsrc(id);pv.muted=false;pv.play().catch(()=>{});}
+  else{$('#player').classList.add('missing');pv.removeAttribute('src');}}));}
+function closePlayer(){if(!pv)return;const was=$('#player').classList.contains('on');pv.pause();$('#player').classList.remove('on','missing');if(was&&current==='stories')growthVideo('resume');}
+$('#pvClose').onclick=closePlayer;pv.onended=closePlayer;
+
+/* register */
+// function renderRegister(){$('#regQrs').innerHTML=qrCard('register')+qrCard('tenders');}
+function renderRegister(){$('#regQrs').innerHTML=qrCard('register');}
+renderRegister();
+
+/* ---------- BM | EN switch ---------- */
+function setLang(l){
+  if(l===lang) return; lang=l;
+  applyStatic(); renderLogo();
+  fw.textContent=FX()[fi%FX().length];
+  renderHub();
+  if(J){ J=JX(jkey); if(current==='journey') renderSlide(ji); }
+  renderStories(); renderRegister(); if(LAY==='D') growthScene();
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-lang]'); if(!b) return;
+  e.stopPropagation(); e.preventDefault();
+  const hit=e.target.closest('b[data-l]'); setLang(hit ? hit.dataset.l : (isMS()?'en':'ms'));
+},true);
+applyStatic();
+
+/* idle reset (paused while a story video plays) */
+let lastAct=Date.now();
+['pointerdown','touchstart','keydown'].forEach(e=>document.addEventListener(e,()=>{lastAct=Date.now();$('#idle').classList.remove('on');},{passive:true,capture:true}));
+setInterval(()=>{if(current==='attract'||(pv&&!pv.paused&&!pv.ended)){lastAct=Date.now();return;}
+  const left=Math.ceil(SETTINGS.idleSeconds-(Date.now()-lastAct)/1000);
+  if(left<=0){$('#idle').classList.remove('on');home();if(LANG.resetOnIdle&&lang!==LANG.defaultLang)setTimeout(()=>setLang(LANG.defaultLang),600);}else if(left<=SETTINGS.idleWarnSeconds){$('#idle').classList.add('on');$('#idleNum').textContent=left;}},250);
+
+/* QA panel */
+let taps=[];$('#hot').addEventListener('click',e=>{e.stopPropagation();const n=Date.now();taps=taps.filter(t=>n-t<3000);taps.push(n);if(taps.length>=SETTINGS.adminTaps){taps=[];openAdmin();}});
+function openAdmin(){const st=b=>b?'<span class="ok">OK</span>':'<span class="warn">MISSING</span>';
+  $('#admin').innerHTML=`<h3>Kiosk QA panel · Procurement</h3>
+  <p>Home videos (${esc(SETTINGS.homeVideos.folder)}): ${window.HomeVideo?HomeVideo.status().count+' file(s) via '+HomeVideo.status().source:'n/a'} · Logo: ${st(media.logo)} · Idle reset: ${SETTINGS.idleSeconds}s</p>
+  <p style="margin-top:10px">QR register: ${st(media.qr.register)} ${QR.register.verify?'<span class="warn">(verify target URL)</span>':''} · QR tenders: ${st(media.qr.tenders)}</p>
+  <p style="margin-top:10px">Story videos: ${STORIES.flatMap(g=>g.items).map(v=>`${v.id} ${st(media.videos[v.id])}`).join(' · ')}</p>
+  <p style="margin-top:10px">Attract photos: ${ATTRACT_PHOTOS.map(p=>`${p.split('/').pop()} ${st(media.photos[p])}`).join(' · ')}</p>
+  <p style="margin-top:18px"><button onclick="location.reload()">Reload</button><button onclick="document.getElementById('admin').classList.remove('on')">Close</button></p>`;
+  $('#admin').classList.add('on');}
+})();
+</script>
+
+<!-- =====================================================================
+     HOME VIDEO PLAYLIST
+     Plays every video in SETTINGS.homeVideos.folder in alphabetical order,
+     in a loop, with Previous / Next / Mute / Full-screen buttons.
+     Add, remove or re-order videos by changing the files in that folder
+     (use 01_, 02_ ... prefixes to set the order). No code change needed.
+     How the folder is read (first one that works):
+       1. Live folder read — kiosk launched with START-KIOSK.bat
+          (Edge flag --allow-file-access-from-files). Picks up changes
+          each time the home screen is shown or the playlist loops.
+       2. <folder>/playlist.js — written by UPDATE-PLAYLIST.bat
+          (START-KIOSK.bat runs it automatically).
+       3. SETTINGS.homeVideos.fallback (single file), if set.
+     ===================================================================== -->
+<style>
+/* controls: hidden until the video is tapped, then shown for 5 s (each tap restarts the timer) */
+.video-frame .hv-ctrls{position:absolute;right:14px;bottom:14px;display:flex;align-items:center;gap:8px;z-index:100001;opacity:0;pointer-events:none;transition:opacity .4s ease}
+.video-frame.hv-awake .hv-ctrls{opacity:1;pointer-events:auto}
+.video-frame .hv-count{height:28px;padding:0 10px;border-radius:14px;display:flex;align-items:center;font-weight:600;font-size:14px;line-height:1;font-family:inherit;color:rgba(255,255,255,.9);background:rgba(0,0,0,.35);letter-spacing:.04em}
+.video-frame .hv-btn{width:42px;height:42px;border-radius:50%;padding:0;margin:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.35);border:none;color:#fff;cursor:pointer;outline:none;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:transform .15s ease,background .15s ease}
+.video-frame .hv-btn:active{transform:scale(.9);background:rgba(0,0,0,.6)}
+.video-frame .hv-btn svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.video-frame .hv-btn svg .f{fill:#fff;stroke:none}
+.video-frame .hv-btn .on-max,.video-frame .hv-btn .on-muted{display:none}
+.video-frame.hv-max .hv-btn .on-max,.video-frame.hv-muted .hv-btn .on-muted{display:block}
+.video-frame.hv-max .hv-btn .off-max,.video-frame.hv-muted .hv-btn .off-muted{display:none}
+.video-frame.hv-none .hv-ctrls{display:none}
+/* full-screen (fills the whole kiosk screen) */
+.video-frame.hv-max{position:fixed!important;inset:0!important;top:0!important;left:0!important;right:auto!important;bottom:auto!important;
+  width:100%!important;height:100%!important;border-radius:0!important;box-shadow:none!important;background:#000!important;z-index:99999!important;transition:none!important}
+.video-frame.hv-max video{object-fit:contain!important;background:#000}
+.video-frame.hv-max .hv-ctrls{right:28px;bottom:26px;gap:10px}
+.video-frame.hv-max .hv-btn{width:54px;height:54px}
+.video-frame.hv-max .hv-btn svg{width:24px;height:24px}
+.video-frame.hv-max .hv-count{height:34px;padding:0 14px;font-size:17px;border-radius:17px}
+</style>
+<script>
+(function(){
+  const S = (typeof SETTINGS !== 'undefined') ? SETTINGS : {};
+  const CFG = Object.assign({
+    folder: 'home-videos/',                       // folder next to index.html
+    muted: false,                                 // start muted?
+    extensions: ['mp4','webm','m4v','mov','ogv'], // file types picked up
+    fallback: ''                                  // optional single video if the folder is empty / unreadable
+  }, S.homeVideos || {});
+  if (!/\/$/.test(CFG.folder)) CFG.folder += '/';
+
+  const vid = document.getElementById('loopVideo');
+  const frame = vid && vid.closest('.video-frame');
+  const attract = document.getElementById('attract');
+  if (!vid || !frame || !attract) { console.warn('[home-video] video frame not found'); return; }
+
+  let list = [], idx = 0, source = 'none', bad = new Set();
+  let muted = !!CFG.muted, autoMuted = false, onHome = attract.classList.contains('active');
+  let weMadeFs = false, retryT = null, scanning = null;
+
+  vid.removeAttribute('loop'); vid.loop = false; vid.muted = muted;
+
+  /* ---------- controls ---------- */
+  const IC = {
+    prev: '<svg viewBox="0 0 24 24"><path class="f" d="M19 5.5v13L9.5 12z"/><path d="M6 5.5v13"/></svg>',
+    next: '<svg viewBox="0 0 24 24"><path class="f" d="M5 5.5v13L14.5 12z"/><path d="M18 5.5v13"/></svg>',
+    mute: '<svg viewBox="0 0 24 24"><g class="off-muted"><path class="f" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></g>'
+        + '<g class="on-muted"><path class="f" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></g></svg>',
+    fs:   '<svg viewBox="0 0 24 24"><path class="off-max" d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>'
+        + '<path class="on-max" d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>'
+  };
+  const bar = document.createElement('div');
+  bar.className = 'hv-ctrls';
+  bar.innerHTML = '<span class="hv-count" id="hvCount"></span>'
+    + '<button class="hv-btn" data-hv="prev" aria-label="Previous video">' + IC.prev + '</button>'
+    + '<button class="hv-btn" data-hv="next" aria-label="Next video">' + IC.next + '</button>'
+    + '<button class="hv-btn" data-hv="mute" aria-label="Mute / unmute">' + IC.mute + '</button>'
+    + '<button class="hv-btn" data-hv="fs" aria-label="Full screen">' + IC.fs + '</button>';
+  frame.appendChild(bar);
+  let awakeT = null;   // controls hidden; tapping the video shows them for 5 s
+  let wasAwake = false;   // a tap on hidden buttons only reveals them, it does not press them
+  frame.addEventListener('pointerdown', () => { wasAwake = frame.classList.contains('hv-awake'); frame.classList.add('hv-awake'); clearTimeout(awakeT); awakeT = setTimeout(() => frame.classList.remove('hv-awake'), 5000); }, true);
+  // taps on the video or its buttons never start the kiosk journey
+  ['click','pointerdown','touchstart','touchend'].forEach(ev => frame.addEventListener(ev, e => e.stopPropagation()));
+  bar.addEventListener('click', e => {
+    const b = e.target.closest('[data-hv]'); if (!b || !wasAwake) return;
+    e.preventDefault();
+    const a = b.dataset.hv;
+    if (a === 'prev') play(idx - 1);
+    else if (a === 'next') play(idx + 1);
+    else if (a === 'mute') setMuted(!muted, true);
+    else if (a === 'fs') setMax(!frame.classList.contains('hv-max'));
+  });
+
+  function renderState(){
+    frame.classList.toggle('hv-muted', vid.muted);
+    const c = document.getElementById('hvCount');
+    if (c) { c.textContent = list.length ? (idx + 1) + ' / ' + list.length : ''; c.style.display = list.length > 1 ? '' : 'none'; }
+  }
+  function setMuted(m, byUser){
+    muted = m; if (byUser) autoMuted = false;
+    vid.muted = m; if (!m && onHome && vid.paused) vid.play().catch(()=>{});
+    renderState();
+  }
+  function setMax(on){
+    frame.classList.toggle('hv-max', on);
+    const covers = window.innerHeight >= screen.height - 4 && window.innerWidth >= screen.width - 4;   // already full screen (Edge kiosk mode)
+    if (on && !document.fullscreenElement && !covers && document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen().then(() => { weMadeFs = true; }).catch(()=>{});
+    } else if (!on && weMadeFs && document.fullscreenElement) {
+      weMadeFs = false; document.exitFullscreen().catch(()=>{});
+    }
+  }
+  document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && weMadeFs) { weMadeFs = false; frame.classList.remove('hv-max'); } });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && frame.classList.contains('hv-max')) setMax(false); });
+
+  function unlock(e){
+    if (e.target.closest && e.target.closest('.hv-ctrls')) return;
+    if (autoMuted) { autoMuted = false; setMuted(false); }
+  }
+  document.addEventListener('pointerdown', unlock, true);
+
+  /* ---------- reading the folder ---------- */
+  const isVideo = n => new RegExp('\\.(' + CFG.extensions.join('|') + ')$', 'i').test(n);
+  const natural = (a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+
+  function readFolder(){            // null = folder could not be read; [] = folder is empty
+    return new Promise(res => {
+      let done = false; const fin = v => { if (!done) { done = true; res(v); } };
+      try {
+        const x = new XMLHttpRequest();
+        x.open('GET', CFG.folder + (location.protocol === 'file:' ? '' : '?t=' + Date.now()));
+        x.timeout = 4000;
+        x.onload = () => {
+          const t = x.responseText || '';
+          if (!t || (x.status && x.status >= 400)) return fin(null);
+          const names = []; let m;
+          const rowRe = /addRow\("((?:[^"\\]|\\.)*)","(?:[^"\\]|\\.)*",(\d)/g;        // Edge / Chrome folder page
+          while ((m = rowRe.exec(t))) if (m[2] === '0') { try { names.push(JSON.parse('"' + m[1] + '"')); } catch (e) { names.push(m[1]); } }
+          if (!/addRow\(/.test(t)) {                                                   // web-server folder page
+            const hrefRe = /href\s*=\s*["']([^"'?#]+)["']/gi;
+            while ((m = hrefRe.exec(t))) { try { const n = decodeURIComponent(m[1]).split('/').filter(Boolean).pop(); if (n) names.push(n); } catch (e) {} }
+          }
+          fin([...new Set(names)]);
+        };
+        x.onerror = x.ontimeout = () => fin(null);
+        x.send();
+      } catch (e) { fin(null); }
+      setTimeout(() => fin(null), 5000);
+    });
+  }
+  function readPlaylistJs(){
+    return new Promise(res => {
+      try { delete window.HOME_PLAYLIST; } catch (e) { window.HOME_PLAYLIST = undefined; }
+      const s = document.createElement('script');
+      s.src = CFG.folder + 'playlist.js?t=' + Date.now();
+      const fin = v => { s.remove(); res(v); };
+      s.onload = () => fin(Array.isArray(window.HOME_PLAYLIST) ? window.HOME_PLAYLIST.map(String) : null);
+      s.onerror = () => fin(null);
+      document.head.appendChild(s);
+    });
+  }
+  async function scan(){
+    let names = await readFolder(), src = 'live folder';
+    if (!names || !names.some(isVideo)) {                 // folder unreadable, or a web-server page with no recognisable video links (e.g. Android local server)
+      const pl = await readPlaylistJs();
+      if (pl && pl.some(isVideo)) { names = pl; src = 'playlist.js'; }
+    }
+    let urls = (names || []).filter(isVideo).sort(natural).map(n => CFG.folder + encodeURIComponent(n));
+    if (!urls.length && CFG.fallback) { urls = [CFG.fallback]; src = 'fallback'; }
+    if (!urls.length) src = names === null ? 'folder not readable' : 'folder empty';
+    return { urls, src };
+  }
+  function refresh(startAt){        // re-read the folder, keep playing the current video if it is still there
+    if (scanning) return scanning;
+    scanning = scan().then(r => {
+      scanning = null;
+      const cur = list[idx], changed = r.urls.join('|') !== list.join('|');
+      list = r.urls; source = r.src;
+      if (changed) { bad.clear(); console.log('[home-video] ' + list.length + ' video(s) from ' + source, list.map(decodeURIComponent)); }
+      if (Array.isArray(S.loopPlaylist)) S.loopPlaylist = list.slice();   // Commercial QA panel
+      const k = list.indexOf(cur);
+      if (!list.length) { noVideo(true); retryLater(); return; }
+      if (startAt !== undefined) play(startAt);
+      else if (k >= 0) { idx = k; vid.loop = list.length === 1; if (onHome && vid.paused) resume(); renderState(); }
+      else play(0);
+    });
+    return scanning;
+  }
+  function retryLater(){ clearTimeout(retryT); retryT = setTimeout(() => { if (onHome) refresh(); else retryLater(); }, 30000); }
+
+  /* ---------- playback ---------- */
+  function noVideo(on){
+    attract.classList.toggle('novideo', on);
+    frame.classList.toggle('hv-none', on);
+    vid.style.visibility = on ? 'hidden' : 'visible';
+    if (on) { frame.classList.remove('hv-max'); vid.removeAttribute('src'); vid.load(); }
+  }
+  function resume(){
+    if (!onHome) return;
+    vid.muted = muted;
+    const p = vid.play();
+    if (p && p.catch) p.catch(() => {                    // autoplay with sound blocked -> play muted
+      if (!vid.muted) { vid.muted = true; autoMuted = !muted; renderState(); vid.play().catch(()=>{}); }
+    });
+    renderState();
+  }
+  function play(i){
+    if (!list.length) return;
+    idx = ((i % list.length) + list.length) % list.length;
+    const src = list[idx];
+    vid.loop = list.length === 1;
+    if (vid.getAttribute('src') !== src) vid.src = src; else vid.currentTime = 0;
+    resume();
+  }
+  vid.addEventListener('loadeddata', () => { bad.delete(list[idx]); noVideo(false); renderState(); });
+  vid.addEventListener('ended', () => {
+    if (list.length <= 1) return;
+    if (idx + 1 >= list.length) refresh(0);              // end of the playlist: re-read the folder, start again from the first
+    else play(idx + 1);
+  });
+  vid.addEventListener('error', () => {
+    const src = vid.getAttribute('src'); if (!src) return;
+    console.warn('[home-video] cannot play', decodeURIComponent(src));
+    bad.add(src);
+    if (bad.size >= list.length) { noVideo(true); retryLater(); return; }
+    setTimeout(() => play(idx + 1), 300);
+  });
+
+  /* ---------- called by show() when the screen changes ---------- */
+  function onScreen(id){
+    onHome = (id === 'attract');
+    if (onHome) refresh();
+    else { vid.pause(); if (frame.classList.contains('hv-max')) setMax(false); }
+  }
+
+  window.HomeVideo = { onScreen, refresh, next: () => play(idx + 1), prev: () => play(idx - 1),
+    status: () => ({ folder: CFG.folder, source, count: list.length, playing: list[idx] ? decodeURIComponent(list[idx]) : '', files: list.map(decodeURIComponent), unplayable: [...bad].map(decodeURIComponent) }) };
+  renderState();
+  refresh();
+})();
+</script>
+
+</body>
+</html>

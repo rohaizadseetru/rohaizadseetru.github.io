@@ -1,0 +1,14 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="528" height="754" viewBox="0 0 528 754" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Side Image" clip-path="url(#clip0_1396_9516)">
+<path id="Side Gradient" d="M528.411 508.639C528.411 666.949 415.291 766.589 272.201 766.589C85.6007 766.589 -30.4193 632.629 -30.4193 382.429C-30.4193 114.509 110.741 -34.9414 314.741 -34.9414C386.291 -34.9414 455.901 -16.1214 503.271 18.1986L445.261 149.939C407.551 121.159 364.051 111.189 318.601 111.189C205.481 111.189 132.971 187.579 128.131 335.929C167.771 290.539 224.811 267.289 295.391 267.289C425.911 267.289 528.401 362.499 528.401 508.629L528.411 508.639ZM376.621 517.489C376.621 446.639 331.181 401.249 261.571 401.249C191.961 401.249 144.581 449.959 144.581 517.489C144.581 585.019 188.091 632.629 263.501 632.629C330.211 632.629 376.621 588.349 376.621 517.489Z" fill="url(#paint0_linear_1396_9516)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_1396_9516" x1="476.201" y1="648.609" x2="476.201" y2="127.589" gradientUnits="userSpaceOnUse">
+<stop stop-color="#D0DCE1"/>
+<stop offset="1" stop-color="#D0DCE1" stop-opacity="0.8"/>
+</linearGradient>
+<clipPath id="clip0_1396_9516">
+<rect width="528" height="754" fill="white"/>
+</clipPath>
+</defs>
+</svg>

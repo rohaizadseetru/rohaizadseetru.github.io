@@ -1,0 +1,32 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Gradient effect" clip-path="url(#clip0_1490_4599)">
+<path id="green gradient side" d="M1525.12 -22.9249L709.608 -838.442L-610 528.053L205.517 1343.57L1525.12 -22.9249Z" fill="url(#paint0_linear_1490_4599)"/>
+<g id="Vector">
+<path d="M47.3337 1502.75C952.16 1745.19 1756.92 1675.84 1844.8 1347.83C1932.69 1019.83 1270.43 557.385 365.606 314.937C-539.221 72.4897 -1343.98 141.847 -1431.86 469.851C-1519.75 797.855 -857.493 1260.3 47.3337 1502.75Z" fill="url(#paint1_radial_1490_4599)" style="mix-blend-mode:multiply"/>
+</g>
+<path id="Bottom" d="M1920 822H0V1080H1920V822Z" fill="url(#paint2_linear_1490_4599)"/>
+<rect id="Rectangle 1" x="1585" width="335" height="1080" fill="url(#paint3_linear_1490_4599)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_1490_4599" x1="122.883" y1="-77.0922" x2="827.774" y2="587.013" gradientUnits="userSpaceOnUse">
+<stop stop-color="#06A990" stop-opacity="0.8"/>
+<stop offset="1" stop-color="#193C97" stop-opacity="0"/>
+</linearGradient>
+<radialGradient id="paint1_radial_1490_4599" cx="0" cy="0" r="1" gradientTransform="matrix(81.0892 -705.104 1660.49 321.787 311.95 1035.66)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#191F5B"/>
+<stop offset="0.631001" stop-color="#191F5B" stop-opacity="0.5"/>
+<stop offset="1" stop-color="#191F5B" stop-opacity="0"/>
+</radialGradient>
+<linearGradient id="paint2_linear_1490_4599" x1="960" y1="1134.22" x2="960" y2="838.559" gradientUnits="userSpaceOnUse">
+<stop stop-color="#060B48"/>
+<stop offset="1" stop-color="#060B48" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="paint3_linear_1490_4599" x1="1938.5" y1="436.165" x2="1646.1" y2="475.274" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FF841E" stop-opacity="0.8"/>
+<stop offset="1" stop-color="#FF841E" stop-opacity="0"/>
+</linearGradient>
+<clipPath id="clip0_1490_4599">
+<rect width="1920" height="1080" fill="white"/>
+</clipPath>
+</defs>
+</svg>

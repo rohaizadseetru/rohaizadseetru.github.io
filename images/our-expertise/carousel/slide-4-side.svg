@@ -1,0 +1,14 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="556" height="754" viewBox="0 0 556 754" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Side Image" clip-path="url(#clip0_1396_9512)">
+<path id="Overlay" d="M555.65 596.178H445.43V761.328H292.67V596.178H-71.8301V473.722L247.23 -25.1055H411.59L115.74 447.885H297.51V300.708H445.44V447.885H555.66V596.189L555.65 596.178Z" fill="url(#paint0_linear_1396_9512)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_1396_9512" x1="467.67" y1="655.088" x2="467.67" y2="126.354" gradientUnits="userSpaceOnUse">
+<stop stop-color="#D0DCE1"/>
+<stop offset="1" stop-color="#D0DCE1" stop-opacity="0.8"/>
+</linearGradient>
+<clipPath id="clip0_1396_9512">
+<rect width="556" height="754" fill="white"/>
+</clipPath>
+</defs>
+</svg>
