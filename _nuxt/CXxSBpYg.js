@@ -1,0 +1,1 @@
+import{_ as o}from"./Cdm4NVbT.js";import{d as t,u as n,A as a,o as r}from"./Bnxvo0T6.js";const u=t({__name:"index",setup(_){return n({title:"Our Rail Network"}),(s,c)=>{const e=o;return r(),a(e,{tab:1,"sync-route":""})}}});export{u as default};
